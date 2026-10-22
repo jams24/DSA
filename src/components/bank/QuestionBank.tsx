@@ -127,6 +127,15 @@ export function QuestionBank({ qas, problems }: { qas: BankQA[]; problems: BankP
               </Chip>
             ))}
           </div>
+          <Link
+            href="/leetcode-150"
+            className="flex items-center justify-between gap-3 rounded-xl border border-orange/30 bg-orange/[0.06] px-4 py-3 text-sm text-dim transition hover:border-orange/60"
+          >
+            <span>
+              Working through <b className="text-ink">LeetCode&apos;s Top Interview 150</b>? Use the dedicated tracker with hints and solved checkboxes.
+            </span>
+            <span className="shrink-0 font-semibold text-orange">Open →</span>
+          </Link>
           <div className="text-sm text-faint">{filteredProblems.length} problems</div>
           <div className="panel divide-y divide-line overflow-hidden">
             {filteredProblems.slice(0, limit * 2).map((p) => (

@@ -12,6 +12,7 @@ import { Avatar, buttonClass } from "@/components/ui";
 const NAV = [
   { href: "/worlds", label: "Worlds" },
   { href: "/arena", label: "Arena" },
+  { href: "/leetcode-150", label: "LeetCode 150" },
   { href: "/questions", label: "Question Bank" },
   { href: "/cheatsheets", label: "Cheat Sheets" },
   { href: "/leaderboard", label: "Leaderboard" },
@@ -91,7 +92,7 @@ export function TopBar() {
     <header className="sticky top-0 z-50 border-b border-line/80 bg-bg/75 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:gap-4">
         <Logo />
-        <nav className="ml-4 hidden items-center gap-1 lg:flex">
+        <nav className="ml-4 hidden items-center gap-1 xl:flex">
           {NAV.map((n) => {
             const active = pathname === n.href || pathname.startsWith(`${n.href}/`);
             return (
@@ -99,7 +100,7 @@ export function TopBar() {
                 key={n.href}
                 href={n.href}
                 className={clsx(
-                  "rounded-lg px-3 py-2 text-sm transition",
+                  "rounded-lg px-3 py-2 text-sm whitespace-nowrap transition",
                   active ? "bg-slate-900/[0.06] text-ink" : "text-dim hover:bg-slate-900/[0.04] hover:text-ink",
                 )}
               >
@@ -118,7 +119,7 @@ export function TopBar() {
           </button>
           <PlayerChip />
           <button
-            className="grid h-10 w-10 place-items-center rounded-xl text-dim hover:bg-slate-900/5 lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-xl text-dim hover:bg-slate-900/5 xl:hidden"
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
           >
@@ -127,7 +128,7 @@ export function TopBar() {
         </div>
       </div>
       {open && (
-        <nav className="border-t border-line bg-bg/95 px-4 py-3 lg:hidden">
+        <nav className="border-t border-line bg-bg/95 px-4 py-3 xl:hidden">
           {NAV.map((n) => (
             <Link
               key={n.href}

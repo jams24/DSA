@@ -14,13 +14,17 @@
 
 Every level has five stages — **Learn → Visualize → Code → Interview → Quiz** — and every world ends with a **boss battle**.
 
+Plus the full **LeetCode Top Interview 150** study plan: all 150 problems grouped into 23 pattern categories, each linked to the lesson that teaches the pattern.
+
 ## Features
 
 - **59 interactive visualizers**: step-through algorithm animations (sorting race, Dijkstra, DP tables, N-Queens…), live simulations (load balancer, rate limiters, Kafka consumer groups, Raft elections with partitions, quorums, retry storms, PagedAttention, continuous batching…) and animated system-design architecture diagrams.
-- **Game layer**: XP, levels and titles, 1–3 stars per level, streaks, 27 achievements, boss battles with hearts and timers, daily challenge, 60-second rapid fire, spaced-repetition mock-interview flashcards, weekly and all-time leaderboards, chiptune sound effects.
+- **Game layer**: XP, levels and titles, 1–3 stars per level, streaks, 30 achievements, boss battles with hearts and timers, daily challenge, 60-second rapid fire, spaced-repetition mock-interview flashcards, weekly and all-time leaderboards, chiptune sound effects.
+- **LeetCode Top Interview 150** (`/leetcode-150`): all 150 problems (39 Easy / 93 Medium / 18 Hard) with a hint each, search and difficulty filters, a "learn the pattern" link per category, and a solved tracker (+10 XP per problem, achievements at 25 / 75 / 150).
 - **Question bank**: every interview question with a model answer, filterable by world and frequency, plus 200+ curated LeetCode problems by topic.
 - **Cheat sheets**: complexity tables, pattern recognition, latency numbers, estimation, system design template, distributed systems and AI inference formulas.
 - **Guest mode**: play without an account (progress in `localStorage`), then sign up and your progress is merged into the account.
+- **Accounts**: sign in with username or email. Admin accounts see every level and boss unlocked.
 - **Server-authoritative scoring** for signed-in players: quiz, boss, arena and daily answers are graded on the server with the same rules engine the client uses for guests.
 
 ## Tech stack
@@ -45,13 +49,24 @@ Environment variables:
 | `DATABASE_URL` | PostgreSQL connection string |
 | `AUTH_SECRET` | ≥ 32 random characters used to sign session cookies (`openssl rand -hex 32`) |
 
-Other scripts: `npm run build`, `npm run start`, `npm run lint`, `npm run validate` (checks every lesson: quiz answer indices, diagram flows/edges, visualizer ids, boss question pools).
+Other scripts: `npm run build`, `npm run start`, `npm run lint`, `npm run validate` (checks every lesson: quiz answer indices, diagram flows/edges, visualizer ids, boss question pools, and the LeetCode 150 list).
+
+### Admin accounts
+
+Admins have every level and boss unlocked. Create one, or promote an existing account or reset its password, with:
+
+```bash
+ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='a-strong-password' npm run create-admin
+```
+
+The password is stored only as a bcrypt hash. Pass the values as environment variables and never commit them.
 
 ## Project structure
 
 ```
 prisma/schema.prisma            players, progress, achievements, XP ledger, flashcards
 scripts/validate-content.ts     content linter (npm run validate)
+scripts/create-admin.mts        create or promote an admin (npm run create-admin)
 src/app/                        pages + API route handlers
   worlds/[worldId]/[lessonId]   lesson page (statically generated)
   worlds/[worldId]/boss         boss battle
@@ -61,6 +76,7 @@ src/content/
   types.ts                      Lesson / World / ArchDiagram schema
   worlds/*.ts                   all course content
   cheatsheets.ts
+  leetcode150.ts                LeetCode Top Interview 150 (problems, categories, hints)
 src/lib/game/                   rules engine (XP, stars, streaks, achievements), shared by client & server
 src/components/viz/             visualizers + registry.tsx (lazy-loaded by id)
 ```
@@ -81,8 +97,13 @@ src/components/viz/             visualizers + registry.tsx (lazy-loaded by id)
 | First boss win | +150 (+30 per extra heart left) |
 | Daily challenge | +30 + 10 per correct answer (once per UTC day) |
 | Arena / flashcards / boss replays | +5 per correct answer / +2 per review / +20, capped at 300 XP per day combined |
+| Tick off a LeetCode 150 problem | +10 (taken back if you untick it) |
 | Achievements | +25 to +500 |
 
-## Deploying (Vercel)
+## Deploying
 
-Import the repo, set `DATABASE_URL` and `AUTH_SECRET`, and deploy — `postinstall` runs `prisma generate`. Run `npm run db:push` against the production database once (and after schema changes).
+**Docker (Deployzy or any container host):** the included `Dockerfile` builds the app and serves it on port 3000. Set `DATABASE_URL` and `AUTH_SECRET` as environment variables.
+
+**Vercel:** import the repo, set `DATABASE_URL` and `AUTH_SECRET`, and deploy. `postinstall` runs `prisma generate`.
+
+Either way, run `npm run db:push` against the production database once, and again after schema changes.
