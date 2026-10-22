@@ -7,6 +7,7 @@ import remarkRehype from "remark-rehype";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeStringify from "rehype-stringify";
 import { codeToHtml } from "shiki";
+import { cacheLife } from "next/cache";
 
 const THEME = "tokyo-night";
 
@@ -19,10 +20,12 @@ const processor = unified()
 
 export async function renderMarkdown(md: string): Promise<string> {
   "use cache";
+  cacheLife("max");
   return String(await processor.process(md));
 }
 
 export async function highlight(code: string, lang: string): Promise<string> {
   "use cache";
+  cacheLife("max");
   return codeToHtml(code.trim(), { lang: lang === "text" ? "text" : lang, theme: THEME });
 }
