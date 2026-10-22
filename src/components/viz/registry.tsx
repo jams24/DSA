@@ -40,4 +40,11 @@ export const VISUALIZERS: Record<string, Entry> = {
   nqueens: { title: "Backtracking: N-Queens", blurb: "Place, prune, recurse, undo — the backtracking loop made visible.", C: lazy(() => import("./algorithms/NQueens")) },
   greedy: { title: "Greedy interval scheduling", blurb: "Three greedy rules, one correct. See which one wins.", C: lazy(() => import("./algorithms/Greedy")) },
   bits: { title: "Bit manipulation playground", blurb: "Flip bits, combine with AND/OR/XOR and try the classic tricks.", C: lazy(() => import("./algorithms/Bits")) },
+  // Patterns
+  twopointers: { title: "Two pointers", blurb: "Pair sums, container with most water and in-place dedupe.", C: lazy(() => import("./patterns/TwoPointers")) },
+  slidingwindow: { title: "Sliding window", blurb: "Variable and fixed windows with a live hash map of counts.", C: lazy(() => import("./patterns/SlidingWindow")) },
+  fastslow: { title: "Fast & slow pointers", blurb: "Floyd's tortoise and hare: detect a cycle, then find where it starts.", C: lazy(() => import("./patterns/FastSlow")) },
+  prefixsum: { title: "Prefix sums", blurb: "O(1) range queries and counting subarrays with a hash map.", C: lazy(() => import("./patterns/PrefixSum")) },
+  monostack: { title: "Monotonic stack", blurb: "Daily temperatures: every index pushed and popped once.", C: lazy(() => import("./patterns/MonoStack")) },
+  intervals: { title: "Merge intervals", blurb: "Sort by start, then sweep and merge.", C: lazy(() => import("./patterns/Intervals")) },
 };
