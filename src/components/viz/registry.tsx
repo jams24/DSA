@@ -33,4 +33,11 @@ export const VISUALIZERS: Record<string, Entry> = {
   dijkstra: { title: "Dijkstra's algorithm", blurb: "Min-heap, relaxation and the shortest-path tree, step by step.", C: lazy(() => import("./trees/Dijkstra")) },
   topo: { title: "Topological sort (Kahn's algorithm)", blurb: "Order courses by prerequisites — and detect a cycle.", C: lazy(() => import("./trees/Topo")) },
   unionfind: { title: "Union-Find", blurb: "Union by rank and path compression on a live forest.", C: lazy(() => import("./trees/UnionFind")) },
+  // Algorithms
+  sorting: { title: "Sorting algorithms", blurb: "Step through six sorts, or race them on the same input.", C: lazy(() => import("./algorithms/Sorting")) },
+  binarysearch: { title: "Binary search", blurb: "Exact match, lower bound, and binary search on the answer.", C: lazy(() => import("./algorithms/BinarySearch")) },
+  dp: { title: "Dynamic programming tables", blurb: "Watch coin change, LCS and knapsack tables fill cell by cell.", C: lazy(() => import("./algorithms/DP")) },
+  nqueens: { title: "Backtracking: N-Queens", blurb: "Place, prune, recurse, undo — the backtracking loop made visible.", C: lazy(() => import("./algorithms/NQueens")) },
+  greedy: { title: "Greedy interval scheduling", blurb: "Three greedy rules, one correct. See which one wins.", C: lazy(() => import("./algorithms/Greedy")) },
+  bits: { title: "Bit manipulation playground", blurb: "Flip bits, combine with AND/OR/XOR and try the classic tricks.", C: lazy(() => import("./algorithms/Bits")) },
 };
