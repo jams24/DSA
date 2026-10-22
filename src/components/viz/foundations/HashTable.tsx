@@ -176,7 +176,7 @@ export default function HashTable() {
 
       {f.calc && <div className="rounded-lg border border-line bg-panel px-3 py-2 font-mono text-xs text-cyan">{f.calc}</div>}
 
-      <div className="max-h-[420px] overflow-auto rounded-xl border border-line bg-[#080c19] p-3 scrollbar-thin">
+      <div className="max-h-[420px] overflow-auto rounded-xl border border-line bg-[#f8fafd] p-3 scrollbar-thin">
         {mode === "chaining" ? (
           <div className="space-y-1.5">
             {f.table.map((chain, i) => {

@@ -56,7 +56,7 @@ export default function Gossip() {
         </button>
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_220px]">
-        <div className="rounded-xl border border-line bg-[#080c19]">
+        <div className="rounded-xl border border-line bg-[#f8fafd]">
           <svg viewBox="0 0 600 300" className="block w-full">
             {f.contacts.map(([a, b], i) => (
               <line key={i} x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y} stroke={C.active} strokeOpacity={0.35} strokeWidth={1.2} />
@@ -65,7 +65,7 @@ export default function Gossip() {
               const r = f.infected[i];
               const fresh = r === f.round && f.round > 0;
               const color = r < 0 ? C.base : i === 0 ? C.compare : C.active;
-              return <circle key={i} cx={p.x} cy={p.y} r={fresh ? 8 : 6} fill={r < 0 ? "#111830" : `${color}`} stroke={color} strokeWidth={1.5} style={fresh ? { filter: `drop-shadow(0 0 6px ${color})` } : undefined} />;
+              return <circle key={i} cx={p.x} cy={p.y} r={fresh ? 8 : 6} fill={r < 0 ? "#f1f5f9" : `${color}`} stroke={color} strokeWidth={1.5} style={fresh ? { filter: `drop-shadow(0 0 6px ${color})` } : undefined} />;
             })}
           </svg>
         </div>

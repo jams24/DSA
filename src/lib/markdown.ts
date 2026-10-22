@@ -9,7 +9,7 @@ import rehypeStringify from "rehype-stringify";
 import { codeToHtml } from "shiki";
 import { cacheLife } from "next/cache";
 
-const THEME = "tokyo-night";
+const THEME = "github-light";
 
 const processor = unified()
   .use(remarkParse)

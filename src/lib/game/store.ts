@@ -12,6 +12,7 @@ export interface PublicUser {
   id: string;
   username: string;
   avatar: string;
+  role?: string;
 }
 
 export interface Toast {
@@ -146,6 +147,11 @@ export const useGame = create<GameStore>()(
 /** The active player's state: the account when signed in, otherwise local guest progress. */
 export function usePlayer(): PlayerState {
   return useGame((s) => (s.user && s.remote ? s.remote : s.guest));
+}
+
+/** Admins see every level as unlocked (no "clear the levels first" hints). */
+export function useIsAdmin(): boolean {
+  return useGame((s) => s.user?.role === "admin");
 }
 
 export function playerSnapshot(): PlayerState {

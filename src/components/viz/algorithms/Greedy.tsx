@@ -81,7 +81,7 @@ export default function Greedy() {
           { value: "short", label: "Shortest first" },
         ]}
       />
-      <div className="rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="relative space-y-1.5">
           {f.order.map((id) => {
             const iv = SEED[id];

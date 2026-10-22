@@ -36,11 +36,11 @@ export default function Roofline() {
           <Slider label="prompt length (prefill)" value={Math.log2(prompt)} min={6} max={14} onChange={(v) => setPrompt(2 ** v)} format={() => prompt.toLocaleString()} />
         </div>
       </div>
-      <div className="rounded-xl border border-line bg-[#080c19] p-2">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="block w-full">
           {[1, 10, 100, 1000].map((tf) => (
             <g key={tf}>
-              <line x1={50} x2={W - 20} y1={yLog(tf)} y2={yLog(tf)} stroke="#1a2140" />
+              <line x1={50} x2={W - 20} y1={yLog(tf)} y2={yLog(tf)} stroke="#e9eef5" />
               <text x={44} y={yLog(tf) + 3} textAnchor="end" fontSize="9" fill={C.faint}>
                 {tf}
               </text>
@@ -48,7 +48,7 @@ export default function Roofline() {
           ))}
           {[1, 10, 100, 1000, 10000, 100000].map((ai) => (
             <g key={ai}>
-              <line x1={xLog(ai)} x2={xLog(ai)} y1={20} y2={H - 30} stroke="#1a2140" />
+              <line x1={xLog(ai)} x2={xLog(ai)} y1={20} y2={H - 30} stroke="#e9eef5" />
               <text x={xLog(ai)} y={H - 16} textAnchor="middle" fontSize="9" fill={C.faint}>
                 {ai >= 1000 ? `${ai / 1000}k` : ai}
               </text>

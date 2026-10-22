@@ -13,7 +13,9 @@ export async function POST(req: Request) {
     return Response.json({ error: "Too many attempts. Wait a few minutes and try again." }, { status: 429 });
   }
 
-  const user = await prisma.user.findUnique({ where: { username } });
+  const user = username.includes("@")
+    ? await prisma.user.findUnique({ where: { email: username.toLowerCase() } })
+    : await prisma.user.findUnique({ where: { username } });
   if (!user || !(await verifyPassword(password, user.passwordHash))) {
     return Response.json({ error: "Wrong username or password" }, { status: 401 });
   }

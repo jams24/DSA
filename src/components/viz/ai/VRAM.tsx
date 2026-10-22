@@ -71,7 +71,7 @@ export default function VRAM() {
         </div>
       </div>
 
-      <div className="space-y-2 rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="space-y-2 rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="flex h-8 overflow-hidden rounded-lg bg-line">
           {[
             { v: weightsGB, c: C.pivot, l: "weights" },
@@ -97,7 +97,7 @@ export default function VRAM() {
           {GPUS.map((g) => {
             const n = Math.ceil(total / (g.mem * 0.92));
             return (
-              <div key={g.name} className="rounded-lg border px-2 py-1.5 text-center" style={{ borderColor: n === 1 ? `${C.done}66` : "#1e2747" }}>
+              <div key={g.name} className="rounded-lg border px-2 py-1.5 text-center" style={{ borderColor: n === 1 ? `${C.done}66` : "#e2e8f0" }}>
                 <div className="text-[11px] text-ink">{g.name}</div>
                 <div className="font-mono text-xs" style={{ color: n === 1 ? C.done : n <= 2 ? C.compare : C.bad }}>
                   {n === 1 ? "fits on 1" : `needs ${n}`}

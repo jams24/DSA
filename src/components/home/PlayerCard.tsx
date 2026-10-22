@@ -19,7 +19,7 @@ export function PlayerCard() {
   if (!ready) return <div className="shimmer panel h-[340px]" />;
 
   return (
-    <div className="panel neon-border relative overflow-hidden p-6" style={{ "--accent": "#a78bfa" } as React.CSSProperties}>
+    <div className="panel neon-border relative overflow-hidden p-6" style={{ "--accent": "#7c3aed" } as React.CSSProperties}>
       <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-violet/20 blur-3xl" />
       <div className="relative flex items-center gap-4">
         <Avatar avatar={user?.avatar ?? "wizard"} size={64} />
@@ -40,14 +40,14 @@ export function PlayerCard() {
             {info.current}/{info.needed} to LV {info.level + 1}
           </span>
         </div>
-        <ProgressBar value={info.pct} color="#a78bfa" height={10} />
+        <ProgressBar value={info.pct} color="#7c3aed" height={10} />
       </div>
       <div className="relative mt-5 grid grid-cols-4 gap-2 text-center">
         {[
-          { icon: Flame, label: "streak", value: player.streak, color: "#fb923c" },
-          { icon: Star, label: "stars", value: prog.stars, color: "#fbbf24" },
-          { icon: Swords, label: "bosses", value: prog.bosses, color: "#fb7185" },
-          { icon: Trophy, label: "badges", value: player.achievements.length, color: "#34d399" },
+          { icon: Flame, label: "streak", value: player.streak, color: "#ea580c" },
+          { icon: Star, label: "stars", value: prog.stars, color: "#d97706" },
+          { icon: Swords, label: "bosses", value: prog.bosses, color: "#e11d48" },
+          { icon: Trophy, label: "badges", value: player.achievements.length, color: "#059669" },
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-line bg-panel-2/80 px-1 py-2.5">
             <s.icon size={16} className="mx-auto" style={{ color: s.color }} />

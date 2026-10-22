@@ -74,7 +74,7 @@ export default function Retries() {
   return (
     <div className="space-y-4">
       <Segmented value={policy} onChange={setPolicy} options={(Object.keys(LABEL) as Policy[]).map((p) => ({ value: p, label: LABEL[p] }))} />
-      <div className="overflow-hidden rounded-xl border border-line bg-[#080c19]">
+      <div className="overflow-hidden rounded-xl border border-line bg-[#f8fafd]">
         <svg viewBox={`0 0 ${W} ${H}`} className="block w-full">
           <rect x={x(OUTAGE[0])} y={10} width={x(OUTAGE[1]) - x(OUTAGE[0])} height={H - 30} fill={C.bad} opacity={0.12} />
           <text x={x(OUTAGE[0]) + 4} y={24} fontSize="10" fill={C.bad}>
@@ -85,7 +85,7 @@ export default function Retries() {
             server capacity
           </text>
           <polyline points={sim.load.map((v, t) => `${x(t)},${y(v)}`).join(" ")} fill="none" stroke={C.active} strokeWidth={1.6} />
-          <line x1={30} x2={W - 10} y1={H - 20} y2={H - 20} stroke="#2a355d" />
+          <line x1={30} x2={W - 10} y1={H - 20} y2={H - 20} stroke="#cbd5e1" />
           {[0, 5, 10, 15, 20, 25, 30].map((s) => (
             <text key={s} x={x(s * 10)} y={H - 6} textAnchor="middle" fontSize="9" fill={C.faint}>
               {s}s

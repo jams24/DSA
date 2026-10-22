@@ -13,7 +13,10 @@ datasource db {
 model User {
   id            String   @id @default(cuid())
   username      String   @unique
+  // optional, lets the user sign in with an email address instead of the username
+  email         String?  @unique
   passwordHash  String
+  role          String   @default("player") // "player" | "admin"
   avatar        String   @default("wizard")
   xp            Int      @default(0)
   streak        Int      @default(0)

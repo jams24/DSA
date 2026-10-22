@@ -43,7 +43,7 @@ export default function MonoStack() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="flex h-48 items-end gap-2">
           {temps.map((t, i) => {
             const color = i === f.i ? C.active : i === f.popped ? C.done : onStack.has(i) ? C.compare : i < f.i ? C.dim : C.base;

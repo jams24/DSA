@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { C, Narration, Slider, TextInput } from "../kit";
 
 const CORPUS = "low low low low lower lower newest newest newest widest widest low";
-const COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24", "#fb923c", "#34d399", "#38bdf8", "#fb7185"];
+const COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706", "#ea580c", "#059669", "#0284c7", "#e11d48"];
 
 function learn(corpus: string, merges: number) {
   const words = corpus.trim().split(/\s+/).filter(Boolean);
@@ -95,7 +95,7 @@ export default function Tokenizer() {
             {!learned.length && <li className="text-faint">none yet — every token is a single character</li>}
           </ol>
         </div>
-        <div className="space-y-3 rounded-xl border border-line bg-[#080c19] p-3">
+        <div className="space-y-3 rounded-xl border border-line bg-[#f8fafd] p-3">
           <div className="text-[10px] uppercase tracking-wider text-faint">Training words after merging (_ marks end of word)</div>
           <div className="flex flex-wrap gap-3">
             {tokenized.map(({ toks, count }, i) => (

@@ -49,7 +49,7 @@ export function AuthForm() {
   }
 
   return (
-    <div className="panel neon-border p-6 sm:p-8" style={{ "--accent": "#22d3ee" } as React.CSSProperties}>
+    <div className="panel neon-border p-6 sm:p-8" style={{ "--accent": "#0891b2" } as React.CSSProperties}>
       <div className="mb-6 text-center">
         <div className="font-pixel text-[10px] tracking-widest text-cyan">{mode === "signup" ? "NEW GAME" : "CONTINUE"}</div>
         <h1 className="mt-2 font-display text-2xl font-bold text-ink">{mode === "signup" ? "Create your player" : "Sign in"}</h1>
@@ -76,17 +76,17 @@ export function AuthForm() {
 
       <form onSubmit={submit} className="space-y-4">
         <label className="block">
-          <span className="mb-1.5 block text-xs text-dim">Username</span>
+          <span className="mb-1.5 block text-xs text-dim">{mode === "signup" ? "Username" : "Username or email"}</span>
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"
             required
             minLength={3}
-            maxLength={20}
-            pattern="[a-zA-Z0-9_]+"
+            maxLength={mode === "signup" ? 20 : 120}
+            pattern={mode === "signup" ? "[a-zA-Z0-9_]+" : undefined}
             className="h-11 w-full rounded-xl border border-line-2 bg-panel px-3 text-ink outline-none focus:border-cyan/60"
-            placeholder="letters, numbers, _"
+            placeholder={mode === "signup" ? "letters, numbers, _" : "your username or email"}
           />
         </label>
         <label className="block">
@@ -125,7 +125,7 @@ export function AuthForm() {
         )}
         {error && <div className="rounded-xl border border-rose/40 bg-rose/10 px-3 py-2 text-sm text-rose">{error}</div>}
         {guestXp > 0 && (
-          <div className="rounded-xl border border-emerald/30 bg-emerald/[0.07] px-3 py-2 text-xs text-[#c9f5e3]">
+          <div className="rounded-xl border border-emerald/30 bg-emerald/[0.07] px-3 py-2 text-xs text-[#065f46]">
             Your {guestXp} guest XP and level progress will be merged into this account.
           </div>
         )}

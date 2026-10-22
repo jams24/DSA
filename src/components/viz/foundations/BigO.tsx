@@ -96,7 +96,7 @@ export default function BigO() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-line bg-[#080c19]">
+      <div className="overflow-hidden rounded-xl border border-line bg-[#f8fafd]">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
           {[0, 0.25, 0.5, 0.75, 1].map((g) => (
             <line

@@ -66,7 +66,7 @@ export function LessonQuiz({
     const stars = starsForScore(right, quiz.length);
     if (stars === 3) {
       sfx.victory();
-      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: [accent, "#fbbf24", "#22d3ee", "#f472b6"] });
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: [accent, "#d97706", "#0891b2", "#db2777"] });
     } else if (stars === 0) sfx.defeat();
   }
 

@@ -87,7 +87,7 @@ export default function NQueens() {
         <Slider label="board size n" value={n} min={4} max={8} onChange={setN} />
       </div>
       <div className="grid gap-4 md:grid-cols-[auto_1fr]">
-        <div className="mx-auto grid w-[min(100%,360px)] gap-0.5 rounded-xl border border-line bg-[#080c19] p-2" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+        <div className="mx-auto grid w-[min(100%,360px)] gap-0.5 rounded-xl border border-line bg-[#f8fafd] p-2" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
           {Array.from({ length: n * n }, (_, k) => {
             const r = Math.floor(k / n);
             const c = k % n;
@@ -100,7 +100,7 @@ export default function NQueens() {
                 key={k}
                 className="grid aspect-square place-items-center rounded-[4px] text-xl transition-colors duration-150 sm:text-2xl"
                 style={{
-                  background: isTry ? (f.tone === "bad" ? `${C.bad}55` : `${C.active}44`) : isConflict ? `${C.bad}33` : dark ? "#18213f" : "#111830",
+                  background: isTry ? (f.tone === "bad" ? `${C.bad}55` : `${C.active}44`) : isConflict ? `${C.bad}33` : dark ? "#f1f5f9" : "#f1f5f9",
                   boxShadow: isTry ? `inset 0 0 0 2px ${f.tone === "bad" ? C.bad : C.active}` : isConflict ? `inset 0 0 0 2px ${C.bad}` : undefined,
                 }}
               >

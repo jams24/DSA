@@ -80,7 +80,7 @@ export default function CRDT() {
       </div>
       <div className="grid gap-3 md:grid-cols-3">
         {reps.map((r, i) => (
-          <div key={i} className="space-y-3 rounded-xl border border-line bg-[#080c19] p-3">
+          <div key={i} className="space-y-3 rounded-xl border border-line bg-[#f8fafd] p-3">
             <div className="font-display font-semibold text-ink">📱 Replica {R[i]}</div>
             <div className="rounded-lg border border-line bg-panel p-2">
               <div className="flex items-center justify-between text-[11px] text-dim">

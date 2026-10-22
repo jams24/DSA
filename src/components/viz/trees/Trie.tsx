@@ -133,7 +133,7 @@ export default function TrieViz() {
         <SmallBtn onClick={() => run("search")}>search word</SmallBtn>
         <SmallBtn tone="good" onClick={() => run("prefix")}>autocomplete prefix</SmallBtn>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg width={W} height={H} className="block">
           {Object.values(f.trie).flatMap((n) =>
             Object.values(n.kids).map((k) => (

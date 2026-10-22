@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { clsx } from "clsx";
 import { Check, Lock } from "lucide-react";
-import { useGame, usePlayer } from "@/lib/game/store";
+import { useGame, useIsAdmin, usePlayer } from "@/lib/game/store";
 import { nextInWorld, worldProgress } from "@/lib/game/progress";
 import { useCatalog } from "@/components/game/GameProvider";
 import { Stars } from "@/components/ui";
@@ -16,6 +16,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
   const world = catalog.find((w) => w.id === worldId);
   const player = usePlayer();
   const ready = useGame((s) => s.ready);
+  const admin = useIsAdmin();
   if (!world) return null;
 
   const accent = world.color;
@@ -42,8 +43,8 @@ export function WorldMap({ worldId }: { worldId: string }) {
   return (
     <div className="relative mx-auto w-full max-w-3xl" style={{ height }}>
       <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 100 ${height}`} preserveAspectRatio="none" aria-hidden>
-        <path d={d} fill="none" stroke="#1e2747" strokeWidth={14} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-        <path d={d} fill="none" stroke="#2a355d" strokeWidth={2} strokeDasharray="2 10" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        <path d={d} fill="none" stroke="#e2e8f0" strokeWidth={14} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        <path d={d} fill="none" stroke="#cbd5e1" strokeWidth={2} strokeDasharray="2 10" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
         {reached > 0 && (
           <path
             d={dDone}
@@ -74,23 +75,23 @@ export function WorldMap({ worldId }: { worldId: string }) {
               style={
                 {
                   "--glow": accent,
-                  borderColor: done || isNext ? accent : "#2a355d",
-                  background: done ? `radial-gradient(circle at 35% 30%, ${accent}, ${accent}99 60%, ${accent}55), #111830` : isNext ? `linear-gradient(${accent}22, ${accent}22), #111830` : "#111830",
-                  boxShadow: done ? `0 6px 0 0 ${accent}55, 0 0 24px -4px ${accent}` : "0 6px 0 0 #070a14",
+                  borderColor: done || isNext ? accent : "#cbd5e1",
+                  background: done ? `radial-gradient(circle at 35% 30%, ${accent}, ${accent}99 60%, ${accent}55), #f1f5f9` : isNext ? `linear-gradient(${accent}22, ${accent}22), #f1f5f9` : "#f1f5f9",
+                  boxShadow: done ? `0 6px 0 0 ${accent}55, 0 0 24px -4px ${accent}` : "0 6px 0 0 #cbd5e1",
                 } as React.CSSProperties
               }
               aria-label={`Level ${i + 1}: ${l.title}`}
             >
               {done ? (
-                <Check size={30} strokeWidth={3} className="text-[#06120a]" />
+                <Check size={30} strokeWidth={3} className="text-[#ffffff]" />
               ) : (
-                <span className="font-pixel text-sm" style={{ color: isNext ? accent : "#9aa2c4" }}>
+                <span className="font-pixel text-sm" style={{ color: isNext ? accent : "#64748b" }}>
                   {i + 1}
                 </span>
               )}
               {isNext && (
                 <span
-                  className="absolute -top-8 animate-float rounded-lg px-2 py-1 font-pixel text-[8px] whitespace-nowrap text-[#06120a]"
+                  className="absolute -top-8 animate-float rounded-lg px-2 py-1 font-pixel text-[8px] whitespace-nowrap text-[#ffffff]"
                   style={{ background: accent }}
                 >
                   {prog.done === 0 ? "START" : "NEXT"}
@@ -121,7 +122,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
         const i = count - 1;
         const left = xOf(i);
         const beaten = ready && prog.boss > 0;
-        const allDone = ready && prog.done === prog.total;
+        const allDone = admin || (ready && prog.done === prog.total);
         return (
           <div className="absolute" style={{ left: `${left}%`, top: yOf(i), transform: "translate(-50%, -50%)" }}>
             <Link
@@ -132,10 +133,10 @@ export function WorldMap({ worldId }: { worldId: string }) {
               )}
               style={
                 {
-                  "--glow": "#fb7185",
-                  borderColor: beaten ? "#34d399" : "#fb7185",
-                  background: beaten ? "#34d39922" : "radial-gradient(circle, #fb718544, #2a0a12)",
-                  boxShadow: "0 8px 0 0 #3b0a17, 0 0 40px -6px #fb7185",
+                  "--glow": "#e11d48",
+                  borderColor: beaten ? "#059669" : "#e11d48",
+                  background: beaten ? "#34d39922" : "radial-gradient(circle, #fb718544, #fff1f2)",
+                  boxShadow: "0 8px 0 0 #fda4af, 0 0 40px -6px #e11d48",
                 } as React.CSSProperties
               }
               aria-label={`Boss battle: ${world.boss.name}`}
@@ -150,7 +151,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
             <div className={clsx("absolute top-1/2 w-[min(33vw,240px)] -translate-y-1/2", left < 50 ? "left-[calc(100%+16px)]" : "right-[calc(100%+16px)] text-right")}>
               <div className="font-pixel text-[9px] text-rose">BOSS BATTLE</div>
               <div className="font-display font-bold text-ink">{world.boss.name}</div>
-              <div className="text-xs text-dim">{beaten ? <Stars count={prog.boss} size={11} /> : allDone ? "You're ready. Fight!" : "Clear the levels first (or be brave)."}</div>
+              <div className="text-xs text-dim">{beaten ? <Stars count={prog.boss} size={11} /> : admin ? "Unlocked (admin)" : allDone ? "You're ready. Fight!" : "Clear the levels first (or be brave)."}</div>
             </div>
           </div>
         );

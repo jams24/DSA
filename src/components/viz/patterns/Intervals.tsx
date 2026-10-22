@@ -59,7 +59,7 @@ export default function Intervals() {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-3 rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="space-y-3 rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="text-[10px] uppercase tracking-wider text-faint">Sorted input</div>
         <div className="space-y-1">
           {f.sorted.map(([a, b], i) => (

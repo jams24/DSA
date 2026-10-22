@@ -3,6 +3,7 @@ import { GuestState } from "./api-schemas";
 import { prisma } from "./db";
 import { emptyState, mergeGuest, type Outcome, type PlayerState } from "./game/engine";
 import { catalog } from "./grade";
+import { LC150_SLUGS } from "@/content/leetcode150";
 import { loadPlayer, lockUser, persistOutcome, type PublicUser } from "./player";
 
 export const TX = { timeout: 30_000, maxWait: 10_000 };
@@ -22,7 +23,7 @@ export function parseGuest(raw: unknown): PlayerState | null {
   if (!parsed.success) return null;
   const g = parsed.data;
   if (Object.keys(g.progress).length > 400 || Object.keys(g.cards).length > 3000) return null;
-  if (g.xp <= 0 && Object.keys(g.progress).length === 0 && Object.keys(g.cards).length === 0) return null;
+  if (g.xp <= 0 && Object.keys(g.progress).length === 0 && Object.keys(g.cards).length === 0 && !g.stats.solved?.length) return null;
   return { ...emptyState(), ...g, progress: g.progress, cards: g.cards, stats: g.stats };
 }
 
@@ -36,7 +37,7 @@ export async function loadWithGuest(
     const loaded = await loadPlayer(tx, userId);
     if (!loaded) return null;
     if (!guest) return { ...loaded, merged: null };
-    const outcome = mergeGuest(loaded.state, guest, catalog());
+    const outcome = mergeGuest(loaded.state, guest, catalog(), new Date(), (slug) => LC150_SLUGS.has(slug));
     await persistOutcome(tx, userId, loaded.state, outcome);
     return { user: loaded.user, state: outcome.state, merged: outcome };
   }, TX);

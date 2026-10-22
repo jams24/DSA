@@ -28,6 +28,8 @@ export interface PlayerStats {
   capXp?: number;
   /** recent once-per-day claims, e.g. "daily:2026-10-22" */
   claims?: string[];
+  /** LeetCode Top Interview 150 slugs the player has marked solved */
+  solved?: string[];
 }
 
 export interface PlayerState {
@@ -48,7 +50,8 @@ export type GameAction =
   | { type: "boss"; worldId: string; won: boolean; heartsLeft: number }
   | { type: "arena"; correct: number; total: number }
   | { type: "daily"; day: string; correct: number; total: number }
-  | { type: "review"; cardId: string; knew: boolean };
+  | { type: "review"; cardId: string; knew: boolean }
+  | { type: "solve"; slug: string; solved: boolean };
 
 export interface XpGrant {
   amount: number;
@@ -81,6 +84,7 @@ export const REWARDS = {
   dailyPerCorrect: 10,
   dailyCap: 300,
   guestExtraCap: 500,
+  solve: 10,
 } as const;
 
 export const BOSS_HP = 8;
@@ -143,7 +147,7 @@ function clone(s: PlayerState): PlayerState {
     progress: Object.fromEntries(Object.entries(s.progress).map(([k, v]) => [k, { ...v }])),
     achievements: [...s.achievements],
     cards: Object.fromEntries(Object.entries(s.cards).map(([k, v]) => [k, { ...v }])),
-    stats: { ...s.stats, claims: [...(s.stats.claims ?? [])] },
+    stats: { ...s.stats, claims: [...(s.stats.claims ?? [])], solved: [...(s.stats.solved ?? [])] },
   };
 }
 
@@ -287,6 +291,21 @@ export function applyAction(state: PlayerState, action: GameAction, catalog: Cat
       return finish(state, s, grants, catalog);
     }
 
+    case "solve": {
+      // symmetric so toggling can't farm XP: +10 when marked solved, −10 when unmarked
+      const solved = new Set(s.stats.solved ?? []);
+      if (action.solved && !solved.has(action.slug)) {
+        solved.add(action.slug);
+        grant(REWARDS.solve, `lc150:${action.slug}`);
+      } else if (!action.solved && solved.has(action.slug)) {
+        solved.delete(action.slug);
+        s.xp = Math.max(0, s.xp - REWARDS.solve);
+        grants.push({ amount: -REWARDS.solve, reason: `lc150-undo:${action.slug}` });
+      }
+      s.stats.solved = [...solved];
+      return finish(state, s, grants, catalog);
+    }
+
     case "review": {
       const prev = s.cards[action.cardId] ?? { box: 1, dueAt: now.toISOString(), reviews: 0 };
       const box = action.knew ? Math.min(5, prev.box + 1) : 1;
@@ -318,7 +337,13 @@ export function validProgressKeys(catalog: Catalog): Set<string> {
  * lessons/bosses is recomputed from the merged entries, so replaying a sync never
  * double-counts; other guest XP (arena, dailies) is accepted up to a fixed cap.
  */
-export function mergeGuest(server: PlayerState, guest: PlayerState, catalog: Catalog, now = new Date()): Outcome {
+export function mergeGuest(
+  server: PlayerState,
+  guest: PlayerState,
+  catalog: Catalog,
+  now = new Date(),
+  isValidSlug: (slug: string) => boolean = () => false,
+): Outcome {
   const s = clone(server);
   const grants: XpGrant[] = [];
   const valid = validProgressKeys(catalog);
@@ -351,11 +376,21 @@ export function mergeGuest(server: PlayerState, guest: PlayerState, catalog: Cat
     grants.push({ amount: delta, reason: "guest-progress" });
   }
 
+  const guestSolved = (guest.stats?.solved ?? []).filter((x) => typeof x === "string" && isValidSlug(x));
+  const solved = new Set(s.stats.solved ?? []);
+  const newlySolved = guestSolved.filter((x) => !solved.has(x));
+  newlySolved.forEach((x) => solved.add(x));
+  s.stats.solved = [...solved];
+  if (newlySolved.length) {
+    s.xp += newlySolved.length * REWARDS.solve;
+    grants.push({ amount: newlySolved.length * REWARDS.solve, reason: "guest-lc150" });
+  }
+
   const ach = buildAchievements(catalog);
   const guestAchXp = (guest.achievements ?? []).reduce((n, id) => n + (ach.find((a) => a.id === id)?.xp ?? 0), 0);
   const extra = Math.min(
     REWARDS.guestExtraCap,
-    Math.max(0, Math.round(Number(guest.xp) || 0) - guestEntryXp - guestAchXp),
+    Math.max(0, Math.round(Number(guest.xp) || 0) - guestEntryXp - guestAchXp - guestSolved.length * REWARDS.solve),
   );
   if (extra > 0) {
     s.xp += extra;

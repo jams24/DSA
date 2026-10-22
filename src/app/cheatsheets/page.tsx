@@ -19,7 +19,7 @@ export default async function CheatSheetsPage() {
         <nav className="hidden lg:block">
           <div className="sticky top-24 space-y-1">
             {sheets.map((s) => (
-              <a key={s.id} href={`#${s.id}`} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-dim hover:bg-white/5 hover:text-ink">
+              <a key={s.id} href={`#${s.id}`} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-dim hover:bg-slate-900/5 hover:text-ink">
                 <span>{s.emoji}</span>
                 {s.title}
               </a>

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { C, Narration, Slider, Stat } from "../kit";
 
 const LENGTHS = [3, 12, 5, 8, 2, 10, 6, 4, 9, 3, 7, 5];
-const COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24", "#fb923c", "#34d399", "#38bdf8", "#fb7185", "#c084fc", "#2dd4bf", "#facc15"];
+const COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706", "#ea580c", "#059669", "#0284c7", "#e11d48", "#9333ea", "#0d9488", "#ca8a04"];
 
 interface Sched {
   grid: (number | null)[][]; // [slot][step] = request id
@@ -58,7 +58,7 @@ function Chart({ s, title, color }: { s: Sched; title: string; color: string }) 
   const busy = s.grid.flat().filter((x) => x !== null && x !== undefined).length;
   const util = busy / (s.grid.length * s.steps);
   return (
-    <div className="space-y-2 rounded-xl border bg-[#080c19] p-3" style={{ borderColor: `${color}55` }}>
+    <div className="space-y-2 rounded-xl border bg-[#f8fafd] p-3" style={{ borderColor: `${color}55` }}>
       <div className="flex items-baseline justify-between">
         <span className="font-display text-sm font-semibold" style={{ color }}>
           {title}
@@ -79,8 +79,8 @@ function Chart({ s, title, color }: { s: Sched; title: string; color: string }) 
                     key={t}
                     className="h-5 w-5 shrink-0 rounded-[3px] text-center font-mono text-[8px] leading-5"
                     style={{
-                      background: id === null || id === undefined ? "repeating-linear-gradient(45deg,#1a1222,#1a1222 3px,#100c18 3px,#100c18 6px)" : COLORS[id % COLORS.length],
-                      color: "#06120a",
+                      background: id === null || id === undefined ? "repeating-linear-gradient(45deg,#f1f5f9,#f1f5f9 3px,#e2e8f0 3px,#e2e8f0 6px)" : COLORS[id % COLORS.length],
+                      color: "#ffffff",
                     }}
                     title={id === null || id === undefined ? "idle (padding)" : `request ${id + 1}`}
                   >

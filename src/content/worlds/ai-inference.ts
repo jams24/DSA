@@ -9,7 +9,7 @@ export const aiInference: World = {
   description:
     "AI infrastructure is now standard interview territory. Learn how LLMs actually run on GPUs, why decoding is memory-bound, and the tricks every serving stack uses — plus RAG and ML system design.",
   emoji: "🧠",
-  color: "#22d3ee",
+  color: "#0891b2",
   boss: {
     name: "The Hallucinating Oracle",
     title: "Confidently Wrong Since Token One",

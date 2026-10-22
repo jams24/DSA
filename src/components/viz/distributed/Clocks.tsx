@@ -115,7 +115,7 @@ export default function Clocks() {
         </SmallBtn>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg width={W} height={300} className="block">
           <defs>
             <marker id="clk-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -141,7 +141,7 @@ export default function Clocks() {
             const color = on ? C.compare : LANE_C[e.p];
             return (
               <g key={e.id} onClick={() => toggleSel(e.id)} className="cursor-pointer">
-                <circle cx={X(e.id)} cy={LANE_Y[e.p]} r={on ? 10 : 8} fill={e.kind === "local" ? "#0c1121" : color} stroke={color} strokeWidth={2.5} />
+                <circle cx={X(e.id)} cy={LANE_Y[e.p]} r={on ? 10 : 8} fill={e.kind === "local" ? "#ffffff" : color} stroke={color} strokeWidth={2.5} />
                 <text x={X(e.id)} y={LANE_Y[e.p] - 16} textAnchor="middle" fontSize="10" fill={C.text} fontFamily="monospace">
                   L{e.lamport}
                 </text>

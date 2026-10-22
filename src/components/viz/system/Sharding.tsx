@@ -6,7 +6,7 @@ import { C, Narration, Segmented, Slider, Stat } from "../kit";
 type Method = "mod" | "range" | "consistent";
 
 const KEYS = Array.from({ length: 48 }, (_, i) => i + 1);
-const COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24", "#fb923c", "#34d399", "#38bdf8", "#fb7185"];
+const COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706", "#ea580c", "#059669", "#0284c7", "#e11d48"];
 const VNODES = 40;
 
 function fnv(s: string) {
@@ -86,7 +86,7 @@ export default function Sharding() {
 
       <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${shards}, minmax(0, 1fr))` }}>
         {Array.from({ length: shards }, (_, s) => (
-          <div key={s} className="rounded-xl border bg-[#080c19] p-2" style={{ borderColor: `${COLORS[s]}55` }}>
+          <div key={s} className="rounded-xl border bg-[#f8fafd] p-2" style={{ borderColor: `${COLORS[s]}55` }}>
             <div className="mb-2 flex items-center justify-between">
               <span className="font-mono text-[11px] font-semibold" style={{ color: COLORS[s] }}>
                 🗄️ shard {s + 1}
@@ -100,7 +100,7 @@ export default function Sharding() {
                     key={k}
                     className="rounded px-1 py-0.5 font-mono text-[9px] transition-all"
                     style={{
-                      background: added && before[i] !== after[i] ? `${C.compare}33` : "#18213f",
+                      background: added && before[i] !== after[i] ? `${C.compare}33` : "#f1f5f9",
                       color: added && before[i] !== after[i] ? C.compare : C.muted,
                       boxShadow: added && before[i] !== after[i] ? `0 0 0 1px ${C.compare}` : undefined,
                     }}

@@ -41,7 +41,7 @@ export function QuestionCard({
                 "group flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all",
                 state === "idle" && "border-line-2 bg-panel-2 hover:-translate-y-0.5 hover:border-cyan/60 hover:bg-panel-3",
                 state === "picked" && "border-cyan bg-cyan/10",
-                state === "right" && "border-emerald bg-emerald/10 shadow-[0_0_20px_-6px_#34d399]",
+                state === "right" && "border-emerald bg-emerald/10 shadow-[0_0_20px_-6px_#059669]",
                 state === "wrong" && "animate-shake border-rose bg-rose/10",
                 state === "dim" && "border-line bg-panel opacity-50",
               )}
@@ -49,12 +49,12 @@ export function QuestionCard({
               <span
                 className={clsx(
                   "grid h-7 w-7 shrink-0 place-items-center rounded-lg border font-pixel text-[9px]",
-                  state === "right" ? "border-emerald bg-emerald text-[#04140d]" : state === "wrong" ? "border-rose bg-rose text-[#2a0610]" : "border-line-2 text-dim",
+                  state === "right" ? "border-emerald bg-emerald text-[#ffffff]" : state === "wrong" ? "border-rose bg-rose text-[#ffffff]" : "border-line-2 text-dim",
                 )}
               >
                 {state === "right" ? <Check size={14} /> : state === "wrong" ? <X size={14} /> : String.fromCharCode(65 + i)}
               </span>
-              <span className="text-[15px] text-[#d5dbf0]">
+              <span className="text-[15px] text-[#334155]">
                 <InlineMd text={opt} />
               </span>
             </button>
@@ -65,7 +65,7 @@ export function QuestionCard({
         <div
           className={clsx(
             "mt-4 animate-pop rounded-xl border px-4 py-3 text-sm",
-            selected === q.answer ? "border-emerald/40 bg-emerald/[0.07] text-[#c9f5e3]" : "border-amber/40 bg-amber/[0.07] text-[#fbe9c0]",
+            selected === q.answer ? "border-emerald/40 bg-emerald/[0.07] text-[#065f46]" : "border-amber/40 bg-amber/[0.07] text-[#92400e]",
           )}
         >
           <span className="mr-1 font-semibold">{selected === q.answer ? "Correct!" : selected === -1 ? "Time's up." : "Not quite."}</span>

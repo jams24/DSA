@@ -165,7 +165,7 @@ export default function DP() {
           </>
         )}
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-3 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-3 scrollbar-thin">
         <table className="border-separate border-spacing-1 font-mono text-xs">
           <thead>
             <tr>

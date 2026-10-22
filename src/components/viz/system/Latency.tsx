@@ -68,7 +68,7 @@ export default function Latency() {
           ))}
         </div>
       </div>
-      <div className="space-y-1.5 rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="space-y-1.5 rounded-xl border border-line bg-[#f8fafd] p-4">
         {ROWS.map((r) => {
           const w = (Math.log10(r.ns / 0.5) / maxLog) * 100;
           const t = TIER[r.tier as keyof typeof TIER];

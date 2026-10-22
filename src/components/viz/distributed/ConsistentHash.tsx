@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { C, Narration, Slider, SmallBtn, Stat } from "../kit";
 
-const COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24", "#fb923c", "#34d399", "#38bdf8"];
+const COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706", "#ea580c", "#059669", "#0284c7"];
 const KEYS = Array.from({ length: 36 }, (_, i) => `key${i + 1}`);
 const SPACE = 2 ** 32;
 
@@ -93,9 +93,9 @@ export default function ConsistentHash() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[460px_1fr]">
-        <div className="rounded-xl border border-line bg-[#080c19]">
+        <div className="rounded-xl border border-line bg-[#f8fafd]">
           <svg viewBox="0 0 460 460" className="block w-full">
-            <circle cx={CX} cy={CY} r={R} fill="none" stroke="#26305a" strokeWidth={10} />
+            <circle cx={CX} cy={CY} r={R} fill="none" stroke="#cbd5e1" strokeWidth={10} />
             {cur.map((v, i) => {
               const next = cur[(i + 1) % cur.length];
               // arc from this vnode to the next is owned by `next`
@@ -112,13 +112,13 @@ export default function ConsistentHash() {
               const isMoved = ownOld && ownOld[i] !== own[i];
               return (
                 <g key={x.k} onMouseEnter={() => setHover(x.k)} onMouseLeave={() => setHover(null)}>
-                  <circle cx={p.x} cy={p.y} r={isMoved ? 6 : 4.5} fill={COLORS[own[i]]} stroke={isMoved ? "#fff" : "none"} strokeWidth={2} style={isMoved ? { filter: "drop-shadow(0 0 5px #fff)" } : undefined} />
+                  <circle cx={p.x} cy={p.y} r={isMoved ? 6 : 4.5} fill={COLORS[own[i]]} stroke={isMoved ? "#0f172a" : "none"} strokeWidth={2} style={isMoved ? { filter: "drop-shadow(0 0 4px #0f172a66)" } : undefined} />
                 </g>
               );
             })}
             {cur.map((v, i) => {
               const p = pt(v.pos);
-              return <rect key={i} x={p.x - 6} y={p.y - 6} width={12} height={12} rx={3} fill={COLORS[v.s]} stroke="#060912" strokeWidth={2} transform={`rotate(45 ${p.x} ${p.y})`} />;
+              return <rect key={i} x={p.x - 6} y={p.y - 6} width={12} height={12} rx={3} fill={COLORS[v.s]} stroke="#f5f7fb" strokeWidth={2} transform={`rotate(45 ${p.x} ${p.y})`} />;
             })}
             <text x={CX} y={CY - 8} textAnchor="middle" fontSize="13" fill={C.text} fontWeight="600">
               hash ring 0 … 2³²

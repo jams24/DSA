@@ -102,7 +102,7 @@ export function RapidFire() {
   if (phase === "setup" || phase === "loading") {
     return (
       <div className="panel p-6 text-center sm:p-10">
-        <Zap size={44} className="mx-auto text-cyan drop-shadow-[0_0_12px_#22d3ee]" />
+        <Zap size={44} className="mx-auto text-cyan drop-shadow-[0_0_12px_#0891b2]" />
         <h1 className="mt-4 font-display text-3xl font-bold text-ink">Rapid Fire</h1>
         <p className="mx-auto mt-2 max-w-md text-dim">{DURATION} seconds. Answer as many as you can — wrong answers cost you time, not points. Keys 1–4 work.</p>
         <div className="mt-7">
@@ -136,7 +136,7 @@ export function RapidFire() {
     const wrong = answers.filter((a) => deck.find((q) => q.id === a.id)?.answer !== a.choice);
     return (
       <div className="space-y-5">
-        <div className="panel neon-border p-8 text-center" style={{ "--accent": "#22d3ee" } as React.CSSProperties}>
+        <div className="panel neon-border p-8 text-center" style={{ "--accent": "#0891b2" } as React.CSSProperties}>
           <div className="font-pixel text-[10px] tracking-widest text-cyan">TIME!</div>
           <div className="mt-4 font-display text-6xl font-bold text-ink">{correct}</div>
           <div className="text-dim">
@@ -194,7 +194,7 @@ export function RapidFire() {
       <div
         className={clsx(
           "panel p-5 transition sm:p-7",
-          flash === "right" && "border-emerald shadow-[0_0_30px_-8px_#34d399]",
+          flash === "right" && "border-emerald shadow-[0_0_30px_-8px_#059669]",
           flash === "wrong" && "animate-shake border-rose",
         )}
       >

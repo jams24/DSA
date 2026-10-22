@@ -164,7 +164,7 @@ function Chip({ on, color, onClick, children }: { on: boolean; color?: string; o
       type="button"
       onClick={onClick}
       className={clsx("rounded-full border px-3 py-1.5 text-xs transition", on ? "text-ink" : "border-line-2 text-dim hover:text-ink")}
-      style={on ? { borderColor: color ?? "#22d3ee", background: `${color ?? "#22d3ee"}1f` } : undefined}
+      style={on ? { borderColor: color ?? "#0891b2", background: `${color ?? "#0891b2"}1f` } : undefined}
     >
       {children}
     </button>

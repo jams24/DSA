@@ -6,21 +6,21 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 
 /** Shared palette so every visualizer speaks the same visual language. */
 export const C = {
-  base: "#2a355d",
-  baseFill: "#18213f",
-  active: "#22d3ee",
-  compare: "#fbbf24",
-  swap: "#f472b6",
-  done: "#34d399",
-  pivot: "#a78bfa",
-  bad: "#fb7185",
-  dim: "#1e2747",
-  text: "#e8ebf7",
-  muted: "#9aa2c4",
-  faint: "#636c93",
-  lime: "#a3e635",
-  orange: "#fb923c",
-  sky: "#38bdf8",
+  base: "#cbd5e1",
+  baseFill: "#f1f5f9",
+  active: "#0891b2",
+  compare: "#d97706",
+  swap: "#db2777",
+  done: "#059669",
+  pivot: "#7c3aed",
+  bad: "#e11d48",
+  dim: "#e2e8f0",
+  text: "#0f172a",
+  muted: "#64748b",
+  faint: "#7d879e",
+  lime: "#65a30d",
+  orange: "#ea580c",
+  sky: "#0284c7",
 } as const;
 
 export interface Stepper<F> {
@@ -137,7 +137,7 @@ export function StepControls<F>({ s, onShuffle }: { s: Stepper<F>; onShuffle?: (
       <button
         type="button"
         onClick={s.toggle}
-        className="flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan to-sky px-4 text-sm font-semibold text-[#03131a] shadow-[0_3px_0_0_#0e7490] active:translate-y-px"
+        className="flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan to-sky px-4 text-sm font-semibold text-[#ffffff] shadow-[0_3px_0_0_#155e75] active:translate-y-px"
       >
         {s.playing ? <Pause size={15} /> : <Play size={15} />}
         {s.playing ? "Pause" : s.atEnd && s.total > 1 ? "Replay" : "Play"}
@@ -186,7 +186,7 @@ export function Narration({ children, tone = "info" }: { children: ReactNode; to
     warn: "border-amber/40 bg-amber/[0.08]",
   }[tone];
   return (
-    <div className={clsx("min-h-[3rem] rounded-xl border px-4 py-2.5 text-sm leading-relaxed text-[#d5dbf0]", toneCls)}>
+    <div className={clsx("min-h-[3rem] rounded-xl border px-4 py-2.5 text-sm leading-relaxed text-[#334155]", toneCls)}>
       {children}
     </div>
   );
@@ -225,7 +225,7 @@ export function Segmented<T extends string>({
           onClick={() => onChange(o.value)}
           className={clsx(
             "rounded-lg px-3 py-1.5 text-xs font-medium transition",
-            value === o.value ? "bg-panel-3 text-ink shadow-[inset_0_0_0_1px_#2a355d]" : "text-faint hover:text-ink",
+            value === o.value ? "bg-panel-3 text-ink shadow-[inset_0_0_0_1px_#cbd5e1]" : "text-faint hover:text-ink",
           )}
         >
           {o.label}
@@ -392,7 +392,7 @@ export function PlayPause({ running, onToggle }: { running: boolean; onToggle: (
     <button
       type="button"
       onClick={onToggle}
-      className="flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan to-sky px-4 text-sm font-semibold text-[#03131a] shadow-[0_3px_0_0_#0e7490] active:translate-y-px"
+      className="flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan to-sky px-4 text-sm font-semibold text-[#ffffff] shadow-[0_3px_0_0_#155e75] active:translate-y-px"
     >
       {running ? <Pause size={15} /> : <Play size={15} />}
       {running ? "Pause" : "Run simulation"}

@@ -107,7 +107,7 @@ export default function BinarySearch() {
       </div>
 
       {mode !== "answer" ? (
-        <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+        <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
           <div className="flex gap-1.5">
             {arr.map((v, i) => {
               const out = i < f.lo || i > f.hi;
@@ -136,7 +136,7 @@ export default function BinarySearch() {
           </div>
         </div>
       ) : (
-        <div className="space-y-3 rounded-xl border border-line bg-[#080c19] p-4">
+        <div className="space-y-3 rounded-xl border border-line bg-[#f8fafd] p-4">
           <div className="flex items-end gap-2">
             {PILES.map((p, i) => (
               <div key={i} className="flex flex-1 flex-col items-center">
@@ -153,7 +153,7 @@ export default function BinarySearch() {
             />
             {f.mid !== null && (
               <div className="absolute top-0 -translate-x-1/2 transition-all duration-500" style={{ left: `${((f.mid - 1) / (max - 1)) * 100}%` }}>
-                <div className="rounded bg-cyan px-1.5 font-mono text-[10px] font-bold text-[#03131a]">k={f.mid}</div>
+                <div className="rounded bg-cyan px-1.5 font-mono text-[10px] font-bold text-[#ffffff]">k={f.mid}</div>
               </div>
             )}
           </div>

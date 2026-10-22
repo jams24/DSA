@@ -102,7 +102,7 @@ export default function TwoPointers() {
       </div>
 
       {mode === "water" ? (
-        <div className="rounded-xl border border-line bg-[#080c19] p-4">
+        <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
           <div className="relative flex h-56 items-end gap-2">
             {f.best && (
               <div
@@ -129,7 +129,7 @@ export default function TwoPointers() {
           </button>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+        <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
           <div className="flex gap-1.5">
             {(f.arr ?? (mode === "pair" ? arr : dups)).map((v, i) => {
               const isL = i === f.l;

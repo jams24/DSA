@@ -124,7 +124,7 @@ export default function UnionFind() {
         <SmallBtn onClick={chain}>tall chain demo</SmallBtn>
         <SmallBtn tone="danger" onClick={reset}>reset</SmallBtn>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg width={W} height={H} className="block">
           {f.parent.map((p, i) =>
             p !== i && pos[i] && pos[p] ? <line key={`e${i}`} x1={X(i)} y1={Y(i)} x2={X(p)} y2={Y(p)} stroke={f.hi[i] === C.pivot ? C.pivot : C.base} strokeWidth={2} /> : null,

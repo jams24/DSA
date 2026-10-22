@@ -137,7 +137,7 @@ export default function Heap() {
         <SmallBtn onClick={heapify}>heapify random</SmallBtn>
         <SmallBtn tone="good" onClick={heapSort}>heap sort</SmallBtn>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-2 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-2 scrollbar-thin">
         <TreeSvg nodes={visible} root={root !== null && !sortedSet.has(root) ? root : null} hi={f.hi} />
       </div>
       <div className="overflow-x-auto rounded-xl border border-line bg-panel p-3 scrollbar-thin">

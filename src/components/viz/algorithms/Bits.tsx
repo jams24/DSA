@@ -59,7 +59,7 @@ export default function Bits() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Segmented value={op} onChange={setOp} options={OPS} />
           <span className="text-xs text-faint">Click any bit to flip it.</span>

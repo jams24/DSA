@@ -105,7 +105,7 @@ export default function Quorum() {
         <SmallBtn onClick={antiEntropy}>🔄 anti-entropy sync</SmallBtn>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-3 rounded-xl border border-line bg-[#080c19] p-5">
+      <div className="flex flex-wrap justify-center gap-3 rounded-xl border border-line bg-[#f8fafd] p-5">
         {active.map((x, i) => {
           const hit = touched?.ids.includes(i);
           const color = !x.up ? C.bad : hit ? (touched!.kind === "write" ? C.active : C.done) : x.version === latest ? C.pivot : C.base;

@@ -66,7 +66,7 @@ export default function FastSlow() {
           <Slider label="cycle length" value={cycle} min={3} max={10} onChange={setCycle} />
         </div>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg width={W} height={cy * 2} className="block">
           <defs>
             <marker id="fs-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">

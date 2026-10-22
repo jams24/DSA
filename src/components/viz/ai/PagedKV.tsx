@@ -7,7 +7,7 @@ const BLOCKS = 48; // KV memory, in blocks of 16 tokens
 const BLOCK = 16;
 const MAX_LEN = 192; // tokens a contiguous allocator must reserve per request (max_seq_len)
 const RESERVE = MAX_LEN / BLOCK;
-const COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24", "#fb923c", "#34d399", "#38bdf8", "#fb7185", "#c084fc"];
+const COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706", "#ea580c", "#059669", "#0284c7", "#e11d48", "#9333ea"];
 const REQS = [
   { prompt: 30, out: 40 },
   { prompt: 20, out: 90 },
@@ -117,7 +117,7 @@ function Grid({ mem, title, color, running, done }: { mem: Mem; title: string; c
   const reserved = mem.owner.filter((o) => o !== null).length;
   const filled = mem.used.reduce((a: number, u) => a + (u ?? 0), 0);
   return (
-    <div className="space-y-2 rounded-xl border bg-[#080c19] p-3" style={{ borderColor: `${color}55` }}>
+    <div className="space-y-2 rounded-xl border bg-[#f8fafd] p-3" style={{ borderColor: `${color}55` }}>
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-display text-sm font-semibold" style={{ color }}>
           {title}
@@ -128,17 +128,17 @@ function Grid({ mem, title, color, running, done }: { mem: Mem; title: string; c
       </div>
       <div className="relative grid gap-1" style={{ gridTemplateColumns: "repeat(16, minmax(0, 1fr))" }}>
         {running === 0 && done === REQS.length && (
-          <div className="absolute inset-0 z-10 grid place-items-center rounded-md bg-[#080c19]/70 font-display text-sm font-semibold text-emerald">✓ all {REQS.length} requests finished</div>
+          <div className="absolute inset-0 z-10 grid place-items-center rounded-md bg-[#f8fafd]/70 font-display text-sm font-semibold text-emerald">✓ all {REQS.length} requests finished</div>
         )}
         {mem.owner.map((o, i) => {
           const u = mem.used[i] ?? 0;
           return (
-            <div key={i} className="relative h-6 overflow-hidden rounded-[3px] border" style={{ borderColor: o === null ? "#1e2747" : `${COLORS[o]}88`, background: "#0c1121" }}>
+            <div key={i} className="relative h-6 overflow-hidden rounded-[3px] border" style={{ borderColor: o === null ? "#e2e8f0" : `${COLORS[o]}88`, background: "#ffffff" }}>
               {o !== null && (
                 <>
                   <div className="absolute inset-0" style={{ background: "repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(251,113,133,.18) 3px,rgba(251,113,133,.18) 6px)" }} />
                   <div className="absolute inset-y-0 left-0" style={{ width: `${(u / BLOCK) * 100}%`, background: COLORS[o] }} />
-                  <span className="absolute inset-0 grid place-items-center font-mono text-[8px] text-[#06120a]">{u ? `R${o + 1}` : ""}</span>
+                  <span className="absolute inset-0 grid place-items-center font-mono text-[8px] text-[#ffffff]">{u ? `R${o + 1}` : ""}</span>
                 </>
               )}
             </div>

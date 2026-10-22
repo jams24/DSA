@@ -25,10 +25,10 @@ export function Toaster() {
             onClick={() => dismiss(t.id)}
             className={clsx(
               "pointer-events-auto flex items-center gap-3 rounded-2xl border px-4 py-3 text-left shadow-2xl backdrop-blur-md",
-              t.kind === "xp" && "border-cyan/40 bg-[#062a33]/90",
-              t.kind === "achievement" && "border-amber/50 bg-[#2a1e05]/95",
+              t.kind === "xp" && "border-cyan/40 bg-[#ecfeff]/90",
+              t.kind === "achievement" && "border-amber/50 bg-[#fffbeb]/95",
               t.kind === "info" && "border-line-2 bg-panel-2/95",
-              t.kind === "error" && "border-rose/50 bg-[#2a0a12]/95",
+              t.kind === "error" && "border-rose/50 bg-[#fff1f2]/95",
             )}
           >
             {t.emoji && <span className={clsx("text-2xl", t.kind === "achievement" && "animate-pop")}>{t.emoji}</span>}
@@ -61,7 +61,7 @@ export function LevelUpModal() {
     if (!levelUp) return;
     sfx.levelUp();
     const end = Date.now() + 900;
-    const colors = ["#22d3ee", "#a78bfa", "#f472b6", "#fbbf24", "#a3e635"];
+    const colors = ["#0891b2", "#7c3aed", "#db2777", "#d97706", "#65a30d"];
     const frame = () => {
       confetti({ particleCount: 6, angle: 60, spread: 70, origin: { x: 0, y: 0.7 }, colors });
       confetti({ particleCount: 6, angle: 120, spread: 70, origin: { x: 1, y: 0.7 }, colors });
@@ -74,7 +74,7 @@ export function LevelUpModal() {
     <AnimatePresence>
       {levelUp && (
         <motion.div
-          className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] grid place-items-center bg-slate-900/40 p-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -86,7 +86,7 @@ export function LevelUpModal() {
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 16 }}
             className="panel neon-border relative w-full max-w-sm overflow-hidden p-8 text-center"
-            style={{ "--accent": "#fbbf24" } as React.CSSProperties}
+            style={{ "--accent": "#d97706" } as React.CSSProperties}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="font-pixel text-xs uppercase tracking-[0.3em] text-amber">Level up!</div>

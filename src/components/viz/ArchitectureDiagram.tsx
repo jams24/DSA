@@ -55,7 +55,7 @@ export default function ArchitectureDiagram({ diagram }: { diagram: ArchDiagram 
           options={diagram.flows.map((f, i) => ({ value: String(i), label: f.name }))}
         />
       )}
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg viewBox="0 0 1000 560" className="block w-full min-w-[720px]">
           <defs>
             <marker id="arch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -65,7 +65,7 @@ export default function ArchitectureDiagram({ diagram }: { diagram: ArchDiagram 
               <path d="M0,0 L10,5 L0,10 z" fill={C.active} />
             </marker>
             <pattern id="arch-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M40 0H0V40" fill="none" stroke="#ffffff" strokeOpacity="0.03" />
+              <path d="M40 0H0V40" fill="none" stroke="#0f172a" strokeOpacity="0.05" />
             </pattern>
           </defs>
           <rect width="1000" height="560" fill="url(#arch-grid)" />
@@ -83,7 +83,7 @@ export default function ArchitectureDiagram({ diagram }: { diagram: ArchDiagram 
                   y1={p1.y}
                   x2={p2.x}
                   y2={p2.y}
-                  stroke={hot ? C.active : "#3a4570"}
+                  stroke={hot ? C.active : "#94a3b8"}
                   strokeWidth={hot ? 2.5 : 1.5}
                   strokeDasharray={e.dashed || hot ? "6 5" : undefined}
                   markerEnd={`url(#${hot ? "arch-arrow-hot" : "arch-arrow"})`}
@@ -108,8 +108,8 @@ export default function ArchitectureDiagram({ diagram }: { diagram: ArchDiagram 
                   width={NW}
                   height={NH}
                   rx={14}
-                  fill={active ? `${k.color}2e` : "#0f1529"}
-                  stroke={active ? k.color : seen ? `${k.color}99` : "#2a355d"}
+                  fill={active ? `${k.color}2e` : "#ffffff"}
+                  stroke={active ? k.color : seen ? `${k.color}99` : "#cbd5e1"}
                   strokeWidth={active ? 2.5 : 1.5}
                   style={active ? { filter: `drop-shadow(0 0 10px ${k.color})` } : undefined}
                 />

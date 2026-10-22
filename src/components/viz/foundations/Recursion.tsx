@@ -103,7 +103,7 @@ export default function Recursion() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_180px]">
-        <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+        <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
           <svg width={W} height={H} className="block">
             {nodes.slice(0, f.visible).map((node) => {
               if (node.parent === null) return null;

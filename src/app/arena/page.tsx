@@ -14,7 +14,7 @@ export default function ArenaPage() {
     {
       href: "/arena/daily",
       icon: CalendarCheck2,
-      color: "#fbbf24",
+      color: "#d97706",
       title: "Daily Challenge",
       text: `${DAILY_SIZE} questions drawn from every world. Same set for everyone today.`,
       reward: `up to +${REWARDS.dailyBase + DAILY_SIZE * REWARDS.dailyPerCorrect} XP · once a day`,
@@ -22,7 +22,7 @@ export default function ArenaPage() {
     {
       href: "/arena/rapid-fire",
       icon: Zap,
-      color: "#22d3ee",
+      color: "#0891b2",
       title: "Rapid Fire",
       text: "60 seconds on the clock. Answer as many as you can. Pick the worlds to draw from.",
       reward: `+${REWARDS.arenaPerCorrect} XP per correct answer`,
@@ -30,7 +30,7 @@ export default function ArenaPage() {
     {
       href: "/arena/flashcards",
       icon: Layers,
-      color: "#f472b6",
+      color: "#db2777",
       title: "Mock Interview Cards",
       text: `${cards} real interview questions with model answers, scheduled by spaced repetition.`,
       reward: `+${REWARDS.review} XP per review`,

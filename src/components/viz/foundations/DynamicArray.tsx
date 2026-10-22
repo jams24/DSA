@@ -121,7 +121,7 @@ export default function DynamicArray() {
         <SmallBtn onClick={() => run("get")}>get(index)</SmallBtn>
       </div>
 
-      <div className="space-y-3 overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+      <div className="space-y-3 overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
         {f.ghost && (
           <div className="opacity-50">
             <div className="mb-1 text-[10px] uppercase tracking-wider text-faint">old block</div>

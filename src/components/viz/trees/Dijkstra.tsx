@@ -106,7 +106,7 @@ export default function Dijkstra() {
         <SmallBtn onClick={() => setEdges(BASE_EDGES.map(([a, b]) => [a, b, 1 + Math.floor(Math.random() * 12)]))}>random weights</SmallBtn>
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_220px]">
-        <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+        <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
           <svg viewBox="0 0 700 340" className="block w-full min-w-[520px]">
             {edges.map(([a, b, w]) => {
               const hot = f.edge && ((f.edge[0] === a && f.edge[1] === b) || (f.edge[0] === b && f.edge[1] === a));
@@ -115,7 +115,7 @@ export default function Dijkstra() {
               return (
                 <g key={`${a}${b}`}>
                   <line x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y} stroke={color} strokeWidth={hot || tree ? 3.5 : 1.8} style={hot ? { filter: `drop-shadow(0 0 5px ${color})` } : undefined} />
-                  <rect x={(pos[a].x + pos[b].x) / 2 - 12} y={(pos[a].y + pos[b].y) / 2 - 10} width={24} height={18} rx={5} fill="#0c1121" stroke={color} />
+                  <rect x={(pos[a].x + pos[b].x) / 2 - 12} y={(pos[a].y + pos[b].y) / 2 - 10} width={24} height={18} rx={5} fill="#ffffff" stroke={color} />
                   <text x={(pos[a].x + pos[b].x) / 2} y={(pos[a].y + pos[b].y) / 2 + 3.5} textAnchor="middle" fontSize="11" fill={C.text} fontFamily="monospace">
                     {w}
                   </text>

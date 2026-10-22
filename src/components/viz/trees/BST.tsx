@@ -125,7 +125,7 @@ export default function BST() {
         <SmallBtn onClick={() => preset("skewed")}>sorted inserts</SmallBtn>
         <SmallBtn onClick={() => preset("random")}>random</SmallBtn>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-2 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-2 scrollbar-thin">
         <TreeSvg nodes={f.nodes} root={f.root} hi={f.hi} />
       </div>
       <Narration>{f.msg}</Narration>

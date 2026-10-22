@@ -209,7 +209,7 @@ function Bars({ f, max, height = 220, showValues }: { f: Frame; max: number; hei
               className="w-full rounded-t-[3px] transition-[height] duration-150"
               style={{
                 height: `${(v / max) * 100}%`,
-                background: f.hi[i] ? color : sorted.has(i) ? `${C.done}aa` : `linear-gradient(${C.base}, #1e2747)`,
+                background: f.hi[i] ? color : sorted.has(i) ? `${C.done}aa` : `linear-gradient(#94a3b8, #cbd5e1)`,
                 boxShadow: f.hi[i] ? `0 0 10px ${color}` : undefined,
               }}
             />
@@ -290,7 +290,7 @@ export default function Sorting() {
 
       {mode === "single" ? (
         <>
-          <div className="rounded-xl border border-line bg-[#080c19] p-4">
+          <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
             <Bars f={single.frame} max={max} showValues={input.length <= 24} />
           </div>
           <Narration>{single.frame.msg}</Narration>
@@ -309,7 +309,7 @@ export default function Sorting() {
               const f = fr[Math.min(race.i, fr.length - 1)];
               const done = race.i >= fr.length - 1;
               return (
-                <div key={a} className="rounded-xl border bg-[#080c19] p-3" style={{ borderColor: done ? `${C.done}66` : "#1e2747" }}>
+                <div key={a} className="rounded-xl border bg-[#f8fafd] p-3" style={{ borderColor: done ? `${C.done}66` : "#e2e8f0" }}>
                   <div className="mb-2 flex items-baseline justify-between">
                     <span className="font-display text-sm font-semibold text-ink">{NAMES[a]}</span>
                     <span className="font-mono text-[10px] text-faint">

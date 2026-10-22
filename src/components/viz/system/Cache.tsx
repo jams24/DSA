@@ -95,7 +95,7 @@ export default function Cache() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="mb-3 flex flex-wrap gap-1">
           {seq.map((k, i) => (
             <span

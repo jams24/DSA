@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { C, Narration, PlayPause, Slider, SmallBtn, useSimLoop } from "../kit";
 
-const KEY_COLORS = ["#22d3ee", "#f472b6", "#a3e635", "#fbbf24", "#a78bfa", "#fb923c"];
+const KEY_COLORS = ["#0891b2", "#db2777", "#65a30d", "#d97706", "#7c3aed", "#ea580c"];
 const KEYS = ["alice", "bob", "carol", "dave", "erin", "frank"];
 const SHOW = 22;
 
@@ -108,7 +108,7 @@ export default function MessageQueue() {
       </div>
 
       <div className="grid gap-3 lg:grid-cols-[1fr_200px]">
-        <div className="space-y-2 rounded-xl border border-line bg-[#080c19] p-3">
+        <div className="space-y-2 rounded-xl border border-line bg-[#f8fafd] p-3">
           <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-faint">
             <span>topic “orders” — producer partitions by hash(user) mod {P}</span>
             <span>offset →</span>
@@ -129,7 +129,7 @@ export default function MessageQueue() {
                       <div
                         key={off}
                         className="h-6 w-3 shrink-0 rounded-[3px]"
-                        style={{ background: KEY_COLORS[key], opacity: consumed ? 0.25 : 1, outline: off === p.committed ? `2px solid #fff` : undefined }}
+                        style={{ background: KEY_COLORS[key], opacity: consumed ? 0.25 : 1, outline: off === p.committed ? `2px solid #0f172a` : undefined }}
                         title={`offset ${off} · ${KEYS[key]}`}
                       />
                     );

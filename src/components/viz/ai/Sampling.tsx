@@ -79,7 +79,7 @@ export default function Sampling() {
         <SmallBtn onClick={() => setSamples([])}>clear</SmallBtn>
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_260px]">
-        <div className="space-y-1.5 rounded-xl border border-line bg-[#080c19] p-3">
+        <div className="space-y-1.5 rounded-xl border border-line bg-[#f8fafd] p-3">
           {dist.map((x) => (
             <div key={x.t} className="flex items-center gap-2 text-xs" style={{ opacity: x.keep ? 1 : 0.35 }}>
               <span className="w-20 text-right font-mono text-ink">{x.t.trim()}</span>

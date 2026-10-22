@@ -47,7 +47,7 @@ export function LessonView(props: LessonViewProps) {
   const ready = useGame((s) => s.ready);
   const play = useGame((s) => s.play);
   const entry = player.progress[lesson.key];
-  const accent = world?.color ?? "#22d3ee";
+  const accent = world?.color ?? "#0891b2";
 
   const hasViz = lesson.visualizers.length > 0 || !!lesson.diagram;
   const tabs: { id: Tab; label: string; icon: typeof BookOpen; done: boolean }[] = [
@@ -142,11 +142,11 @@ export function LessonView(props: LessonViewProps) {
                     onClick={() => go(t.id)}
                     className={clsx(
                       "flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition",
-                      tab === t.id ? "bg-panel-3 text-ink shadow-[inset_0_0_0_1px_var(--accent)]" : "text-dim hover:bg-white/5 hover:text-ink",
+                      tab === t.id ? "bg-panel-3 text-ink shadow-[inset_0_0_0_1px_var(--accent)]" : "text-dim hover:bg-slate-900/5 hover:text-ink",
                     )}
                   >
                     <span
-                      className={clsx("grid h-5 w-5 place-items-center rounded-md text-[10px]", t.done ? "bg-emerald text-[#04140d]" : "bg-line-2 text-dim")}
+                      className={clsx("grid h-5 w-5 place-items-center rounded-md text-[10px]", t.done ? "bg-emerald text-[#ffffff]" : "bg-line-2 text-dim")}
                     >
                       {t.done ? <Check size={12} /> : i + 1}
                     </span>
@@ -167,7 +167,7 @@ export function LessonView(props: LessonViewProps) {
                 </h3>
                 <ul className="grid gap-2 sm:grid-cols-2">
                   {lesson.keyPoints.map((k) => (
-                    <li key={k} className="flex gap-2 text-sm text-[#d5dbf0]">
+                    <li key={k} className="flex gap-2 text-sm text-[#334155]">
                       <span style={{ color: accent }}>◆</span>
                       {k}
                     </li>
@@ -247,7 +247,7 @@ export function LessonView(props: LessonViewProps) {
 
           <div className="mt-12 flex flex-wrap justify-between gap-3 border-t border-line pt-6">
             {props.prev ? (
-              <Link href={props.prev.href} className="flex max-w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-dim transition hover:bg-white/5 hover:text-ink">
+              <Link href={props.prev.href} className="flex max-w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-dim transition hover:bg-slate-900/5 hover:text-ink">
                 <ChevronLeft size={16} className="shrink-0" /> {props.prev.title}
               </Link>
             ) : (
@@ -255,7 +255,7 @@ export function LessonView(props: LessonViewProps) {
             )}
             <Link
               href={props.next.href}
-              className="ml-auto flex max-w-full items-center gap-2 rounded-xl border border-line-2 bg-panel-3 px-4 py-2.5 text-sm text-ink shadow-[0_4px_0_0_rgb(0_0_0/0.5)] transition hover:border-faint active:translate-y-[2px]"
+              className="ml-auto flex max-w-full items-center gap-2 rounded-xl border border-line-2 bg-panel-3 px-4 py-2.5 text-sm text-ink shadow-[0_4px_0_0_#d5dce8] transition hover:border-faint active:translate-y-[2px]"
             >
               {props.next.title} <ChevronRight size={16} className="shrink-0" />
             </Link>
@@ -279,12 +279,12 @@ export function LessonView(props: LessonViewProps) {
                         href={`/worlds/${worldId}/${l.id}`}
                         className={clsx(
                           "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition",
-                          current ? "bg-white/[0.06] text-ink" : "text-dim hover:bg-white/[0.04] hover:text-ink",
+                          current ? "bg-slate-900/[0.06] text-ink" : "text-dim hover:bg-slate-900/[0.04] hover:text-ink",
                         )}
                       >
                         <span
                           className="grid h-5 w-5 shrink-0 place-items-center rounded-md text-[10px] font-semibold"
-                          style={{ background: st > 0 ? accent : "#1e2747", color: st > 0 ? "#06120a" : "#9aa2c4" }}
+                          style={{ background: st > 0 ? accent : "#e2e8f0", color: st > 0 ? "#ffffff" : "#64748b" }}
                         >
                           {st > 0 ? "✓" : i + 1}
                         </span>

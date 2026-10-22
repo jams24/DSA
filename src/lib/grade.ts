@@ -2,6 +2,7 @@
 
 import { buildCatalog, dailyQuestions, getLessonByKey, getQuestion, getWorld } from "@/content";
 import type { Catalog } from "@/content/types";
+import { LC150_SLUGS } from "@/content/leetcode150";
 import type { ActionRequest } from "./api-schemas";
 import { simulateBoss } from "./game/boss";
 import { type GameAction, utcDay } from "./game/engine";
@@ -62,6 +63,10 @@ export function grade(req: ActionRequest, now: Date): Graded {
       const correct = qs.filter((q, i) => q.answer === req.answers[i]).length;
       return { action: { type: "daily", day, correct, total: qs.length } };
     }
+
+    case "solve":
+      if (!LC150_SLUGS.has(req.slug)) return { error: "Unknown problem" };
+      return { action: { type: "solve", slug: req.slug, solved: req.solved } };
 
     case "review": {
       const [lessonKey, idx] = req.cardId.split("~");

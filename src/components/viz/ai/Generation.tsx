@@ -60,7 +60,7 @@ export default function Generation() {
           { value: "off", label: "Without KV cache" },
         ]}
       />
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
         <div className="flex gap-1">
           {tokens.map((t, i) => {
             const visible = i < f.total;
@@ -71,7 +71,7 @@ export default function Generation() {
               <div key={i} className="flex w-16 shrink-0 flex-col items-center gap-1" style={{ opacity: visible ? 1 : 0.15 }}>
                 <div
                   className="w-full truncate rounded-md border px-1 py-1 text-center font-mono text-[10px]"
-                  style={{ borderColor: isNew ? C.done : isPrompt ? C.sky : C.pivot, color: isNew ? C.done : C.text, background: isNew ? `${C.done}22` : "#0f1529" }}
+                  style={{ borderColor: isNew ? C.done : isPrompt ? C.sky : C.pivot, color: isNew ? C.done : C.text, background: isNew ? `${C.done}22` : "#ffffff" }}
                 >
                   {t}
                 </div>
@@ -83,9 +83,9 @@ export default function Generation() {
                         key={kv}
                         className="grid h-6 w-6 place-items-center rounded font-mono text-[9px] font-bold transition-all duration-300"
                         style={{
-                          background: !hasKV ? "transparent" : isComputed ? C.bad : cache ? `${C.active}55` : "#1e2747",
-                          color: isComputed ? "#2a0610" : C.text,
-                          border: `1px solid ${!hasKV ? "#1e2747" : isComputed ? C.bad : cache ? C.active : "#26305a"}`,
+                          background: !hasKV ? "transparent" : isComputed ? C.bad : cache ? `${C.active}55` : "#e2e8f0",
+                          color: isComputed ? "#ffffff" : C.text,
+                          border: `1px solid ${!hasKV ? "#e2e8f0" : isComputed ? C.bad : cache ? C.active : "#cbd5e1"}`,
                         }}
                       >
                         {hasKV ? kv : ""}

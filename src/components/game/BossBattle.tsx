@@ -56,7 +56,7 @@ export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId
     setPhase(won ? "won" : "lost");
     if (won) {
       sfx.victory();
-      const colors = [color, "#fbbf24", "#22d3ee", "#f472b6"];
+      const colors = [color, "#d97706", "#0891b2", "#db2777"];
       confetti({ particleCount: 160, spread: 100, origin: { y: 0.5 }, colors });
       setTimeout(() => confetti({ particleCount: 90, spread: 120, origin: { y: 0.4 }, colors }), 400);
     } else sfx.defeat();
@@ -150,7 +150,7 @@ export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId
   if (phase === "won" || phase === "lost") {
     const won = phase === "won";
     return (
-      <div className={clsx("panel p-8 text-center sm:p-12", won ? "neon-border" : "")} style={{ "--accent": won ? "#34d399" : "#fb7185" } as React.CSSProperties}>
+      <div className={clsx("panel p-8 text-center sm:p-12", won ? "neon-border" : "")} style={{ "--accent": won ? "#059669" : "#e11d48" } as React.CSSProperties}>
         <div className={clsx("font-pixel text-xs tracking-[0.3em]", won ? "text-emerald" : "text-rose")}>{won ? "VICTORY" : "DEFEATED"}</div>
         <motion.div initial={{ scale: 0.4, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} className={clsx("my-6 text-8xl", won && "grayscale")}>
           {won ? "🏆" : boss.emoji}
@@ -192,7 +192,7 @@ export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId
               </div>
               <div className="flex gap-1">
                 {Array.from({ length: BOSS_HP }, (_, k) => (
-                  <div key={k} className={clsx("h-3.5 flex-1 rounded-sm transition-all duration-500", k < hp ? "bg-gradient-to-b from-rose to-[#be123c] shadow-[0_0_8px_#fb7185]" : "bg-line")} />
+                  <div key={k} className={clsx("h-3.5 flex-1 rounded-sm transition-all duration-500", k < hp ? "bg-gradient-to-b from-rose to-[#be123c] shadow-[0_0_8px_#e11d48]" : "bg-line")} />
                 ))}
               </div>
             </div>
@@ -200,7 +200,7 @@ export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId
               <span className="text-xs text-dim">You</span>
               <div className="flex gap-1">
                 {Array.from({ length: BOSS_HEARTS }, (_, k) => (
-                  <Heart key={k} size={22} className={clsx("transition", k < hearts ? "fill-rose text-rose drop-shadow-[0_0_6px_#fb7185]" : "text-line-2")} />
+                  <Heart key={k} size={22} className={clsx("transition", k < hearts ? "fill-rose text-rose drop-shadow-[0_0_6px_#e11d48]" : "text-line-2")} />
                 ))}
               </div>
               {combo >= 2 && <span className="animate-pop font-pixel text-[9px] text-orange">COMBO x{combo}</span>}

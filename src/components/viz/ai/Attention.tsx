@@ -70,7 +70,7 @@ export default function Attention() {
         </label>
       </div>
       <div className="grid gap-4 lg:grid-cols-[auto_1fr]">
-        <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-3 scrollbar-thin">
+        <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-3 scrollbar-thin">
           <table className="border-separate border-spacing-[2px] font-mono text-[10px]">
             <thead>
               <tr>
@@ -91,9 +91,9 @@ export default function Attention() {
                       key={j}
                       className="h-7 w-8 rounded-[3px] text-center"
                       style={{
-                        background: causal && j > i ? "repeating-linear-gradient(45deg,#111830,#111830 3px,#0b1020 3px,#0b1020 6px)" : `rgba(34, 211, 238, ${Math.min(1, w * 1.4)})`,
+                        background: causal && j > i ? "repeating-linear-gradient(45deg,#f1f5f9,#f1f5f9 3px,#e2e8f0 3px,#e2e8f0 6px)" : `rgba(8, 145, 178, ${Math.min(1, w * 1.4)})`,
                         outline: i === q ? `1px solid ${C.active}` : undefined,
-                        color: w > 0.45 ? "#03131a" : "#9aa2c4",
+                        color: w > 0.45 ? "#ffffff" : "#64748b",
                       }}
                       title={w.toFixed(3)}
                     >

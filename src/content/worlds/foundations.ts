@@ -10,7 +10,7 @@ export const foundations: World = {
   description:
     "Every interview starts here. Learn to reason about cost, then master the building blocks every other structure is made from.",
   emoji: "🌱",
-  color: "#a3e635",
+  color: "#65a30d",
   boss: {
     name: "Big-O the Ogre",
     title: "Devourer of Nested Loops",

@@ -10,7 +10,7 @@ export const treesGraphs: World = {
   description:
     "Hierarchies and networks are everywhere: file systems, org charts, maps, social graphs, build systems. Learn to walk them, search them and connect them efficiently.",
   emoji: "🌳",
-  color: "#34d399",
+  color: "#059669",
   boss: {
     name: "The Hydra of Edges",
     title: "Guardian of the Cyclic Graph",

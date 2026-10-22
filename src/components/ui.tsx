@@ -8,12 +8,12 @@ type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-b from-cyan to-sky text-[#03131a] font-semibold shadow-[0_4px_0_0_#0e7490,0_0_24px_-4px_rgb(34_211_238/0.6)] hover:brightness-110 active:translate-y-[2px] active:shadow-[0_2px_0_0_#0e7490]",
+    "bg-gradient-to-b from-cyan to-sky text-[#ffffff] font-semibold shadow-[0_4px_0_0_#155e75,0_0_24px_-4px_rgb(8_145_178/0.35)] hover:brightness-110 active:translate-y-[2px] active:shadow-[0_2px_0_0_#155e75]",
   secondary:
-    "bg-panel-3 text-ink border border-line-2 shadow-[0_4px_0_0_rgb(0_0_0/0.5)] hover:bg-[#1f2a50] hover:border-faint active:translate-y-[2px] active:shadow-[0_2px_0_0_rgb(0_0_0/0.5)]",
-  ghost: "text-dim hover:text-ink hover:bg-white/5",
+    "bg-panel-3 text-ink border border-line-2 shadow-[0_4px_0_0_#d5dce8] hover:bg-[#e2e8f0] hover:border-faint active:translate-y-[2px] active:shadow-[0_2px_0_0_#d5dce8]",
+  ghost: "text-dim hover:text-ink hover:bg-slate-900/5",
   danger:
-    "bg-gradient-to-b from-rose to-pink text-[#2a0610] font-semibold shadow-[0_4px_0_0_#9f1239] active:translate-y-[2px] active:shadow-[0_2px_0_0_#9f1239]",
+    "bg-gradient-to-b from-rose to-pink text-[#ffffff] font-semibold shadow-[0_4px_0_0_#9f1239] active:translate-y-[2px] active:shadow-[0_2px_0_0_#9f1239]",
 };
 
 const sizes: Record<Size, string> = {
@@ -51,7 +51,7 @@ export function LinkButton({
 
 export function ProgressBar({
   value,
-  color = "#22d3ee",
+  color = "#0891b2",
   className,
   height = 8,
 }: {
@@ -78,7 +78,7 @@ export function ProgressRing({
   value,
   size = 56,
   stroke = 5,
-  color = "#22d3ee",
+  color = "#0891b2",
   children,
 }: {
   value: number;
@@ -92,7 +92,7 @@ export function ProgressRing({
   return (
     <div className="relative inline-grid place-items-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="#1e2747" strokeWidth={stroke} fill="none" />
+        <circle cx={size / 2} cy={size / 2} r={r} stroke="#e2e8f0" strokeWidth={stroke} fill="none" />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -118,10 +118,10 @@ export function Stars({ count, max = 3, size = 14, className }: { count: number;
         <svg key={i} width={size} height={size} viewBox="0 0 24 24" aria-hidden>
           <path
             d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"
-            fill={i < count ? "#fbbf24" : "#1e2747"}
-            stroke={i < count ? "#f59e0b" : "#2a355d"}
+            fill={i < count ? "#f59e0b" : "#e2e8f0"}
+            stroke={i < count ? "#d97706" : "#cbd5e1"}
             strokeWidth="1.2"
-            style={i < count ? { filter: "drop-shadow(0 0 3px #fbbf24)" } : undefined}
+            style={i < count ? { filter: "drop-shadow(0 0 2px rgb(245 158 11 / 0.6))" } : undefined}
           />
         </svg>
       ))}
@@ -182,7 +182,7 @@ export function InlineMd({ text, className }: { text: string; className?: string
       {parts.map((p, i) => {
         if (p.startsWith("`") && p.endsWith("`") && p.length > 1)
           return (
-            <code key={i} className="rounded-md border border-violet/20 bg-violet/10 px-1 py-px font-mono text-[0.88em] text-[#d8ccff]">
+            <code key={i} className="rounded-md border border-violet/20 bg-violet/10 px-1 py-px font-mono text-[0.88em] text-[#6d28d9]">
               {p.slice(1, -1)}
             </code>
           );

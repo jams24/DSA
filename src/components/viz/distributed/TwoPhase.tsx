@@ -91,7 +91,7 @@ export default function TwoPhase() {
           { value: "saga-fail", label: "Saga: payment fails" },
         ]}
       />
-      <div className="rounded-xl border border-line bg-[#080c19]">
+      <div className="rounded-xl border border-line bg-[#f8fafd]">
         <svg viewBox="0 0 660 330" className="block w-full">
           <defs>
             <marker id="tp-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -99,7 +99,7 @@ export default function TwoPhase() {
             </marker>
           </defs>
           {names.map((_, i) => (
-            <line key={i} x1={330} y1={92} x2={PX[i]} y2={232} stroke="#1e2747" strokeWidth={2} />
+            <line key={i} x1={330} y1={92} x2={PX[i]} y2={232} stroke="#e2e8f0" strokeWidth={2} />
           ))}
           {f.msgs.map((m, i) => {
             const x1 = m.up ? PX[m.to] : 330;
@@ -111,7 +111,7 @@ export default function TwoPhase() {
             return (
               <g key={`${s.i}-${i}`} className="animate-pop">
                 <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={m.color} strokeWidth={2.5} markerEnd="url(#tp-arrow)" />
-                <rect x={mx - 36} y={my - 10} width={72} height={20} rx={6} fill="#0c1121" stroke={m.color} />
+                <rect x={mx - 36} y={my - 10} width={72} height={20} rx={6} fill="#ffffff" stroke={m.color} />
                 <text x={mx} y={my + 4} textAnchor="middle" fontSize="10.5" fontWeight="600" fill={m.color}>
                   {m.label}
                 </text>

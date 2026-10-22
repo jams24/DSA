@@ -72,7 +72,7 @@ export function DailyChallenge() {
       </div>
 
       {phase === "done" ? (
-        <div className="panel neon-border p-8 text-center" style={{ "--accent": "#fbbf24" } as React.CSSProperties}>
+        <div className="panel neon-border p-8 text-center" style={{ "--accent": "#d97706" } as React.CSSProperties}>
           <div className="font-display text-5xl font-bold text-ink">
             {correct}/{data.questions.length}
           </div>

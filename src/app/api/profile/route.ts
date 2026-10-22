@@ -10,7 +10,7 @@ export async function PATCH(req: Request) {
   const user = await prisma.user.update({
     where: { id: userId },
     data: { avatar: parsed.data.avatar },
-    select: { id: true, username: true, avatar: true },
+    select: { id: true, username: true, avatar: true, role: true },
   });
   return Response.json({ user });
 }

@@ -94,7 +94,7 @@ export default function CAP() {
         )}
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_260px]">
-        <div className="rounded-xl border border-line bg-[#080c19]">
+        <div className="rounded-xl border border-line bg-[#f8fafd]">
           <svg viewBox="0 0 620 340" className="block w-full">
             {[
               [0, 1],
@@ -102,7 +102,7 @@ export default function CAP() {
               [1, 2],
             ].map(([a, b]) => {
               const cut = partition && (a === 2 || b === 2);
-              return <line key={`${a}${b}`} x1={NODES[a].x} y1={NODES[a].y} x2={NODES[b].x} y2={NODES[b].y} stroke={cut ? C.bad : "#2a355d"} strokeWidth={cut ? 2 : 2.5} strokeDasharray={cut ? "6 6" : undefined} opacity={cut ? 0.6 : 1} />;
+              return <line key={`${a}${b}`} x1={NODES[a].x} y1={NODES[a].y} x2={NODES[b].x} y2={NODES[b].y} stroke={cut ? C.bad : "#cbd5e1"} strokeWidth={cut ? 2 : 2.5} strokeDasharray={cut ? "6 6" : undefined} opacity={cut ? 0.6 : 1} />;
             })}
             {partition && (
               <g>
@@ -114,7 +114,7 @@ export default function CAP() {
             )}
             {NODES.map((n, i) => (
               <g key={n.id}>
-                <circle cx={n.x} cy={n.y} r={46} fill="#0f1529" stroke={C.pivot} strokeWidth={2.5} />
+                <circle cx={n.x} cy={n.y} r={46} fill="#ffffff" stroke={C.pivot} strokeWidth={2.5} />
                 <text x={n.x} y={n.y - 12} textAnchor="middle" fontSize="13" fontWeight="bold" fill={C.text}>
                   {n.id}
                 </text>

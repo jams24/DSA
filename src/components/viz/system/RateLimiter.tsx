@@ -113,7 +113,7 @@ export default function RateLimiter() {
         {lanes.map((lane) => {
           const tot = totals.current[lane.id];
           return (
-            <div key={lane.id} className="rounded-xl border border-line bg-[#080c19] p-3">
+            <div key={lane.id} className="rounded-xl border border-line bg-[#f8fafd] p-3">
               <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
                 <span className="font-display text-sm font-semibold text-ink">{lane.title}</span>
                 <span className="font-mono text-[11px]">

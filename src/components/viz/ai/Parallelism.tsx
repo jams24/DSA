@@ -4,11 +4,11 @@ import { useState } from "react";
 import { C, Narration, Segmented, Slider } from "../kit";
 
 type Mode = "data" | "tensor" | "pipeline" | "expert";
-const GPU_COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635"];
+const GPU_COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d"];
 
 function Gpu({ i, children, label }: { i: number; children: React.ReactNode; label?: string }) {
   return (
-    <div className="rounded-xl border-2 bg-[#0c1121] p-2" style={{ borderColor: `${GPU_COLORS[i]}88` }}>
+    <div className="rounded-xl border-2 bg-[#ffffff] p-2" style={{ borderColor: `${GPU_COLORS[i]}88` }}>
       <div className="mb-1.5 flex justify-between font-mono text-[10px]" style={{ color: GPU_COLORS[i] }}>
         <span>🧮 GPU {i}</span>
         <span className="text-faint">{label}</span>
@@ -59,7 +59,7 @@ export default function Parallelism() {
       </div>
 
       {mode === "pipeline" && (
-        <div className="space-y-2 rounded-xl border border-line bg-[#080c19] p-3">
+        <div className="space-y-2 rounded-xl border border-line bg-[#f8fafd] p-3">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <span className="text-xs text-dim">Forward-pass schedule (GPipe-style): micro-batches flow through 4 stages</span>
             <div className="w-44">
@@ -74,7 +74,7 @@ export default function Parallelism() {
                   const m = t - st;
                   const busy = m >= 0 && m < micro;
                   return (
-                    <div key={t} className="grid h-6 w-7 shrink-0 place-items-center rounded-[3px] font-mono text-[9px]" style={{ background: busy ? GPU_COLORS[st] : "repeating-linear-gradient(45deg,#1a1222,#1a1222 3px,#100c18 3px,#100c18 6px)", color: "#06120a" }}>
+                    <div key={t} className="grid h-6 w-7 shrink-0 place-items-center rounded-[3px] font-mono text-[9px]" style={{ background: busy ? GPU_COLORS[st] : "repeating-linear-gradient(45deg,#f1f5f9,#f1f5f9 3px,#e2e8f0 3px,#e2e8f0 6px)", color: "#ffffff" }}>
                       {busy ? `m${m + 1}` : ""}
                     </div>
                   );

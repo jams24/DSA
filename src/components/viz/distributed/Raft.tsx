@@ -48,7 +48,7 @@ const POS = Array.from({ length: N }, (_, i) => {
   const a = -Math.PI / 2 + (2 * Math.PI * i) / N;
   return { x: 260 + 170 * Math.cos(a), y: 215 + 170 * Math.sin(a) };
 });
-const TERM_COLORS = ["#2a355d", "#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24", "#fb923c", "#34d399", "#38bdf8", "#fb7185"];
+const TERM_COLORS = ["#cbd5e1", "#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706", "#ea580c", "#059669", "#0284c7", "#e11d48"];
 const CMDS = ["x=1", "y=7", "x=3", "z=2", "y=9", "x=5", "w=4", "z=8"];
 
 const rand = (lo: number, hi: number) => lo + Math.random() * (hi - lo);
@@ -265,24 +265,24 @@ export default function Raft() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
-        <div className="overflow-hidden rounded-xl border border-line bg-[#080c19]">
+        <div className="overflow-hidden rounded-xl border border-line bg-[#f8fafd]">
           <svg viewBox="0 0 520 430" className="block w-full">
             {partitioned && <line x1={150} y1={0} x2={330} y2={430} stroke={C.bad} strokeWidth={2} strokeDasharray="8 6" opacity={0.7} />}
             {POS.map((a, i) =>
-              POS.map((b, j) => (j > i ? <line key={`${i}-${j}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="#161d38" strokeWidth={1} /> : null)),
+              POS.map((b, j) => (j > i ? <line key={`${i}-${j}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="#e2e8f0" strokeWidth={1} /> : null)),
             )}
             {flights.current.map((f) => {
               const a = POS[f.msg.from];
               const b = POS[f.msg.to];
               const p = Math.min(1, Math.max(0, (t - f.sent) / (f.arrive - f.sent)));
               const color =
-                f.msg.kind === "vote" ? C.compare : f.msg.kind === "voteResp" ? (f.msg.granted ? C.done : C.bad) : f.msg.kind === "append" ? (f.msg.entries.length ? C.active : "#3a6b80") : f.msg.success ? "#2f8a6b" : C.bad;
+                f.msg.kind === "vote" ? C.compare : f.msg.kind === "voteResp" ? (f.msg.granted ? C.done : C.bad) : f.msg.kind === "append" ? (f.msg.entries.length ? C.active : "#7dd3fc") : f.msg.success ? "#6ee7b7" : C.bad;
               const r = f.msg.kind === "append" && f.msg.entries.length ? 6 : 4;
               return <circle key={f.id} cx={a.x + (b.x - a.x) * p} cy={a.y + (b.y - a.y) * p} r={r} fill={color} style={{ filter: `drop-shadow(0 0 4px ${color})` }} />;
             })}
             {nodes.current.map((n, i) => {
               const p = POS[i];
-              const color = !n.alive ? "#3b1520" : n.role === "leader" ? C.done : n.role === "candidate" ? C.compare : C.sky;
+              const color = !n.alive ? "#fecdd3" : n.role === "leader" ? C.done : n.role === "candidate" ? C.compare : C.sky;
               const frac = n.role === "leader" || !n.alive ? 0 : Math.max(0, Math.min(1, (n.deadline - t) / n.timeout));
               const R = 34;
               const circ = 2 * Math.PI * (R + 7);
@@ -321,7 +321,7 @@ export default function Raft() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-3 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-3 scrollbar-thin">
         <div className="mb-2 text-[10px] uppercase tracking-wider text-faint">Replicated logs (color = term · bright = committed)</div>
         <table className="border-separate border-spacing-1 font-mono text-[10px]">
           <tbody>

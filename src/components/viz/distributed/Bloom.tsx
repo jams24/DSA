@@ -67,7 +67,7 @@ export default function Bloom() {
           <Slider label="hash functions k" value={k} min={1} max={5} onChange={(v) => reset(v)} />
         </div>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
         <div className="grid min-w-[560px] grid-cols-16 gap-1" style={{ gridTemplateColumns: "repeat(16, minmax(0, 1fr))" }}>
           {bits.map((b, i) => {
             const probed = probe?.idx.includes(i);

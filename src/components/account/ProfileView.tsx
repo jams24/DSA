@@ -52,7 +52,12 @@ export function ProfileView() {
           <Avatar avatar={user?.avatar ?? "wizard"} size={88} />
           <div className="min-w-0 flex-1">
             <div className="font-pixel text-[10px] text-violet">LEVEL {info.level}</div>
-            <h1 className="font-display text-3xl font-bold text-ink">{user?.username ?? "Guest Adventurer"}</h1>
+            <h1 className="font-display text-3xl font-bold text-ink">
+              {user?.username ?? "Guest Adventurer"}
+              {user?.role === "admin" && (
+                <span className="ml-3 rounded-full border border-amber/40 bg-amber/10 px-2.5 py-1 align-middle text-xs font-semibold text-amber">👑 Admin · all levels unlocked</span>
+              )}
+            </h1>
             <div className="text-amber">{info.title}</div>
             <div className="mt-4 max-w-md">
               <div className="mb-1 flex justify-between text-xs text-dim">
@@ -61,7 +66,7 @@ export function ProfileView() {
                   {info.current}/{info.needed} → LV {info.level + 1}
                 </span>
               </div>
-              <ProgressBar value={info.pct} color="#a78bfa" height={10} />
+              <ProgressBar value={info.pct} color="#7c3aed" height={10} />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-4">

@@ -151,7 +151,7 @@ export default function LinkedList() {
         <SmallBtn tone="good" onClick={() => run("reverse")}>reverse</SmallBtn>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg width={width} height={190} className="block">
           <defs>
             <marker id="ll-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

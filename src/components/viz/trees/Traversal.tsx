@@ -93,7 +93,7 @@ export default function Traversal() {
           { value: "level", label: "Level order (BFS)" },
         ]}
       />
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-2 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-2 scrollbar-thin">
         <TreeSvg nodes={nodes} root={root} hi={f.hi} />
       </div>
       <div className="grid gap-3 sm:grid-cols-2">

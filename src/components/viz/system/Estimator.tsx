@@ -93,7 +93,7 @@ export default function Estimator() {
             <Stat label={`storage over ${v.years}y ×${v.replicas}`} value={bytes(total)} color={C.compare} />
             <Stat label="read egress (avg)" value={`${bytes(egress)}/s`} color={C.pivot} />
           </div>
-          <div className="rounded-xl border border-line bg-[#080c19] p-4 font-mono text-xs leading-relaxed text-dim">
+          <div className="rounded-xl border border-line bg-[#f8fafd] p-4 font-mono text-xs leading-relaxed text-dim">
             <div>
               writes/day = {v.dau}M users × {v.writes} = <span className="text-ink">{qps(writesPerDay)}</span>
             </div>

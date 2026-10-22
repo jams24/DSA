@@ -6,7 +6,7 @@ import { C, Narration, Segmented, SmallBtn, Stat, StepControls, useStepper } fro
 const R = 13;
 const COLS = 24;
 const N = R * COLS;
-const ISLAND_COLORS = ["#a3e635", "#22d3ee", "#f472b6", "#fbbf24", "#a78bfa", "#fb923c", "#34d399", "#38bdf8", "#fb7185"];
+const ISLAND_COLORS = ["#65a30d", "#0891b2", "#db2777", "#d97706", "#7c3aed", "#ea580c", "#059669", "#0284c7", "#e11d48"];
 
 type Algo = "bfs" | "dfs" | "astar";
 
@@ -213,7 +213,7 @@ export default function GraphGrid() {
       {mode === "path" && <div className="text-xs text-faint">Click or drag on the grid to draw walls, then press Play.</div>}
 
       <div
-        className="grid touch-none gap-[2px] rounded-xl border border-line bg-[#080c19] p-2 select-none"
+        className="grid touch-none gap-[2px] rounded-xl border border-line bg-[#f8fafd] p-2 select-none"
         style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
         onPointerUp={() => (painting.current = null)}
         onPointerLeave={() => (painting.current = null)}
@@ -221,18 +221,18 @@ export default function GraphGrid() {
         {Array.from({ length: N }, (_, i) => {
           const vi = visitedIdx.get(i);
           const visited = vi !== undefined && vi < f.visited;
-          let bg = "#111830";
+          let bg = "#f1f5f9";
           let border = "transparent";
           if (mode === "path") {
-            if (walls.has(i)) bg = "#3a4570";
+            if (walls.has(i)) bg = "#94a3b8";
             else if (pathSet.has(i)) bg = C.compare;
             else if (frontier.has(i)) border = C.swap;
             else if (visited) bg = `${C.active}${Math.max(30, 90 - Math.floor((vi! / Math.max(1, result.order.length)) * 60)).toString(16)}`;
           } else {
-            if (!land.has(i)) bg = "#0c1530";
+            if (!land.has(i)) bg = "#e0f2fe";
             else if (visited && result.kind === "islands") bg = ISLAND_COLORS[result.color.get(i)! % ISLAND_COLORS.length];
-            else bg = "#3d4a2a";
-            if (frontier.has(i)) border = "#fff";
+            else bg = "#d9f99d";
+            if (frontier.has(i)) border = "#0f172a";
           }
           const label = mode === "path" && (i === start ? "S" : i === goal ? "T" : "");
           return (
@@ -248,7 +248,7 @@ export default function GraphGrid() {
               style={{
                 background: label ? (i === start ? C.done : C.bad) : bg,
                 boxShadow: border !== "transparent" ? `inset 0 0 0 2px ${border}` : undefined,
-                color: "#06120a",
+                color: "#ffffff",
               }}
             >
               {label}

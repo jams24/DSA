@@ -66,7 +66,7 @@ export default async function WorldPage(props: PageProps<"/worlds/[worldId]">) {
             <p className="mt-4 text-sm text-dim italic">“{world.boss.taunt}”</p>
             <Link
               href={`/worlds/${world.id}/boss`}
-              className="mt-5 flex h-10 items-center justify-center rounded-xl bg-gradient-to-b from-rose to-pink text-sm font-semibold text-[#2a0610] shadow-[0_4px_0_0_#9f1239] active:translate-y-0.5"
+              className="mt-5 flex h-10 items-center justify-center rounded-xl bg-gradient-to-b from-rose to-pink text-sm font-semibold text-[#ffffff] shadow-[0_4px_0_0_#9f1239] active:translate-y-0.5"
             >
               ⚔️ Enter boss battle
             </Link>

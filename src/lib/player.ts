@@ -9,6 +9,7 @@ export interface PublicUser {
   id: string;
   username: string;
   avatar: string;
+  role: string;
 }
 
 export async function loadPlayer(tx: Tx, userId: string): Promise<{ user: PublicUser; state: PlayerState } | null> {
@@ -40,7 +41,7 @@ export async function loadPlayer(tx: Tx, userId: string): Promise<{ user: Public
       u.cards.map((c) => [c.cardId, { box: c.box, dueAt: c.dueAt.toISOString(), reviews: c.reviews }]),
     ),
   };
-  return { user: { id: u.id, username: u.username, avatar: u.avatar }, state };
+  return { user: { id: u.id, username: u.username, avatar: u.avatar, role: u.role }, state };
 }
 
 /** Row-locks the user so concurrent actions for one player apply sequentially. */

@@ -10,7 +10,7 @@ export const patterns: World = {
   description:
     "Interviewers recycle a small set of patterns. Learn to recognize the signal in the problem statement, reach for the right template, and adapt it under pressure.",
   emoji: "🗝️",
-  color: "#f472b6",
+  color: "#db2777",
   boss: {
     name: "The Sliding Specter",
     title: "Haunter of Off-by-One Errors",

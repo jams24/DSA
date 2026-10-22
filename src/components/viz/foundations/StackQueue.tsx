@@ -105,7 +105,7 @@ export default function StackQueue() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-[200px_1fr]">
-        <div className="rounded-xl border border-line bg-[#080c19] p-4">
+        <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
           <div className="mb-2 text-center text-[10px] uppercase tracking-wider text-faint">Stack (LIFO)</div>
           <div className="mx-auto flex h-[300px] w-28 flex-col-reverse gap-1.5 rounded-b-xl border-x-2 border-b-2 border-line-2 p-1.5">
             <AnimatePresence initial={false}>
@@ -132,7 +132,7 @@ export default function StackQueue() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-line bg-[#080c19] p-4">
+        <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
           <div className="mb-3 text-[10px] uppercase tracking-wider text-faint">Queue (FIFO) as a circular buffer, capacity {CAP}</div>
           <div className="grid grid-cols-8 gap-1.5">
             {q.slots.map((x, i) => (

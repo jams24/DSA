@@ -7,11 +7,11 @@ import { WorldCards } from "@/components/world/WorldCards";
 import { LinkButton, SectionTitle } from "@/components/ui";
 
 const LOOP = [
-  { icon: BookOpen, title: "Learn", text: "Short, interview-focused explanations with the trade-offs spelled out.", color: "#a3e635" },
-  { icon: Eye, title: "Visualize", text: "Step through animated algorithms and live system simulations.", color: "#22d3ee" },
-  { icon: Code2, title: "Code", text: "Clean reference implementations in Python, JavaScript and Java.", color: "#a78bfa" },
-  { icon: Brain, title: "Interview", text: "The questions interviewers actually ask, with model answers.", color: "#f472b6" },
-  { icon: Swords, title: "Quiz & Boss", text: "Earn stars, then defeat each world's boss to prove mastery.", color: "#fb7185" },
+  { icon: BookOpen, title: "Learn", text: "Short, interview-focused explanations with the trade-offs spelled out.", color: "#65a30d" },
+  { icon: Eye, title: "Visualize", text: "Step through animated algorithms and live system simulations.", color: "#0891b2" },
+  { icon: Code2, title: "Code", text: "Clean reference implementations in Python, JavaScript and Java.", color: "#7c3aed" },
+  { icon: Brain, title: "Interview", text: "The questions interviewers actually ask, with model answers.", color: "#db2777" },
+  { icon: Swords, title: "Quiz & Boss", text: "Earn stars, then defeat each world's boss to prove mastery.", color: "#e11d48" },
 ];
 
 export default function Home() {
@@ -90,10 +90,10 @@ export default function Home() {
         <SectionTitle eyebrow="Game modes" title="Beyond the campaign" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[
-            { href: "/arena/rapid-fire", icon: Zap, title: "Rapid Fire", text: "60 seconds. As many correct answers as you can.", color: "#fbbf24" },
-            { href: "/arena/flashcards", icon: Layers, title: "Mock Interview Cards", text: "Spaced-repetition flashcards of real interview questions.", color: "#f472b6" },
-            { href: "/questions", icon: Network, title: "Question Bank", text: "Every interview question and LeetCode problem, searchable.", color: "#22d3ee" },
-            { href: "/leaderboard", icon: Trophy, title: "Leaderboard", text: "Weekly and all-time XP rankings.", color: "#34d399" },
+            { href: "/arena/rapid-fire", icon: Zap, title: "Rapid Fire", text: "60 seconds. As many correct answers as you can.", color: "#d97706" },
+            { href: "/arena/flashcards", icon: Layers, title: "Mock Interview Cards", text: "Spaced-repetition flashcards of real interview questions.", color: "#db2777" },
+            { href: "/questions", icon: Network, title: "Question Bank", text: "Every interview question and LeetCode problem, searchable.", color: "#0891b2" },
+            { href: "/leaderboard", icon: Trophy, title: "Leaderboard", text: "Weekly and all-time XP rankings.", color: "#059669" },
           ].map((m) => (
             <Link key={m.href} href={m.href} className="group panel p-5 transition hover:-translate-y-1" style={{ "--accent": m.color } as React.CSSProperties}>
               <m.icon style={{ color: m.color }} className="transition group-hover:scale-110" />

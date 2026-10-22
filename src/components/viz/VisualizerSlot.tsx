@@ -8,7 +8,7 @@ function Frame({ title, blurb, onInteract, children }: { title: string; blurb: s
   return (
     <section className="panel p-4 sm:p-6" onPointerDownCapture={onInteract} onKeyDownCapture={onInteract}>
       <header className="mb-5 flex items-start gap-3">
-        <span className="mt-1 h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-cyan shadow-[0_0_10px_#22d3ee]" />
+        <span className="mt-1 h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-cyan shadow-[0_0_10px_#0891b2]" />
         <div>
           <h3 className="font-display text-lg font-semibold text-ink">{title}</h3>
           <p className="text-sm text-dim">{blurb}</p>

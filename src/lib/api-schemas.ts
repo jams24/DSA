@@ -11,6 +11,7 @@ export const ActionRequest = z.discriminatedUnion("type", [
   z.object({ type: z.literal("arena"), answers: z.array(graded).max(150) }),
   z.object({ type: z.literal("daily"), answers: z.array(choice).max(20) }),
   z.object({ type: z.literal("review"), cardId: z.string().max(200), knew: z.boolean() }),
+  z.object({ type: z.literal("solve"), slug: z.string().max(120), solved: z.boolean() }),
 ]);
 export type ActionRequest = z.infer<typeof ActionRequest>;
 
@@ -43,6 +44,7 @@ export const GuestState = z.object({
       dailyCount: z.number().optional(),
       reviews: z.number().optional(),
       claims: z.array(z.string().max(40)).max(60).optional(),
+      solved: z.array(z.string().max(120)).max(200).optional(),
     })
     .default({}),
 });
@@ -65,7 +67,8 @@ export const SignupRequest = z.object({
 });
 
 export const LoginRequest = z.object({
-  username,
+  // username or email address
+  username: z.string().trim().min(3).max(120),
   password: z.string().min(1).max(100),
   guest: z.unknown().optional(),
 });

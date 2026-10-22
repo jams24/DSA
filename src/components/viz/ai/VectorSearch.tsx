@@ -42,7 +42,7 @@ function build(seed: number) {
   return { pts, nbrs };
 }
 
-const COLORS = ["#22d3ee", "#a78bfa", "#f472b6", "#a3e635", "#fbbf24"];
+const COLORS = ["#0891b2", "#7c3aed", "#db2777", "#65a30d", "#d97706"];
 
 export default function VectorSearch() {
   const [mode, setMode] = useState<"brute" | "graph">("graph");
@@ -111,7 +111,7 @@ export default function VectorSearch() {
         </div>
         <span className="text-xs text-faint">Click anywhere on the map to move the query embedding.</span>
       </div>
-      <div className="rounded-xl border border-line bg-[#080c19]">
+      <div className="rounded-xl border border-line bg-[#f8fafd]">
         <svg
           viewBox="0 0 640 360"
           className="block w-full cursor-crosshair"
@@ -121,7 +121,7 @@ export default function VectorSearch() {
           }}
         >
           {mode === "graph" &&
-            nbrs.flatMap((ns, i) => ns.filter((j) => j > i).map((j) => <line key={`${i}-${j}`} x1={pts[i].x} y1={pts[i].y} x2={pts[j].x} y2={pts[j].y} stroke="#1a2140" strokeWidth={0.8} />))}
+            nbrs.flatMap((ns, i) => ns.filter((j) => j > i).map((j) => <line key={`${i}-${j}`} x1={pts[i].x} y1={pts[i].y} x2={pts[j].x} y2={pts[j].y} stroke="#d5dce6" strokeWidth={0.8} />))}
           {mode === "graph" &&
             graph.path.slice(1).map((n, i) => {
               const a = pts[graph.path[i]];
@@ -136,14 +136,14 @@ export default function VectorSearch() {
           {pts.map((p, i) => {
             const hit = found.includes(i);
             const checked = mode === "brute" || graph.visited.has(i);
-            return <circle key={i} cx={p.x} cy={p.y} r={hit ? 6 : 3.5} fill={hit ? COLORS[p.c] : checked ? `${COLORS[p.c]}88` : "#2a355d"} stroke={hit ? "#fff" : "none"} strokeWidth={1.5} />;
+            return <circle key={i} cx={p.x} cy={p.y} r={hit ? 6 : 3.5} fill={hit ? COLORS[p.c] : checked ? `${COLORS[p.c]}88` : "#cbd5e1"} stroke={hit ? "#0f172a" : "none"} strokeWidth={1.5} />;
           })}
           {found.map((i) => (
-            <line key={`q${i}`} x1={query.x} y1={query.y} x2={pts[i].x} y2={pts[i].y} stroke="#fff" strokeOpacity={0.35} strokeDasharray="3 3" />
+            <line key={`q${i}`} x1={query.x} y1={query.y} x2={pts[i].x} y2={pts[i].y} stroke="#0f172a" strokeOpacity={0.3} strokeDasharray="3 3" />
           ))}
           <g transform={`translate(${query.x} ${query.y})`}>
             <circle r={9} fill={C.bad} style={{ filter: `drop-shadow(0 0 8px ${C.bad})` }} />
-            <text y={4} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#2a0610">
+            <text y={4} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ffffff">
               q
             </text>
           </g>

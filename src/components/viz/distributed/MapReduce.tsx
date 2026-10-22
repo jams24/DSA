@@ -49,7 +49,7 @@ export default function MapReduce() {
     </span>
   );
   const col = (title: string, on: boolean, children: React.ReactNode) => (
-    <div className="space-y-2 rounded-xl border p-2 transition-opacity duration-500" style={{ borderColor: on ? "#2a355d" : "#151b33", opacity: on ? 1 : 0.25 }}>
+    <div className="space-y-2 rounded-xl border p-2 transition-opacity duration-500" style={{ borderColor: on ? "#cbd5e1" : "#e2e8f0", opacity: on ? 1 : 0.25 }}>
       <div className="text-[10px] uppercase tracking-wider text-faint">{title}</div>
       {children}
     </div>
@@ -57,7 +57,7 @@ export default function MapReduce() {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-2 overflow-x-auto rounded-xl border border-line bg-[#080c19] p-3 md:grid-cols-4">
+      <div className="grid gap-2 overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-3 md:grid-cols-4">
         {col(
           "Input splits",
           true,

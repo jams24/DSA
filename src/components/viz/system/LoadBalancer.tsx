@@ -161,12 +161,12 @@ export default function LoadBalancer() {
         <SmallBtn onClick={reset}>reset</SmallBtn>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg viewBox="0 0 760 340" className="block w-full min-w-[620px]">
           {CLIENTS.map((c, ci) => (
             <g key={ci}>
-              <line x1={95} y1={c.y} x2={LB.x - 50} y2={LB.y} stroke="#26305a" strokeWidth={1.5} />
-              <rect x={20} y={c.y - 22} width={76} height={44} rx={10} fill="#0f1529" stroke={C.sky} strokeOpacity={0.6} />
+              <line x1={95} y1={c.y} x2={LB.x - 50} y2={LB.y} stroke="#cbd5e1" strokeWidth={1.5} />
+              <rect x={20} y={c.y - 22} width={76} height={44} rx={10} fill="#ffffff" stroke={C.sky} strokeOpacity={0.6} />
               <text x={58} y={c.y - 2} textAnchor="middle" fontSize="16">
                 💻
               </text>
@@ -176,9 +176,9 @@ export default function LoadBalancer() {
             </g>
           ))}
           {SERVER_Y.map((y, i) => (
-            <line key={i} x1={LB.x + 50} y1={LB.y} x2={590} y2={y} stroke={s[i].up ? "#26305a" : "#3b1520"} strokeWidth={1.5} strokeDasharray={s[i].up ? undefined : "4 4"} />
+            <line key={i} x1={LB.x + 50} y1={LB.y} x2={590} y2={y} stroke={s[i].up ? "#cbd5e1" : "#fecdd3"} strokeWidth={1.5} strokeDasharray={s[i].up ? undefined : "4 4"} />
           ))}
-          <rect x={LB.x - 50} y={LB.y - 32} width={100} height={64} rx={14} fill="#1c1608" stroke={C.compare} strokeWidth={2} />
+          <rect x={LB.x - 50} y={LB.y - 32} width={100} height={64} rx={14} fill="#fffbeb" stroke={C.compare} strokeWidth={2} />
           <text x={LB.x} y={LB.y - 4} textAnchor="middle" fontSize="20">
             ⚖️
           </text>
@@ -189,7 +189,7 @@ export default function LoadBalancer() {
             const sv = s[i];
             return (
               <g key={sv.name} onClick={() => toggleServer(i)} className="cursor-pointer">
-                <rect x={590} y={y - 28} width={150} height={56} rx={12} fill={sv.up ? "#141029" : "#2a0a12"} stroke={sv.up ? C.pivot : C.bad} strokeWidth={2} />
+                <rect x={590} y={y - 28} width={150} height={56} rx={12} fill={sv.up ? "#f5f3ff" : "#fff1f2"} stroke={sv.up ? C.pivot : C.bad} strokeWidth={2} />
                 <text x={606} y={y - 6} fontSize="12" fontWeight="600" fill={C.text}>
                   {sv.up ? "⚙️" : "💥"} {sv.name}
                 </text>
@@ -199,7 +199,7 @@ export default function LoadBalancer() {
                 <text x={606} y={y + 22} fontSize="9.5" fill={C.done} fontFamily="monospace">
                   ✓{sv.served} {sv.failed ? `✗${sv.failed}` : ""}
                 </text>
-                <rect x={700} y={y - 18} width={30} height={36} rx={4} fill="#0b1020" stroke="#26305a" />
+                <rect x={700} y={y - 18} width={30} height={36} rx={4} fill="#e2e8f0" stroke="#cbd5e1" />
                 <rect x={700} y={y + 18 - (36 * Math.min(counts[i], maxActive)) / maxActive} width={30} height={(36 * Math.min(counts[i], maxActive)) / maxActive} rx={4} fill={counts[i] > 6 ? C.bad : C.active} opacity={0.75} />
                 <text x={715} y={y + 4} textAnchor="middle" fontSize="11" fontWeight="bold" fill={C.text}>
                   {counts[i]}

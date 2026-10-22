@@ -90,7 +90,7 @@ export default function Replication() {
           const w = versionAt(i);
           const behind = latest.version - w.version;
           return (
-            <div key={n} className="rounded-xl border bg-[#080c19] p-3" style={{ borderColor: i === 0 ? `${C.done}66` : behind ? `${C.compare}66` : "#1e2747" }}>
+            <div key={n} className="rounded-xl border bg-[#f8fafd] p-3" style={{ borderColor: i === 0 ? `${C.done}66` : behind ? `${C.compare}66` : "#e2e8f0" }}>
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-ink">🗄️ {n}</span>
                 <span className="font-mono text-faint">{i === 0 ? "writes here" : `lag ${LAGS[i] / 1000}s`}</span>

@@ -10,7 +10,7 @@ export const algorithms: World = {
   description:
     "The core algorithmic techniques behind almost every coding interview. Learn when each strategy applies — and how to prove your choice to the interviewer.",
   emoji: "⛏️",
-  color: "#fbbf24",
+  color: "#d97706",
   boss: {
     name: "The Quicksort Golem",
     title: "Partitioner of Heroes",

@@ -9,7 +9,7 @@ export const distributed: World = {
   description:
     "The almighty distributed systems: what breaks when computers talk over unreliable networks, and the protocols that make them agree anyway. This is what separates senior from staff-level interviews.",
   emoji: "🌌",
-  color: "#a78bfa",
+  color: "#7c3aed",
   boss: {
     name: "The Byzantine General",
     title: "Sender of Contradictory Orders",

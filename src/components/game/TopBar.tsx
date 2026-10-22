@@ -20,11 +20,11 @@ const NAV = [
 export function Logo() {
   return (
     <Link href="/" className="group flex items-center gap-2.5">
-      <span className="relative grid h-9 w-9 place-items-center rounded-xl border border-cyan/40 bg-gradient-to-br from-cyan/25 to-violet/25 shadow-[0_0_18px_-4px_#22d3ee]">
+      <span className="relative grid h-9 w-9 place-items-center rounded-xl border border-cyan/40 bg-gradient-to-br from-cyan/25 to-violet/25 shadow-[0_0_18px_-4px_#0891b2]">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
-          <path d="M5 4h6a6 6 0 0 1 0 12H8v4H5z" fill="none" stroke="#22d3ee" strokeWidth="2.2" strokeLinejoin="round" />
-          <circle cx="11" cy="10" r="2" fill="#f472b6" />
-          <path d="M15 17l4 4" stroke="#a78bfa" strokeWidth="2.2" strokeLinecap="round" />
+          <path d="M5 4h6a6 6 0 0 1 0 12H8v4H5z" fill="none" stroke="#0891b2" strokeWidth="2.2" strokeLinejoin="round" />
+          <circle cx="11" cy="10" r="2" fill="#db2777" />
+          <path d="M15 17l4 4" stroke="#7c3aed" strokeWidth="2.2" strokeLinecap="round" />
         </svg>
       </span>
       <span className="hidden leading-none min-[420px]:block">
@@ -62,7 +62,7 @@ function PlayerChip() {
         <Avatar avatar={user?.avatar ?? "wizard"} size={32} />
         <div className="w-24">
           <div className="flex items-baseline justify-between">
-            <span className="font-pixel text-[9px] text-amber">LV {info.level}</span>
+            <span className="font-pixel text-[9px] text-amber">{user?.role === "admin" ? "👑 " : ""}LV {info.level}</span>
             <span className="text-[10px] text-faint">{player.xp} XP</span>
           </div>
           <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-line">
@@ -100,7 +100,7 @@ export function TopBar() {
                 href={n.href}
                 className={clsx(
                   "rounded-lg px-3 py-2 text-sm transition",
-                  active ? "bg-white/[0.06] text-ink" : "text-dim hover:bg-white/[0.04] hover:text-ink",
+                  active ? "bg-slate-900/[0.06] text-ink" : "text-dim hover:bg-slate-900/[0.04] hover:text-ink",
                 )}
               >
                 {n.label}
@@ -111,14 +111,14 @@ export function TopBar() {
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={toggleSound}
-            className="grid h-10 w-10 place-items-center rounded-xl text-dim transition hover:bg-white/5 hover:text-ink"
+            className="grid h-10 w-10 place-items-center rounded-xl text-dim transition hover:bg-slate-900/5 hover:text-ink"
             aria-label={sound ? "Mute sound effects" : "Enable sound effects"}
           >
             {sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
           <PlayerChip />
           <button
-            className="grid h-10 w-10 place-items-center rounded-xl text-dim hover:bg-white/5 lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-xl text-dim hover:bg-slate-900/5 lg:hidden"
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
           >
@@ -133,15 +133,15 @@ export function TopBar() {
               key={n.href}
               href={n.href}
               onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2.5 text-dim hover:bg-white/5 hover:text-ink"
+              className="block rounded-lg px-3 py-2.5 text-dim hover:bg-slate-900/5 hover:text-ink"
             >
               {n.label}
             </Link>
           ))}
-          <Link href="/profile" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-dim hover:bg-white/5 hover:text-ink">
+          <Link href="/profile" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-dim hover:bg-slate-900/5 hover:text-ink">
             Profile & achievements
           </Link>
-          <Link href="/login" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-cyan hover:bg-white/5 md:hidden">
+          <Link href="/login" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-cyan hover:bg-slate-900/5 md:hidden">
             Sign in / save progress
           </Link>
         </nav>

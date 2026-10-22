@@ -68,7 +68,7 @@ export default function Fencing() {
           { value: "n", label: "Lease only (unsafe)" },
         ]}
       />
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg viewBox="0 0 700 300" className="block w-full min-w-[620px]">
           <defs>
             <marker id="fence-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -80,7 +80,7 @@ export default function Fencing() {
               <text x={10} y={Y(i) + 4} fontSize="11.5" fill={C.text}>
                 {l}
               </text>
-              <line x1={135} y1={Y(i)} x2={690} y2={Y(i)} stroke="#1e2747" strokeWidth={2} />
+              <line x1={135} y1={Y(i)} x2={690} y2={Y(i)} stroke="#e2e8f0" strokeWidth={2} />
             </g>
           ))}
           {fenced && f.maxToken > 0 && (

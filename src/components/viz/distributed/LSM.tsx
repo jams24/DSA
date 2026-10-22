@@ -126,7 +126,7 @@ export default function LSM() {
         </SmallBtn>
         <SmallBtn onClick={randomWrites}>random write</SmallBtn>
       </div>
-      <div className="space-y-3 rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="space-y-3 rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="rounded-xl border border-cyan/40 bg-cyan/[0.05] p-3">
           <div className="mb-2 flex items-center gap-2 text-xs">
             <span className="font-semibold text-cyan">⚡ Memtable (RAM, sorted)</span>

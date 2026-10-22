@@ -9,7 +9,7 @@ export const systemDesign: World = {
   description:
     "Learn the components every large system is built from — load balancers, caches, databases, queues, CDNs — then put them together in the case studies interviewers actually ask.",
   emoji: "🏙️",
-  color: "#38bdf8",
+  color: "#0284c7",
   boss: {
     name: "The Titan of Scale",
     title: "Bringer of the Thundering Herd",

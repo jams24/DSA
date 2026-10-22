@@ -138,7 +138,7 @@ export default function SlidingWindow() {
         )}
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
         <div className="relative flex gap-1">
           {items.map((ch, i) => {
             const inWin = i >= f.l && i <= f.r;

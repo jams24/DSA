@@ -50,14 +50,14 @@ export default function Speculative() {
           ↻ new run
         </button>
       </div>
-      <div className="rounded-xl border border-line bg-[#080c19] p-4">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-4">
         <div className="flex flex-wrap gap-1">
           {TEXT.map((w, i) => {
             const roundIdx = rounds.findIndex((r) => i >= r.start && i <= r.start + r.accepted);
             const r = rounds[roundIdx];
             const shown = cur >= 0 && roundIdx <= cur && roundIdx >= 0;
             const isBonus = r && i === r.start + r.accepted;
-            const color = !shown ? "#1e2747" : isBonus ? C.active : C.done;
+            const color = !shown ? "#e2e8f0" : isBonus ? C.active : C.done;
             return (
               <span key={i} className="rounded-md border px-1.5 py-0.5 font-mono text-xs transition-all" style={{ borderColor: color, color: shown ? C.text : C.faint, background: shown ? `${color}22` : "transparent" }}>
                 {w}

@@ -85,7 +85,7 @@ export default function Topo() {
           { value: "cycle", label: "Add a cycle (DP → Hashing)" },
         ]}
       />
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] scrollbar-thin">
         <svg viewBox="0 0 680 330" className="block w-full min-w-[520px]">
           <defs>
             <marker id="topo-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -125,7 +125,7 @@ export default function Topo() {
                 <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize="12.5" fontWeight="600" fill={C.text}>
                   {n.id}
                 </text>
-                <circle cx={n.x + 44} cy={n.y - 20} r={10} fill="#0c1121" stroke={color} />
+                <circle cx={n.x + 44} cy={n.y - 20} r={10} fill="#ffffff" stroke={color} />
                 <text x={n.x + 44} y={n.y - 16} textAnchor="middle" fontSize="10" fontFamily="monospace" fill={color}>
                   {f.indeg[n.id]}
                 </text>

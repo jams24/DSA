@@ -86,7 +86,7 @@ export default function Quantization() {
           ]}
         />
       </div>
-      <div className="rounded-xl border border-line bg-[#080c19] p-3">
+      <div className="rounded-xl border border-line bg-[#f8fafd] p-3">
         <svg viewBox="0 0 600 190" className="block w-full">
           {levels.map((v, i) => (
             <line key={i} x1={20 + ((v - lo) / (hi - lo)) * 560} x2={20 + ((v - lo) / (hi - lo)) * 560} y1={10} y2={170} stroke={C.compare} strokeOpacity={0.35} strokeDasharray="2 3" />
@@ -97,7 +97,7 @@ export default function Quantization() {
           {h2.map((c, i) => (
             <rect key={`b${i}`} x={20 + (i / BINS) * 560 + 3} y={170 - (c / hmax) * 150} width={560 / BINS - 6} height={(c / hmax) * 150} fill={C.swap} opacity={0.85} />
           ))}
-          <line x1={20} x2={580} y1={170} y2={170} stroke="#2a355d" />
+          <line x1={20} x2={580} y1={170} y2={170} stroke="#cbd5e1" />
           <text x={20} y={185} fontSize="10" fill={C.faint}>
             −0.08
           </text>

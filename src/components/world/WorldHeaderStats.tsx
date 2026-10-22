@@ -1,6 +1,6 @@
 "use client";
 
-import { useGame, usePlayer } from "@/lib/game/store";
+import { useGame, useIsAdmin, usePlayer } from "@/lib/game/store";
 import { nextInWorld, worldProgress } from "@/lib/game/progress";
 import { useCatalog } from "@/components/game/GameProvider";
 import { LinkButton, ProgressBar } from "@/components/ui";
@@ -9,6 +9,7 @@ export function WorldHeaderStats({ worldId }: { worldId: string }) {
   const world = useCatalog().find((w) => w.id === worldId);
   const player = usePlayer();
   const ready = useGame((s) => s.ready);
+  const admin = useIsAdmin();
   if (!world) return null;
   const p = worldProgress(world, player);
   const next = nextInWorld(world, player);
@@ -20,6 +21,11 @@ export function WorldHeaderStats({ worldId }: { worldId: string }) {
         <span className="font-mono text-ink">{ready ? `${p.done}/${p.total} · ${p.stars}/${p.maxStars} ★` : "…"}</span>
       </div>
       <ProgressBar value={ready ? p.pct : 0} color={world.color} />
+      {admin && (
+        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber/40 bg-amber/10 px-3 py-1 text-xs font-semibold text-amber">
+          👑 Admin — every level and boss in this world is unlocked
+        </div>
+      )}
       <div className="mt-5">
         {next ? (
           <LinkButton href={`/worlds/${world.id}/${next.id}`} size="lg">

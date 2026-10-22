@@ -67,7 +67,7 @@ export default function PrefixSum() {
         )}
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-line bg-[#080c19] p-4 scrollbar-thin">
+      <div className="overflow-x-auto rounded-xl border border-line bg-[#f8fafd] p-4 scrollbar-thin">
         <div className="space-y-2">
           <div className="flex items-center gap-1">
             <span className="w-14 shrink-0 text-right font-mono text-[11px] text-faint">nums</span>
