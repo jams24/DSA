@@ -1,0 +1,92 @@
+// DSA Quest — player data. Course content lives in src/content (versioned with the code);
+// the database only stores who the players are and what they have achieved.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  username      String   @unique
+  passwordHash  String
+  avatar        String   @default("wizard")
+  xp            Int      @default(0)
+  streak        Int      @default(0)
+  bestStreak    Int      @default(0)
+  // UTC calendar day (YYYY-MM-DD) of the last XP-earning activity, used for streaks
+  lastActiveDay String?
+  // Counters + recent claims used by the game engine (see src/lib/game/engine.ts PlayerStats)
+  stats         Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  progress     LessonProgress[]
+  achievements UserAchievement[]
+  xpEvents     XpEvent[]
+  cards        CardReview[]
+}
+
+// One row per lesson (or boss, id "boss/<worldId>") the player has touched.
+model LessonProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  lessonId    String
+  read        Boolean   @default(false)
+  visualized  Boolean   @default(false)
+  bestScore   Int       @default(0) // percent 0..100
+  stars       Int       @default(0) // 0..3
+  completedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([lessonId])
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+// Append-only XP ledger. User.xp is the running total; this powers weekly leaderboards,
+// daily caps and "already claimed" checks (e.g. reason = "daily:2026-10-22").
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
+  @@index([userId, reason])
+}
+
+// Leitner-box spaced repetition for interview flashcards.
+model CardReview {
+  id        String   @id @default(cuid())
+  userId    String
+  cardId    String
+  box       Int      @default(1) // 1..5
+  dueAt     DateTime @default(now())
+  reviews   Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, cardId])
+}
