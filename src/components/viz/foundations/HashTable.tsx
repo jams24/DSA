@@ -239,7 +239,7 @@ export default function HashTable() {
       <StepControls s={s} />
       <div className="grid grid-cols-3 gap-2">
         <Stat label="keys" value={n} />
-        <Stat label="load factor α" value={(n / f.table.length).toFixed(2)} color={n / f.table.length > limit ? C.bad : C.done} />
+        <Stat label="load factor" value={(n / f.table.length).toFixed(2)} color={n / f.table.length > limit ? C.bad : C.done} />
         <Stat label="avg comparisons" value={probes.ops ? (probes.steps / probes.ops).toFixed(2) : "–"} color={C.compare} />
       </div>
     </div>

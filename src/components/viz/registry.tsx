@@ -24,4 +24,13 @@ export const VISUALIZERS: Record<string, Entry> = {
   linkedlist: { title: "Linked list", blurb: "Insert, delete and reverse by rewiring pointers.", C: lazy(() => import("./foundations/LinkedList")) },
   stackqueue: { title: "Stack & queue", blurb: "LIFO vs FIFO, a ring-buffer queue and the bracket matcher.", C: lazy(() => import("./foundations/StackQueue")) },
   recursion: { title: "Recursion tree & call stack", blurb: "See every call of fib(n), then prune it with memoization.", C: lazy(() => import("./foundations/Recursion")) },
+  // Trees & graphs
+  traversal: { title: "Tree traversals", blurb: "Pre, in, post and level order — with the stack or queue that drives each.", C: lazy(() => import("./trees/Traversal")) },
+  bst: { title: "Binary search tree", blurb: "Insert, search and all three delete cases. Then break it with sorted input.", C: lazy(() => import("./trees/BST")) },
+  heap: { title: "Binary heap", blurb: "Sift up, sift down, O(n) heapify and heap sort on the backing array.", C: lazy(() => import("./trees/Heap")) },
+  trie: { title: "Trie (prefix tree)", blurb: "Insert words, search, and autocomplete a prefix.", C: lazy(() => import("./trees/Trie")) },
+  grid: { title: "BFS vs DFS vs A* on a grid", blurb: "Draw walls and watch each search explore. Then count islands.", C: lazy(() => import("./trees/GraphGrid")) },
+  dijkstra: { title: "Dijkstra's algorithm", blurb: "Min-heap, relaxation and the shortest-path tree, step by step.", C: lazy(() => import("./trees/Dijkstra")) },
+  topo: { title: "Topological sort (Kahn's algorithm)", blurb: "Order courses by prerequisites — and detect a cycle.", C: lazy(() => import("./trees/Topo")) },
+  unionfind: { title: "Union-Find", blurb: "Union by rank and path compression on a live forest.", C: lazy(() => import("./trees/UnionFind")) },
 };

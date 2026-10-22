@@ -75,7 +75,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
                 {
                   "--glow": accent,
                   borderColor: done || isNext ? accent : "#2a355d",
-                  background: done ? `radial-gradient(circle at 35% 30%, ${accent}, ${accent}99 60%, ${accent}55)` : isNext ? `${accent}22` : "#111830",
+                  background: done ? `radial-gradient(circle at 35% 30%, ${accent}, ${accent}99 60%, ${accent}55), #111830` : isNext ? `linear-gradient(${accent}22, ${accent}22), #111830` : "#111830",
                   boxShadow: done ? `0 6px 0 0 ${accent}55, 0 0 24px -4px ${accent}` : "0 6px 0 0 #070a14",
                 } as React.CSSProperties
               }
