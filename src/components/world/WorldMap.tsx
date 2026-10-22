@@ -99,7 +99,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
             </Link>
             <div
               className={clsx(
-                "absolute top-1/2 w-[min(38vw,240px)] -translate-y-1/2",
+                "absolute top-1/2 w-[min(33vw,240px)] -translate-y-1/2",
                 labelRight ? "left-[calc(100%+16px)] text-left" : "right-[calc(100%+16px)] text-right",
               )}
             >
@@ -147,7 +147,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
                 </span>
               )}
             </Link>
-            <div className={clsx("absolute top-1/2 w-[min(38vw,240px)] -translate-y-1/2", left < 50 ? "left-[calc(100%+16px)]" : "right-[calc(100%+16px)] text-right")}>
+            <div className={clsx("absolute top-1/2 w-[min(33vw,240px)] -translate-y-1/2", left < 50 ? "left-[calc(100%+16px)]" : "right-[calc(100%+16px)] text-right")}>
               <div className="font-pixel text-[9px] text-rose">BOSS BATTLE</div>
               <div className="font-display font-bold text-ink">{world.boss.name}</div>
               <div className="text-xs text-dim">{beaten ? <Stars count={prog.boss} size={11} /> : allDone ? "You're ready. Fight!" : "Clear the levels first (or be brave)."}</div>

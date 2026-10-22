@@ -6,7 +6,7 @@ import { clsx } from "clsx";
 import { BookOpen, Check, ChevronLeft, ChevronRight, Code2, Eye, MessagesSquare, Swords, Trophy } from "lucide-react";
 import type { ArchDiagram, ComplexityRow, Difficulty, PracticeProblem, QuizQuestion } from "@/content/types";
 import { useGame, usePlayer } from "@/lib/game/store";
-import { DifficultyPill, LinkButton, Pill, Stars } from "@/components/ui";
+import { DifficultyPill, Pill, Stars } from "@/components/ui";
 import { DiagramSlot, VisualizerSlot } from "@/components/viz/VisualizerSlot";
 import { useCatalog } from "@/components/game/GameProvider";
 import { CodeSamples, type RenderedSample } from "./CodeSamples";
@@ -247,15 +247,18 @@ export function LessonView(props: LessonViewProps) {
 
           <div className="mt-12 flex flex-wrap justify-between gap-3 border-t border-line pt-6">
             {props.prev ? (
-              <LinkButton href={props.prev.href} variant="ghost">
-                <ChevronLeft size={16} /> {props.prev.title}
-              </LinkButton>
+              <Link href={props.prev.href} className="flex max-w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-dim transition hover:bg-white/5 hover:text-ink">
+                <ChevronLeft size={16} className="shrink-0" /> {props.prev.title}
+              </Link>
             ) : (
               <span />
             )}
-            <LinkButton href={props.next.href} variant="secondary">
-              {props.next.title} <ChevronRight size={16} />
-            </LinkButton>
+            <Link
+              href={props.next.href}
+              className="ml-auto flex max-w-full items-center gap-2 rounded-xl border border-line-2 bg-panel-3 px-4 py-2.5 text-sm text-ink shadow-[0_4px_0_0_rgb(0_0_0/0.5)] transition hover:border-faint active:translate-y-[2px]"
+            >
+              {props.next.title} <ChevronRight size={16} className="shrink-0" />
+            </Link>
           </div>
         </div>
 

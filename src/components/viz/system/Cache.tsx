@@ -111,7 +111,7 @@ export default function Cache() {
             </span>
           ))}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <span className="w-20 shrink-0 text-right text-[10px] uppercase tracking-wider text-faint">{policy === "fifo" ? "newest →" : policy === "lru" ? "MRU →" : "cache"}</span>
           <div className="flex gap-2">
             {Array.from({ length: cap }, (_, i) => {

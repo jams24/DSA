@@ -52,7 +52,7 @@ export function Leaderboard() {
       />
       {!user && (
         <div className="rounded-xl border border-cyan/30 bg-cyan/[0.06] px-4 py-3 text-sm text-dim">
-          Guests aren't ranked.{" "}
+          Guests aren&apos;t ranked.{" "}
           <Link href="/login?next=/leaderboard" className="font-semibold text-cyan hover:underline">
             Create an account
           </Link>{" "}

@@ -353,7 +353,7 @@ export default function Raft() {
         </table>
       </div>
       <p className="text-xs text-dim">
-        Try: crash the leader and watch a new election; partition the network and send writes — the 2-node side can't commit anything (no majority), while the 3-node side elects a leader and keeps going. Heal it and the minority's
+        Try: crash the leader and watch a new election; partition the network and send writes — the 2-node side can&apos;t commit anything (no majority), while the 3-node side elects a leader and keeps going. Heal it and the minority&apos;s
         uncommitted entries are overwritten.
       </p>
     </div>

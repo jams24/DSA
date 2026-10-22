@@ -27,8 +27,8 @@ export function Logo() {
           <path d="M15 17l4 4" stroke="#a78bfa" strokeWidth="2.2" strokeLinecap="round" />
         </svg>
       </span>
-      <span className="leading-none">
-        <span className="block font-pixel text-[11px] tracking-wider text-ink">DSA QUEST</span>
+      <span className="hidden leading-none min-[420px]:block">
+        <span className="block font-pixel text-[11px] tracking-wider whitespace-nowrap text-ink">DSA QUEST</span>
         <span className="mt-1 block text-[10px] tracking-wide text-faint">interview RPG</span>
       </span>
     </Link>
@@ -71,9 +71,11 @@ function PlayerChip() {
         </div>
       </Link>
       {!user && (
-        <Link href="/login" className={buttonClass("primary", "sm", "hidden md:inline-flex")}>
-          Save progress
-        </Link>
+        <span className="hidden md:block">
+          <Link href="/login" className={buttonClass("primary", "sm")}>
+            Save progress
+          </Link>
+        </span>
       )}
     </div>
   );
@@ -87,7 +89,7 @@ export function TopBar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line/80 bg-bg/75 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:gap-4">
         <Logo />
         <nav className="ml-4 hidden items-center gap-1 lg:flex">
           {NAV.map((n) => {
@@ -138,6 +140,9 @@ export function TopBar() {
           ))}
           <Link href="/profile" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-dim hover:bg-white/5 hover:text-ink">
             Profile & achievements
+          </Link>
+          <Link href="/login" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-cyan hover:bg-white/5 md:hidden">
+            Sign in / save progress
           </Link>
         </nav>
       )}

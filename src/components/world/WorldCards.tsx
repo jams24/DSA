@@ -13,7 +13,7 @@ export function WorldCards({ large = false }: { large?: boolean }) {
   const ready = useGame((s) => s.ready);
 
   return (
-    <div className={clsx("grid gap-4", large ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3")}>
+    <div className={clsx("grid gap-4", large ? "sm:grid-cols-2" : "sm:grid-cols-2 xl:grid-cols-4")}>
       {catalog.map((w) => {
         const p = worldProgress(w, player);
         const cleared = p.total > 0 && p.done === p.total;
@@ -64,6 +64,29 @@ export function WorldCards({ large = false }: { large?: boolean }) {
           </Link>
         );
       })}
+      <Link
+        href="/arena"
+        className="group panel relative flex flex-col justify-between overflow-hidden border-dashed p-5 transition duration-300 hover:-translate-y-1 hover:border-amber/60"
+      >
+        <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-amber/20 opacity-30 blur-3xl transition group-hover:opacity-60" />
+        <div className="relative flex items-start gap-4">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-amber/40 bg-amber/10 text-3xl transition group-hover:scale-110 group-hover:-rotate-3">
+            🏟️
+          </div>
+          <div>
+            <div className="font-pixel text-[9px] uppercase tracking-widest text-amber">Bonus realm</div>
+            <h3 className="mt-1 font-display text-lg font-bold text-ink">The Arena</h3>
+            <p className="mt-0.5 text-sm text-dim">Daily challenge, rapid fire, mock interview cards & boss rush.</p>
+          </div>
+        </div>
+        <div className="relative mt-5 flex flex-wrap gap-1.5 text-[11px] text-dim">
+          {["📅 Daily", "⚡ Rapid fire", "🃏 Flashcards", "⚔️ Boss rush"].map((m) => (
+            <span key={m} className="rounded-full border border-line-2 bg-panel-2 px-2 py-0.5">
+              {m}
+            </span>
+          ))}
+        </div>
+      </Link>
     </div>
   );
 }

@@ -70,4 +70,17 @@ export const VISUALIZERS: Record<string, Entry> = {
   bloom: { title: "Bloom filter", blurb: "Definitely-not or maybe, from a few bits and hash functions.", C: lazy(() => import("./distributed/Bloom")) },
   crdt: { title: "CRDTs", blurb: "Offline replicas that always converge — vs last-writer-wins losing data.", C: lazy(() => import("./distributed/CRDT")) },
   mapreduce: { title: "MapReduce word count", blurb: "Map, combine, shuffle, reduce — the batch processing blueprint.", C: lazy(() => import("./distributed/MapReduce")) },
+  // AI inference
+  tokenizer: { title: "BPE tokenizer", blurb: "Learn merge rules from a corpus and watch words become tokens.", C: lazy(() => import("./ai/Tokenizer")) },
+  attention: { title: "Self-attention heatmap", blurb: "Three heads, a causal mask and a softmax temperature to play with.", C: lazy(() => import("./ai/Attention")) },
+  sampling: { title: "Decoding & sampling", blurb: "Temperature, top-k and top-p reshape the next-token distribution.", C: lazy(() => import("./ai/Sampling")) },
+  generation: { title: "Prefill, decode & the KV cache", blurb: "Step through generation with and without caching keys and values.", C: lazy(() => import("./ai/Generation")) },
+  paged: { title: "PagedAttention", blurb: "Contiguous KV allocation vs vLLM-style paging on the same workload.", C: lazy(() => import("./ai/PagedKV")) },
+  batching: { title: "Static vs continuous batching", blurb: "GPU slot timelines for the same 12 requests.", C: lazy(() => import("./ai/Batching")) },
+  quantization: { title: "Quantization lab", blurb: "Bits, scales and outliers — see the rounding error.", C: lazy(() => import("./ai/Quantization")) },
+  speculative: { title: "Speculative decoding", blurb: "Draft, verify, accept — tokens per expensive forward pass.", C: lazy(() => import("./ai/Speculative")) },
+  parallelism: { title: "Model parallelism", blurb: "Data, tensor, pipeline and expert parallelism across 4 GPUs.", C: lazy(() => import("./ai/Parallelism")) },
+  vram: { title: "GPU memory calculator", blurb: "Weights + KV cache + overhead for real models and GPUs.", C: lazy(() => import("./ai/VRAM")) },
+  roofline: { title: "Roofline: why decode is memory-bound", blurb: "Arithmetic intensity, batch size and the ridge point on an H100.", C: lazy(() => import("./ai/Roofline")) },
+  vectorsearch: { title: "Vector search", blurb: "Exact k-NN vs HNSW-style graph search on an embedding map.", C: lazy(() => import("./ai/VectorSearch")) },
 };

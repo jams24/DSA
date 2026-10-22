@@ -25,6 +25,8 @@ function merge(a: Replica, b: Replica): Replica {
   };
 }
 
+const tag = () => Math.random().toString(36).slice(2, 7);
+
 const ITEMS = ["🥛", "🍞", "🥚", "🧀"];
 
 export default function CRDT() {
@@ -32,7 +34,6 @@ export default function CRDT() {
   const [online, setOnline] = useState(false);
   const [clock, setClock] = useState(1);
   const [msg, setMsg] = useState("Three replicas start OFFLINE from each other (think phones in airplane mode). Make changes on different replicas, then sync.");
-  const tag = () => Math.random().toString(36).slice(2, 7);
 
   function update(i: number, f: (r: Replica) => Replica, note: string) {
     setClock((c) => c + 1);
