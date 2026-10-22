@@ -49,11 +49,9 @@ export default function RateLimiter() {
     rec("sliding", swOk);
   }
 
-  useSimLoop(running, (dt, t) => {
-    if (!now.current) {
-      fixed.current.start = Math.floor(t / WINDOW) * WINDOW;
-    }
-    now.current = t;
+  useSimLoop(running, (dt) => {
+    now.current += dt;
+    const t = now.current;
     tokens.current = Math.min(LIMIT, tokens.current + (dt / 1000) * REFILL);
     if (pattern === "steady") {
       acc.current += (dt / 1000) * rate;
@@ -78,7 +76,7 @@ export default function RateLimiter() {
   });
 
   function burst(n: number) {
-    const t = now.current || performance.now();
+    const t = now.current;
     for (let k = 0; k < n; k++) arrive(t - (n - 1 - k) * 20);
   }
 

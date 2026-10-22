@@ -79,8 +79,9 @@ export default function LoadBalancer() {
     return up[ipHash(CLIENTS[client].ip) % up.length];
   }
 
-  useSimLoop(running, (dt, t) => {
-    now.current = t;
+  useSimLoop(running, (dt) => {
+    now.current += dt;
+    const t = now.current;
     spawnAcc.current += (dt / 1000) * rate;
     while (spawnAcc.current >= 1) {
       spawnAcc.current -= 1;
