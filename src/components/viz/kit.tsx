@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import { ChevronLeft, ChevronRight, Pause, Play, RotateCcw, Shuffle } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 /** Shared palette so every visualizer speaks the same visual language. */
 export const C = {
@@ -354,4 +354,48 @@ export function parseNums(s: string, max = 16): number[] | null {
     .map(Number);
   if (!nums.length || nums.some((n) => !Number.isFinite(n))) return null;
   return nums.slice(0, max).map((n) => Math.round(n));
+}
+
+/**
+ * Drives a real-time simulation: `step(dtMs, nowMs)` mutates refs every animation frame,
+ * and the component re-renders at roughly `fps`.
+ */
+export function useSimLoop(running: boolean, step: (dt: number, now: number) => void, fps = 30) {
+  const stepRef = useRef(step);
+  useLayoutEffect(() => {
+    stepRef.current = step;
+  });
+  const [, force] = useState(0);
+  useEffect(() => {
+    if (!running) return;
+    let raf = 0;
+    let last = performance.now();
+    let acc = 0;
+    const loop = (t: number) => {
+      const dt = Math.min(100, t - last);
+      last = t;
+      acc += dt;
+      stepRef.current(dt, t);
+      if (acc >= 1000 / fps) {
+        acc = 0;
+        force((x) => x + 1);
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [running, fps]);
+}
+
+export function PlayPause({ running, onToggle }: { running: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan to-sky px-4 text-sm font-semibold text-[#03131a] shadow-[0_3px_0_0_#0e7490] active:translate-y-px"
+    >
+      {running ? <Pause size={15} /> : <Play size={15} />}
+      {running ? "Pause" : "Run simulation"}
+    </button>
+  );
 }

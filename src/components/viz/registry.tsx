@@ -47,4 +47,12 @@ export const VISUALIZERS: Record<string, Entry> = {
   prefixsum: { title: "Prefix sums", blurb: "O(1) range queries and counting subarrays with a hash map.", C: lazy(() => import("./patterns/PrefixSum")) },
   monostack: { title: "Monotonic stack", blurb: "Daily temperatures: every index pushed and popped once.", C: lazy(() => import("./patterns/MonoStack")) },
   intervals: { title: "Merge intervals", blurb: "Sort by start, then sweep and merge.", C: lazy(() => import("./patterns/Intervals")) },
+  // System design
+  latency: { title: "Latency numbers", blurb: "Every engineer's mental model of how slow things are, on a log scale.", C: lazy(() => import("./system/Latency")) },
+  estimator: { title: "Back-of-envelope calculator", blurb: "Turn users and actions into QPS, storage and bandwidth.", C: lazy(() => import("./system/Estimator")) },
+  loadbalancer: { title: "Load balancer simulator", blurb: "Five balancing algorithms, a slow server, and a kill switch.", C: lazy(() => import("./system/LoadBalancer")) },
+  cache: { title: "Cache eviction policies", blurb: "LRU vs LFU vs FIFO on the same access pattern.", C: lazy(() => import("./system/Cache")) },
+  ratelimiter: { title: "Rate limiter showdown", blurb: "Token bucket, fixed window and sliding log on identical traffic.", C: lazy(() => import("./system/RateLimiter")) },
+  sharding: { title: "Sharding & rebalancing", blurb: "Mod-N vs range vs consistent hashing — then add a shard.", C: lazy(() => import("./system/Sharding")) },
+  queue: { title: "Partitioned log (Kafka-style)", blurb: "Keys, partitions, consumer groups, offsets and lag.", C: lazy(() => import("./system/MessageQueue")) },
 };
