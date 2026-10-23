@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Brain, Code2, Eye, Layers, ListChecks, Network, Swords, Trophy, Zap } from "lucide-react";
+import { BookOpen, Brain, Code2, Eye, Layers, ListChecks, Network, Swords, Timer, Trophy, Zap } from "lucide-react";
 import { contentStats } from "@/content";
 import { ContinueButton, PlayerCard } from "@/components/home/PlayerCard";
 import { DailyBanner } from "@/components/home/DailyBanner";
@@ -88,10 +88,11 @@ export default function Home() {
       {/* modes */}
       <section className="pt-20">
         <SectionTitle eyebrow="Game modes" title="Beyond the campaign" />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[
             { href: "/leetcode-150", icon: ListChecks, title: "LeetCode Top 150", text: "All 150 with the key trick, a step-by-step simulation, pitfalls and tested solutions.", color: "#ea580c" },
             { href: "/challenges", icon: Code2, title: "Coding Challenges", text: "Build what interviewers ask for: APIs, UI components and language drills in Python, JS, Java, Go, React.", color: "#7c3aed" },
+            { href: "/interview", icon: Timer, title: "Interview Practice", text: "STAR story bank for behavioral rounds, Amazon's Leadership Principles, and a timed mock-interview simulator.", color: "#0d9488" },
             { href: "/arena/rapid-fire", icon: Zap, title: "Rapid Fire", text: "60 seconds. As many correct answers as you can.", color: "#d97706" },
             { href: "/arena/flashcards", icon: Layers, title: "Mock Interview Cards", text: "Spaced-repetition flashcards of real interview questions.", color: "#db2777" },
             { href: "/questions", icon: Network, title: "Question Bank", text: "Every interview question and LeetCode problem, searchable.", color: "#0891b2" },

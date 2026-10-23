@@ -14,7 +14,8 @@ const NAV = [
   { href: "/arena", label: "Arena" },
   { href: "/leetcode-150", label: "LeetCode 150" },
   { href: "/challenges", label: "Challenges" },
-  { href: "/questions", label: "Question Bank" },
+  { href: "/interview", label: "Interview" },
+  { href: "/questions", label: "Questions" },
   { href: "/cheatsheets", label: "Cheat Sheets" },
   { href: "/leaderboard", label: "Leaderboard" },
 ];
@@ -93,7 +94,7 @@ export function TopBar() {
     <header className="sticky top-0 z-50 border-b border-line/80 bg-bg/75 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:gap-4">
         <Logo />
-        <nav className="ml-2 hidden items-center gap-0.5 xl:flex 2xl:ml-4 2xl:gap-1">
+        <nav className="ml-1 hidden items-center xl:flex 2xl:ml-4 2xl:gap-1">
           {NAV.map((n) => {
             const active = pathname === n.href || pathname.startsWith(`${n.href}/`);
             return (
@@ -101,7 +102,7 @@ export function TopBar() {
                 key={n.href}
                 href={n.href}
                 className={clsx(
-                  "rounded-lg px-2.5 py-2 text-sm whitespace-nowrap transition 2xl:px-3",
+                  "rounded-lg px-2 py-2 text-sm whitespace-nowrap transition 2xl:px-3",
                   active ? "bg-slate-900/[0.06] text-ink" : "text-dim hover:bg-slate-900/[0.04] hover:text-ink",
                 )}
               >
