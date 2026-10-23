@@ -66,7 +66,7 @@ export function WorldCards({ large = false }: { large?: boolean }) {
       })}
       <Link
         href="/arena"
-        className="group panel relative flex flex-col justify-between overflow-hidden border-dashed p-5 transition duration-300 hover:-translate-y-1 hover:border-amber/60"
+        className="group panel relative flex flex-col justify-between gap-5 overflow-hidden border-dashed p-5 transition duration-300 hover:-translate-y-1 hover:border-amber/60 sm:col-span-full sm:flex-row sm:items-center"
       >
         <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-amber/20 opacity-30 blur-3xl transition group-hover:opacity-60" />
         <div className="relative flex items-start gap-4">
@@ -79,7 +79,7 @@ export function WorldCards({ large = false }: { large?: boolean }) {
             <p className="mt-0.5 text-sm text-dim">Daily challenge, rapid fire, mock interview cards & boss rush.</p>
           </div>
         </div>
-        <div className="relative mt-5 flex flex-wrap gap-1.5 text-[11px] text-dim">
+        <div className="relative flex flex-wrap gap-1.5 text-[11px] text-dim">
           {["📅 Daily", "⚡ Rapid fire", "🃏 Flashcards", "⚔️ Boss rush"].map((m) => (
             <span key={m} className="rounded-full border border-line-2 bg-panel-2 px-2 py-0.5">
               {m}

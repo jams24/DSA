@@ -242,6 +242,53 @@ A100 40/80 GB · ~1.6–2 TB/s — H100 SXM 80 GB · 3.35 TB/s — H200 141 GB �
 `,
   },
   {
+    id: "infra",
+    title: "Infra, Kubernetes & SRE cheat sheet",
+    emoji: "⚓",
+    md: `
+### Networking
+- **Round trips before the first byte**: TCP 1 + TLS 1.3 1 (TLS 1.2: 2) + request 1. HTTP/3 (QUIC): 2 total, 1 with 0-RTT resumption.
+- **CIDR**: /n leaves 32 − n host bits. /16 = 65,536 · /20 = 4,096 · /24 = 256 · /28 = 16. AWS reserves 5 per subnet.
+- **Private ranges**: 10/8 · 172.16/12 · 192.168/16 · CGNAT 100.64/10 · metadata 169.254.169.254.
+- **Throughput ≤ window ÷ RTT**. Bandwidth-delay product = bandwidth × RTT.
+- **Ports**: 22 SSH · 53 DNS · 80/443 HTTP(S) · 3306 MySQL · 5432 Postgres · 6379 Redis · 9092 Kafka · 2379 etcd · 6443 k8s API · 9090 Prometheus.
+
+### Linux triage (first 60 seconds)
+\`uptime\` → \`dmesg -T | tail\` → \`vmstat 1\` → \`mpstat -P ALL 1\` → \`pidstat 1\` → \`iostat -xz 1\` → \`free -m\` → \`df -h\` / \`df -i\` → \`ss -s\` → \`sar -n TCP,ETCP 1\` → \`top\`.
+- Exit **137** = SIGKILL (often OOM) · **143** = SIGTERM · load average counts **D-state** (I/O) tasks too.
+
+### Kubernetes
+| Symptom | Look at |
+|---|---|
+| Pending | \`kubectl describe pod\` events: Insufficient cpu/memory, taints, affinity, PVC zone |
+| CrashLoopBackOff | \`kubectl logs --previous\`, exit code, liveness probe too strict |
+| OOMKilled | memory limit vs real usage, leaks, JVM heap vs container limit |
+| ImagePullBackOff | image name/tag/digest, registry auth (imagePullSecrets) |
+| Service unreachable | selector ↔ pod labels, readiness, \`kubectl get endpointslices\`, NetworkPolicy |
+- **Requests** schedule, **limits** enforce (CPU → throttle, memory → OOM kill). QoS: Guaranteed > Burstable > BestEffort.
+- **HPA**: desired = ceil(current × metric / target), every 15 s, scale-down stabilization 5 min.
+- **Zero-downtime**: maxUnavailable 0 + readiness probe + preStop sleep + SIGTERM handling + PDB.
+
+### Deployments
+Recreate (downtime) · Rolling (mixed versions) · Blue/green (2× capacity, instant rollback) · Canary (smallest blast radius) · Feature flags (deploy ≠ release) · Schema: **expand → migrate → contract**.
+
+### SRE numbers
+| SLO | Downtime / 30 days | / year |
+|---|---|---|
+| 99% | 7.2 h | 3.65 d |
+| 99.9% | 43.2 min | 8.76 h |
+| 99.95% | 21.6 min | 4.38 h |
+| 99.99% | 4.3 min | 52.6 min |
+| 99.999% | 26 s | 5.3 min |
+- **Error budget** = 1 − SLO. **Burn rate** = error rate ÷ (1 − SLO). Page at 14.4× over 1 h or 6× over 6 h; ticket at 1× over 3 d.
+- **Serial** availability multiplies (0.999³ ≈ 99.7%). **Redundant** independent copies: 1 − (1 − a)².
+- **RTO** = time to recover, **RPO** = data you can lose. Backup/restore → pilot light → warm standby → active-active.
+
+### Observability
+Golden signals (latency, traffic, errors, saturation) · RED for services · USE for resources · histograms aggregate, summaries don't · never average percentiles · keep label cardinality bounded · propagate \`traceparent\`.
+`,
+  },
+  {
     id: "communication",
     title: "Talking like a senior engineer",
     emoji: "🗣️",

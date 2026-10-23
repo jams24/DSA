@@ -11,6 +11,7 @@
 | 🏙️ Skyline City | system design: estimation, load balancing, caching, databases, sharding, queues, rate limiting, APIs, CDNs + 7 case studies | 17 |
 | 🌌 Consensus Nebula | distributed systems: CAP, consistency, clocks, quorums, consistent hashing, Raft, locks, 2PC/sagas, gossip, LSM/Bloom, CRDTs, stream processing, Dynamo | 14 |
 | 🧠 Neural Citadel | AI inference: transformers, prefill/decode, KV cache, batching, quantization, speculative decoding, parallelism, roofline, FlashAttention, RAG, ML system design, LLM serving | 12 |
+| ⚓ Container Harbor | infra, DevOps & SRE: what happens when you type a URL, TCP/UDP/HTTP/3, subnets & VPCs, Linux troubleshooting, containers, Kubernetes architecture & workloads, service mesh, CI/CD, cloud & Terraform, observability, SLOs & incidents, disaster recovery + a metrics-platform case study | 14 |
 
 Every level has five stages — **Learn → Visualize → Code → Interview → Quiz** — and every world ends with a **boss battle**.
 
@@ -18,11 +19,11 @@ Plus the full **LeetCode Top Interview 150** study plan: all 150 problems groupe
 
 ## Features
 
-- **59 interactive visualizers**: step-through algorithm animations (sorting race, Dijkstra, DP tables, N-Queens…), live simulations (load balancer, rate limiters, Kafka consumer groups, Raft elections with partitions, quorums, retry storms, PagedAttention, continuous batching…) and animated system-design architecture diagrams.
-- **Game layer**: XP, levels and titles, 1–3 stars per level, streaks, 30 achievements, boss battles with hearts and timers, daily challenge, 60-second rapid fire, spaced-repetition mock-interview flashcards, weekly and all-time leaderboards, chiptune sound effects.
+- **69 interactive visualizers**: step-through algorithm animations (sorting race, Dijkstra, DP tables, N-Queens…), live simulations (load balancer, rate limiters, Kafka consumer groups, Raft elections with partitions, quorums, retry storms, PagedAttention, continuous batching, a Kubernetes cluster you can break, an HPA autoscaler, deployment strategies…), an on-call debugging drill, and animated architecture diagrams.
+- **Game layer**: XP, levels and titles, 1–3 stars per level, streaks, 31 achievements, boss battles with hearts and timers, daily challenge, 60-second rapid fire, spaced-repetition mock-interview flashcards, weekly and all-time leaderboards, chiptune sound effects.
 - **LeetCode Top Interview 150** (`/leetcode-150`): all 150 problems (39 Easy / 93 Medium / 18 Hard) with a hint each, search and difficulty filters, a "learn the pattern" link per category, and a solved tracker (+10 XP per problem, achievements at 25 / 75 / 150).
 - **Question bank**: every interview question with a model answer, filterable by world and frequency, plus 200+ curated LeetCode problems by topic.
-- **Cheat sheets**: complexity tables, pattern recognition, latency numbers, estimation, system design template, distributed systems and AI inference formulas.
+- **Cheat sheets**: complexity tables, pattern recognition, latency numbers, estimation, system design template, distributed systems, AI inference formulas, and infra/Kubernetes/SRE numbers.
 - **Guest mode**: play without an account (progress in `localStorage`), then sign up and your progress is merged into the account.
 - **Accounts**: sign in with username or email. Admin accounts see every level and boss unlocked.
 - **Server-authoritative scoring** for signed-in players: quiz, boss, arena and daily answers are graded on the server with the same rules engine the client uses for guests.

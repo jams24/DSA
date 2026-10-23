@@ -32,7 +32,7 @@ export default function Home() {
             <span className="bg-gradient-to-r from-violet to-pink bg-clip-text text-transparent">Raft consensus</span>.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-dim">
-            DSA Quest is an interview-prep RPG. Clear levels in data structures, algorithms, system design, distributed systems and AI inference — with
+            DSA Quest is an interview-prep RPG. Clear levels in data structures, algorithms, system design, distributed systems, AI inference and DevOps/SRE — with
             interactive visualizations, real interview questions and boss battles.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -62,7 +62,7 @@ export default function Home() {
 
       {/* worlds */}
       <section className="pt-20">
-        <SectionTitle eyebrow="World select" title="Seven worlds. One offer letter.">
+        <SectionTitle eyebrow="World select" title="Eight worlds. One offer letter.">
           Start in Foundation Fields or warp straight to the realm your next interview needs. Every world ends with a boss.
         </SectionTitle>
         <WorldCards />

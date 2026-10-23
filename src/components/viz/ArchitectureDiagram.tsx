@@ -20,6 +20,10 @@ const KIND: Record<ArchNodeKind, { icon: string; color: string }> = {
   gpu: { icon: "🧮", color: C.lime },
   external: { icon: "🌍", color: C.muted },
   model: { icon: "🧠", color: C.active },
+  node: { icon: "🖥️", color: C.sky },
+  control: { icon: "🎛️", color: C.pivot },
+  monitor: { icon: "📈", color: C.done },
+  registry: { icon: "📦", color: C.orange },
 };
 
 const NW = 140;

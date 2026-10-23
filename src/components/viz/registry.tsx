@@ -83,4 +83,15 @@ export const VISUALIZERS: Record<string, Entry> = {
   vram: { title: "GPU memory calculator", blurb: "Weights + KV cache + overhead for real models and GPUs.", C: lazy(() => import("./ai/VRAM")) },
   roofline: { title: "Roofline: why decode is memory-bound", blurb: "Arithmetic intensity, batch size and the ridge point on an H100.", C: lazy(() => import("./ai/Roofline")) },
   vectorsearch: { title: "Vector search", blurb: "Exact k-NN vs HNSW-style graph search on an embedding map.", C: lazy(() => import("./ai/VectorSearch")) },
+  // Infrastructure, DevOps & SRE
+  handshake: { title: "Connection setup: DNS, TCP, TLS, QUIC", blurb: "Count the round trips before the first byte for HTTP/1.1, HTTP/2 and HTTP/3.", C: lazy(() => import("./infra/Handshake")) },
+  congestion: { title: "TCP congestion control", blurb: "Slow start, AIMD and the sawtooth: Reno vs Tahoe under loss.", C: lazy(() => import("./infra/Congestion")) },
+  cidr: { title: "CIDR & subnet calculator", blurb: "See network vs host bits, carve a VPC into subnets and test membership.", C: lazy(() => import("./infra/Cidr")) },
+  incident: { title: "On-call drill", blurb: "Get paged, run Linux and kubectl commands, find the root cause.", C: lazy(() => import("./infra/Incident")) },
+  layers: { title: "Docker build cache", blurb: "Instruction order, cache invalidation and multi-stage image size.", C: lazy(() => import("./infra/Layers")) },
+  kube: { title: "Kubernetes cluster simulator", blurb: "Scale, kill pods, fail and drain nodes. Watch the controllers reconcile.", C: lazy(() => import("./infra/Kube")) },
+  hpa: { title: "Horizontal Pod Autoscaler", blurb: "Target utilization, startup time and stabilization vs real traffic.", C: lazy(() => import("./infra/Autoscaler")) },
+  rollout: { title: "Deployment strategies", blurb: "Ship a buggy release with recreate, rolling, blue/green and canary.", C: lazy(() => import("./infra/Rollout")) },
+  percentiles: { title: "Latency percentiles & the tail", blurb: "Mean vs p99, why you can't average percentiles, and fan-out.", C: lazy(() => import("./infra/Percentiles")) },
+  slo: { title: "SLOs & error budgets", blurb: "Nines, dependency math, burn rates and multi-window alerts.", C: lazy(() => import("./infra/Slo")) },
 };

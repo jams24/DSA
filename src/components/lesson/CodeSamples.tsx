@@ -18,6 +18,10 @@ const LANG_LABEL: Record<string, string> = {
   cpp: "C++",
   go: "Go",
   sql: "SQL",
+  yaml: "YAML",
+  bash: "Bash",
+  dockerfile: "Dockerfile",
+  hcl: "Terraform",
   text: "Text",
 };
 

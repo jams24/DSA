@@ -11,6 +11,10 @@ export type Lang =
   | "cpp"
   | "go"
   | "sql"
+  | "yaml"
+  | "bash"
+  | "dockerfile"
+  | "hcl"
   | "text";
 
 export interface CodeVariant {
@@ -70,7 +74,11 @@ export type ArchNodeKind =
   | "search"
   | "gpu"
   | "external"
-  | "model";
+  | "model"
+  | "node"
+  | "control"
+  | "monitor"
+  | "registry";
 
 export interface ArchNode {
   id: string;
