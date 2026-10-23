@@ -289,6 +289,45 @@ Golden signals (latency, traffic, errors, saturation) · RED for services · USE
 `,
   },
   {
+    id: "agents",
+    title: "AI engineering & agents cheat sheet",
+    emoji: "🤖",
+    md: `
+### Models
+- **Training**: pretrain (next token, compute ≈ 6·N·D) → SFT → preference tuning (RLHF / DPO / RLAIF) → RL on verifiable rewards (reasoning, agents) → distillation.
+- **MoE**: total params ≫ active params (top-k experts per token). **GQA / MLA** shrink the KV cache. **RoPE scaling** (YaRN) extends context. Effective context < advertised.
+- **Reasoning / test-time compute**: thinking budgets, self-consistency (vote), best-of-N + verifier (≤ pass@N). Thinking tokens bill as output.
+
+### Context engineering
+- Order for caching: **system → tools → static docs → conversation → latest message**. No timestamps at the top.
+- Agents: minimal non-overlapping tools · just-in-time retrieval · truncate tool output · compaction · notes / to-do files · sub-agents · memory files (CLAUDE.md / AGENTS.md).
+- Structured output: JSON-schema / constrained decoding, then validate in code.
+
+### Tools & MCP
+- Function calling: the model emits {name, input}, **your code executes**, and you return a tool_result with the call id.
+- MCP: host → one client per server → server, over JSON-RPC 2.0. Primitives: **tools / resources / prompts**, plus client-side **sampling / roots / elicitation**. Transports: **stdio** (local), **streamable HTTP** (remote, OAuth 2.1).
+- Good tools: few and task-shaped, namespaced, clear docs, concise output, actionable errors, idempotent side effects.
+
+### Agent harness checklist
+Loop + budgets · tool registry · sandbox (fs + network) · permissions (allow / ask / deny, modes) · hooks for invariants · context manager (truncate, compact) · memory · sub-agents · checkpoints · streaming + interrupt · traces & cost.
+
+### Patterns
+Augmented LLM → prompt chaining → routing → parallelization (sectioning / voting) → orchestrator-workers → evaluator-optimizer → autonomous agent. Use the simplest one that passes evals.
+
+### Retrieval
+Hybrid (BM25 + dense) → **RRF** Σ 1/(60 + rank) → cross-encoder rerank → top 5–10. Contextual retrieval for chunks. Measure **recall@k** separately from answer quality.
+
+### Evals
+Code graders > LLM judge (watch position, verbosity and self-preference bias; calibrate vs humans) > humans for scale. Agents: grade end states, multiple trials, **pass@k = 1 − (1 − p)^k**, **pass^k = p^k**. 500 items at 70% ≈ ±4 pts (95% CI).
+
+### Security
+**Lethal trifecta**: private data + untrusted content + exfiltration channel. Break a leg. Least privilege · sandbox · policy enforced in code · approvals for external or irreversible actions · treat model output as untrusted · budgets against denial-of-wallet.
+
+### LLMOps
+Cost = in·p_in + out·p_out · cache prefixes · batch API ≈ half price · route / cascade · retries with backoff + jitter, fallbacks, timeouts · trace prompts, tokens, cost · prompt → RAG → fine-tune (LoRA / QLoRA ≈ < 1% trainable params).
+`,
+  },
+  {
     id: "communication",
     title: "Talking like a senior engineer",
     emoji: "🗣️",

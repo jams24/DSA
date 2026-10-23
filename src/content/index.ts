@@ -12,8 +12,9 @@ import { systemDesign } from "./worlds/system-design";
 import { distributed } from "./worlds/distributed";
 import { aiInference } from "./worlds/ai-inference";
 import { infra } from "./worlds/infra";
+import { agents } from "./worlds/agents";
 
-export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra].sort(
+export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents].sort(
   (a, b) => a.order - b.order,
 );
 

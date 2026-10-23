@@ -94,4 +94,15 @@ export const VISUALIZERS: Record<string, Entry> = {
   rollout: { title: "Deployment strategies", blurb: "Ship a buggy release with recreate, rolling, blue/green and canary.", C: lazy(() => import("./infra/Rollout")) },
   percentiles: { title: "Latency percentiles & the tail", blurb: "Mean vs p99, why you can't average percentiles, and fan-out.", C: lazy(() => import("./infra/Percentiles")) },
   slo: { title: "SLOs & error budgets", blurb: "Nines, dependency math, burn rates and multi-window alerts.", C: lazy(() => import("./infra/Slo")) },
+  // Agents, LLM frontier & AI engineering
+  agentloop: { title: "Inside an agent harness", blurb: "Step through a coding agent's loop: tool calls, permissions, hooks, subagents and compaction.", C: lazy(() => import("./agents/AgentLoop")) },
+  context: { title: "Context budget & prompt caching", blurb: "Why agent sessions get expensive, and how caching and compaction fix it.", C: lazy(() => import("./agents/ContextBudget")) },
+  moe: { title: "Mixture-of-Experts router", blurb: "Top-k routing, load balancing, capacity and dropped tokens.", C: lazy(() => import("./agents/MoE")) },
+  reasoning: { title: "Test-time compute", blurb: "Majority voting and best-of-N with a verifier vs a single sample.", C: lazy(() => import("./agents/Reasoning")) },
+  patterns: { title: "Agentic workflow patterns", blurb: "Chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer, agents.", C: lazy(() => import("./agents/Patterns")) },
+  hybrid: { title: "Hybrid search & reranking", blurb: "BM25 + embeddings fused with reciprocal rank fusion, then a cross-encoder.", C: lazy(() => import("./agents/HybridSearch")) },
+  evals: { title: "Eval statistics", blurb: "pass@k vs pass^k, and whether a benchmark gain is real or noise.", C: lazy(() => import("./agents/Evals")) },
+  injection: { title: "Prompt injection & the lethal trifecta", blurb: "Poison an email agent, then find the defenses that actually stop exfiltration.", C: lazy(() => import("./agents/Injection")) },
+  cascade: { title: "Model routing & cascades", blurb: "Router vs cascade vs one big model: cost against quality.", C: lazy(() => import("./agents/Cascade")) },
+  lora: { title: "Fine-tuning memory: full vs LoRA vs QLoRA", blurb: "Trainable parameters, adapter size and what fits on one GPU.", C: lazy(() => import("./agents/LoRA")) },
 };

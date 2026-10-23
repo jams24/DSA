@@ -7,6 +7,15 @@ import { worldProgress } from "@/lib/game/progress";
 import { useCatalog } from "@/components/game/GameProvider";
 import { ProgressBar, Stars } from "@/components/ui";
 
+// The Arena card fills whatever is left of the last row (full width when the worlds divide evenly).
+const ARENA_SPAN_SM = ["sm:col-span-2 sm:flex-row sm:items-center", "sm:col-span-1"];
+const ARENA_SPAN_XL = [
+  "xl:col-span-4 xl:flex-row xl:items-center",
+  "xl:col-span-3 xl:flex-row xl:items-center",
+  "xl:col-span-2 xl:flex-col xl:items-stretch",
+  "xl:col-span-1 xl:flex-col xl:items-stretch",
+];
+
 export function WorldCards({ large = false }: { large?: boolean }) {
   const catalog = useCatalog();
   const player = usePlayer();
@@ -66,7 +75,11 @@ export function WorldCards({ large = false }: { large?: boolean }) {
       })}
       <Link
         href="/arena"
-        className="group panel relative flex flex-col justify-between gap-5 overflow-hidden border-dashed p-5 transition duration-300 hover:-translate-y-1 hover:border-amber/60 sm:col-span-full sm:flex-row sm:items-center"
+        className={clsx(
+          "group panel relative flex flex-col justify-between gap-5 overflow-hidden border-dashed p-5 transition duration-300 hover:-translate-y-1 hover:border-amber/60",
+          ARENA_SPAN_SM[catalog.length % 2],
+          !large && ARENA_SPAN_XL[catalog.length % 4],
+        )}
       >
         <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-amber/20 opacity-30 blur-3xl transition group-hover:opacity-60" />
         <div className="relative flex items-start gap-4">
