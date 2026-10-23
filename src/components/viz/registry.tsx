@@ -94,6 +94,23 @@ export const VISUALIZERS: Record<string, Entry> = {
   rollout: { title: "Deployment strategies", blurb: "Ship a buggy release with recreate, rolling, blue/green and canary.", C: lazy(() => import("./infra/Rollout")) },
   percentiles: { title: "Latency percentiles & the tail", blurb: "Mean vs p99, why you can't average percentiles, and fan-out.", C: lazy(() => import("./infra/Percentiles")) },
   slo: { title: "SLOs & error budgets", blurb: "Nines, dependency math, burn rates and multi-window alerts.", C: lazy(() => import("./infra/Slo")) },
+  // Docker & Kubernetes deep dive
+  dockerrun: { title: "What docker run really does", blurb: "CLI → dockerd → containerd → shim → runc → namespaces, cgroups and overlayfs.", C: lazy(() => import("./cloud/DockerRun")) },
+  dockernet: { title: "Docker networking & volumes", blurb: "Trace packets through bridges, veth pairs, NAT and embedded DNS.", C: lazy(() => import("./cloud/DockerNet")) },
+  probes: { title: "Probes & CrashLoopBackOff", blurb: "Startup, liveness and readiness probes against slow, hung and crashing apps.", C: lazy(() => import("./cloud/Probes")) },
+  scheduler: { title: "kube-scheduler: filter & score", blurb: "Requests, taints, node affinity and anti-affinity decide where a pod lands.", C: lazy(() => import("./cloud/Scheduler")) },
+  k8snet: { title: "Services, Ingress & NetworkPolicy", blurb: "Follow a packet through DNS, kube-proxy DNAT, the CNI and policies.", C: lazy(() => import("./cloud/K8sNet")) },
+  statefulset: { title: "StatefulSet vs Deployment", blurb: "Stable names, ordered rollout and a PVC per pod. Delete pods and keep the data.", C: lazy(() => import("./cloud/StatefulSet")) },
+  gitops: { title: "GitOps reconciliation (Argo CD)", blurb: "Commit to Git, drift the cluster by hand, and watch sync, selfHeal and prune.", C: lazy(() => import("./cloud/GitOps")) },
+  podstatus: { title: "Broken pod triage", blurb: "Read kubectl output and find the root cause of eight real failure modes.", C: lazy(() => import("./cloud/PodStatus")) },
+  // Kafka engineering
+  producer: { title: "Kafka producer internals", blurb: "linger.ms, batch.size, compression and acks, then retries with and without idempotence.", C: lazy(() => import("./kafka/Producer")) },
+  isr: { title: "Replication, ISR & high watermark", blurb: "Produce, slow down followers, kill the leader. See exactly when acked data is lost.", C: lazy(() => import("./kafka/Isr")) },
+  rebalance: { title: "Consumer group rebalancing", blurb: "Add, remove and crash consumers under eager vs cooperative-sticky assignment.", C: lazy(() => import("./kafka/Rebalance")) },
+  eos: { title: "Delivery semantics & transactions", blurb: "Crash a read-process-write app under at-most, at-least and exactly-once.", C: lazy(() => import("./kafka/Eos")) },
+  compaction: { title: "Retention & log compaction", blurb: "Segments, the log cleaner, tombstones and delete vs compact policies.", C: lazy(() => import("./kafka/Compaction")) },
+  windows: { title: "Stream windows & late events", blurb: "Tumbling, hopping and session windows with out-of-order events and grace.", C: lazy(() => import("./kafka/Windows")) },
+  kafkasizing: { title: "Kafka cluster sizing", blurb: "Partitions, storage, network and broker count from throughput and retention.", C: lazy(() => import("./kafka/Sizing")) },
   // Agents, LLM frontier & AI engineering
   agentloop: { title: "Inside an agent harness", blurb: "Step through a coding agent's loop: tool calls, permissions, hooks, subagents and compaction.", C: lazy(() => import("./agents/AgentLoop")) },
   context: { title: "Context budget & prompt caching", blurb: "Why agent sessions get expensive, and how caching and compaction fix it.", C: lazy(() => import("./agents/ContextBudget")) },

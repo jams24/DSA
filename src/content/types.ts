@@ -15,6 +15,7 @@ export type Lang =
   | "bash"
   | "dockerfile"
   | "hcl"
+  | "properties"
   | "text";
 
 export interface CodeVariant {

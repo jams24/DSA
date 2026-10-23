@@ -13,8 +13,10 @@ import { distributed } from "./worlds/distributed";
 import { aiInference } from "./worlds/ai-inference";
 import { infra } from "./worlds/infra";
 import { agents } from "./worlds/agents";
+import { kubernetes } from "./worlds/kubernetes";
+import { kafka } from "./worlds/kafka";
 
-export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents].sort(
+export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka].sort(
   (a, b) => a.order - b.order,
 );
 

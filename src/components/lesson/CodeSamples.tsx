@@ -22,6 +22,7 @@ const LANG_LABEL: Record<string, string> = {
   bash: "Bash",
   dockerfile: "Dockerfile",
   hcl: "Terraform",
+  properties: "Config",
   text: "Text",
 };
 
