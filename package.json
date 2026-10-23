@@ -10,7 +10,8 @@
     "validate": "tsx --tsconfig tsconfig.json scripts/validate-content.ts",
     "db:push": "prisma db push",
     "postinstall": "prisma generate",
-    "create-admin": "tsx scripts/create-admin.mts"
+    "create-admin": "tsx scripts/create-admin.mts",
+    "lc150:build": "python3 scripts/lc150/build.py"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { clsx } from "clsx";
-import { Check, ExternalLink, Lightbulb, Search } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, ChevronDown, Compass, ExternalLink, GraduationCap, Lightbulb, Search, Sparkles } from "lucide-react";
 import { lcUrl, type LcCategory, type LcDifficulty } from "@/content/leetcode150";
 import { REWARDS } from "@/lib/game/engine";
 import { useGame, usePlayer } from "@/lib/game/store";
 import { sfx } from "@/lib/sound";
 import { ProgressBar, ProgressRing } from "@/components/ui";
+import { RevealCode } from "./RevealCode";
 
 export interface LessonRef {
   href: string;
@@ -17,13 +18,48 @@ export interface LessonRef {
   color: string;
 }
 
+export interface GuideRef {
+  trick: string;
+  steps: string[];
+  time: string;
+  space: string;
+  pitfall: string;
+}
+
+export interface PatternRef {
+  recognize: string[];
+  tips: string[];
+  template: string;
+  templateHtml: string;
+}
+
+const MASTERY = [
+  { title: "Learn the pattern before the problems", text: "Open each category's pattern guide (and its lesson). Read the template until you could rewrite it from memory, then start the problems." },
+  { title: "Go category by category, Easy → Medium → Hard", text: "Three or four problems a day finishes all 150 in about six weeks. Finishing a pattern beats sampling randomly." },
+  { title: "The 25-minute rule", text: "Attempt for 20–25 minutes. Stuck? Open the hint. Still stuck after 10 more minutes? Read only the key trick and try again. Then read the solution, close it, and re-type it from memory." },
+  { title: "Say it out loud before you code", text: "Name the pattern, the approach and the time/space complexity in two sentences. That's exactly what the interviewer wants to hear first." },
+  { title: "Spaced repetition", text: "Re-solve each problem after 1 day, 1 week and 1 month without looking. If you can't, untick it, because it isn't learned yet." },
+  { title: "Keep a mistakes log", text: "Write down the pitfall you hit, in one line. Re-read the log the night before an interview." },
+  { title: "Simulate the real thing", text: "When a category is done, solve two of its problems under a 30-minute timer while explaining aloud, and test with edge cases before running." },
+];
+
 const DIFF_CLS: Record<LcDifficulty, string> = {
   Easy: "text-emerald",
   Medium: "text-amber",
   Hard: "text-rose",
 };
 
-export function LeetCode150({ categories, lessons }: { categories: LcCategory[]; lessons: Record<string, LessonRef> }) {
+export function LeetCode150({
+  categories,
+  lessons,
+  guides,
+  patterns,
+}: {
+  categories: LcCategory[];
+  lessons: Record<string, LessonRef>;
+  guides: Record<string, GuideRef>;
+  patterns: Record<string, PatternRef>;
+}) {
   const player = usePlayer();
   const ready = useGame((s) => s.ready);
   const play = useGame((s) => s.play);
@@ -35,6 +71,15 @@ export function LeetCode150({ categories, lessons }: { categories: LcCategory[];
   const [category, setCategory] = useState<string | null>(null);
   const [hints, setHints] = useState<Set<string>>(new Set());
   const [pending, setPending] = useState<Set<string>>(new Set());
+  const [explained, setExplained] = useState<Set<string>>(new Set());
+  const [openPatterns, setOpenPatterns] = useState<Set<string>>(new Set());
+  const [mastery, setMastery] = useState(false);
+  const flip = (set: Set<string>, key: string) => {
+    const n = new Set(set);
+    if (n.has(key)) n.delete(key);
+    else n.add(key);
+    return n;
+  };
 
   const all = categories.flatMap((c) => c.problems);
   const byDiff = (d: LcDifficulty) => {
@@ -119,6 +164,30 @@ export function LeetCode150({ categories, lessons }: { categories: LcCategory[];
         </div>
       )}
 
+      <div className="panel overflow-hidden">
+        <button type="button" onClick={() => setMastery((m) => !m)} className="flex w-full items-center gap-3 px-4 py-3 text-left">
+          <GraduationCap size={18} className="text-violet" />
+          <span className="flex-1">
+            <span className="block font-display font-semibold text-ink">How to master the 150</span>
+            <span className="block text-xs text-dim">A study plan that makes patterns stick, not just a checklist</span>
+          </span>
+          <ChevronDown size={18} className={clsx("text-faint transition", mastery && "rotate-180")} />
+        </button>
+        {mastery && (
+          <ol className="grid gap-2 border-t border-line p-4 sm:grid-cols-2">
+            {MASTERY.map((m, i) => (
+              <li key={m.title} className="flex gap-3 rounded-xl border border-line bg-panel-2 p-3 text-sm">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-violet/10 font-mono text-xs font-bold text-violet">{i + 1}</span>
+                <span>
+                  <span className="block font-semibold text-ink">{m.title}</span>
+                  <span className="mt-0.5 block leading-relaxed text-dim">{m.text}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+
       {/* filters */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -174,12 +243,52 @@ export function LeetCode150({ categories, lessons }: { categories: LcCategory[];
               <div className="w-24">
                 <ProgressBar value={(done / full.problems.length) * 100} color={lesson?.color ?? "#0891b2"} height={6} />
               </div>
-              {lesson && (
-                <Link href={lesson.href} className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-line-2 px-2.5 py-1 text-xs text-dim transition hover:border-cyan/50 hover:text-ink">
-                  {lesson.emoji} Learn the pattern: <span className="font-semibold text-ink">{lesson.title}</span>
-                </Link>
-              )}
+              <div className="ml-auto flex flex-wrap gap-1.5">
+                {patterns[c.category] && (
+                  <button
+                    type="button"
+                    onClick={() => setOpenPatterns((s) => flip(s, c.category))}
+                    className={clsx(
+                      "inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs transition",
+                      openPatterns.has(c.category) ? "border-violet/50 bg-violet/10 text-violet" : "border-line-2 text-dim hover:border-violet/50 hover:text-ink",
+                    )}
+                  >
+                    <Compass size={13} /> Pattern guide
+                  </button>
+                )}
+                {lesson && (
+                  <Link href={lesson.href} className="inline-flex items-center gap-1.5 rounded-lg border border-line-2 px-2.5 py-1 text-xs text-dim transition hover:border-cyan/50 hover:text-ink">
+                    {lesson.emoji} Lesson: <span className="font-semibold text-ink">{lesson.title}</span>
+                  </Link>
+                )}
+              </div>
             </header>
+            {openPatterns.has(c.category) && patterns[c.category] && (
+              <div className="animate-pop border-b border-line bg-violet/[0.03] p-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <div className="text-xs font-semibold tracking-wide text-faint uppercase">Recognize it when…</div>
+                    <ul className="mt-1.5 list-disc space-y-1 pl-5 text-sm text-dim">
+                      {patterns[c.category].recognize.map((r) => (
+                        <li key={r}>{r}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold tracking-wide text-faint uppercase">Tricks that transfer</div>
+                    <ul className="mt-1.5 list-disc space-y-1 pl-5 text-sm text-dim">
+                      {patterns[c.category].tips.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-3 text-xs font-semibold tracking-wide text-faint uppercase">Template</div>
+                <div className="mt-1.5">
+                  <RevealCode html={patterns[c.category].templateHtml} code={patterns[c.category].template} hidden={false} />
+                </div>
+              </div>
+            )}
             <ul className="divide-y divide-line">
               {c.problems.map((p) => {
                 const isDone = solved.has(p.slug);
@@ -201,15 +310,27 @@ export function LeetCode150({ categories, lessons }: { categories: LcCategory[];
                         {isDone && <Check size={14} strokeWidth={3} />}
                       </button>
                       <span className="w-10 shrink-0 font-mono text-xs text-faint">{p.id}</span>
-                      <a
-                        href={lcUrl(p.slug)}
-                        target="_blank"
-                        rel="noreferrer"
+                      <Link
+                        href={`/leetcode-150/${p.slug}`}
                         className={clsx("min-w-0 flex-1 truncate text-sm hover:text-cyan", isDone ? "text-dim line-through decoration-emerald/60" : "text-ink")}
                       >
                         {p.title}
-                      </a>
+                      </Link>
                       <span className={clsx("hidden w-16 text-xs font-semibold sm:block", DIFF_CLS[p.difficulty])}>{p.difficulty}</span>
+                      {guides[p.slug] && (
+                        <button
+                          type="button"
+                          onClick={() => setExplained((s) => flip(s, p.slug))}
+                          className={clsx(
+                            "inline-flex h-7 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-medium transition",
+                            explained.has(p.slug) ? "bg-cyan/15 text-cyan" : "text-faint hover:bg-slate-900/5 hover:text-ink",
+                          )}
+                          aria-label={`Explain ${p.title}`}
+                        >
+                          <Sparkles size={14} />
+                          <span className="hidden sm:inline">Explain</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() =>
@@ -231,11 +352,38 @@ export function LeetCode150({ categories, lessons }: { categories: LcCategory[];
                       </a>
                     </div>
                     {showHint && (
-                      <div className="mt-2 ml-[4.75rem] animate-pop rounded-lg border border-amber/30 bg-amber/[0.06] px-3 py-2 text-sm text-[#92400e]">
+                      <div className="mt-2 animate-pop rounded-lg border border-amber/30 bg-amber/[0.06] px-3 py-2 text-sm text-[#92400e] sm:ml-[4.75rem]">
                         <span className="sm:hidden">
                           <span className={clsx("mr-1 font-semibold", DIFF_CLS[p.difficulty])}>{p.difficulty}.</span>
                         </span>
                         {p.hint}
+                      </div>
+                    )}
+                    {explained.has(p.slug) && guides[p.slug] && (
+                      <div className="mt-2 animate-pop space-y-3 rounded-xl border border-cyan/25 bg-cyan/[0.04] p-3 text-sm sm:ml-[4.75rem]">
+                        <p className="leading-relaxed text-ink">
+                          <span className="mr-1.5 font-semibold text-cyan">Trick.</span>
+                          {guides[p.slug].trick}
+                        </p>
+                        <ol className="space-y-1">
+                          {guides[p.slug].steps.map((st, i) => (
+                            <li key={i} className="flex gap-2 text-dim">
+                              <span className="font-mono text-xs font-bold text-cyan">{i + 1}.</span>
+                              <span>{st}</span>
+                            </li>
+                          ))}
+                        </ol>
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <span className="rounded-md border border-line-2 bg-panel px-2 py-0.5 font-mono text-ink">time {guides[p.slug].time}</span>
+                          <span className="rounded-md border border-line-2 bg-panel px-2 py-0.5 font-mono text-ink">space {guides[p.slug].space}</span>
+                        </div>
+                        <p className="flex gap-2 text-dim">
+                          <AlertTriangle size={15} className="mt-0.5 shrink-0 text-amber" />
+                          <span>{guides[p.slug].pitfall}</span>
+                        </p>
+                        <Link href={`/leetcode-150/${p.slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan hover:underline">
+                          Full breakdown, pattern template & tested solution <ArrowRight size={14} />
+                        </Link>
                       </div>
                     )}
                   </li>

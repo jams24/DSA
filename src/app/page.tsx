@@ -90,7 +90,7 @@ export default function Home() {
         <SectionTitle eyebrow="Game modes" title="Beyond the campaign" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {[
-            { href: "/leetcode-150", icon: ListChecks, title: "LeetCode Top 150", text: "All 150 Top Interview problems with hints and a solved tracker.", color: "#ea580c" },
+            { href: "/leetcode-150", icon: ListChecks, title: "LeetCode Top 150", text: "All 150 with the key trick, approach, pitfalls and tested solutions.", color: "#ea580c" },
             { href: "/arena/rapid-fire", icon: Zap, title: "Rapid Fire", text: "60 seconds. As many correct answers as you can.", color: "#d97706" },
             { href: "/arena/flashcards", icon: Layers, title: "Mock Interview Cards", text: "Spaced-repetition flashcards of real interview questions.", color: "#db2777" },
             { href: "/questions", icon: Network, title: "Question Bank", text: "Every interview question and LeetCode problem, searchable.", color: "#0891b2" },

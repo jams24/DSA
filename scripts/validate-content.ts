@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { WORLDS } from "../src/content";
 import { LC150 } from "../src/content/leetcode150";
+import { LC_GUIDE, LC_PATTERNS } from "../src/content/leetcode150-guide";
 import { BOSS_HEARTS, BOSS_HP } from "../src/lib/game/engine";
 
 const errors: string[] = [];
@@ -56,6 +57,8 @@ const lessonKeys = new Set(WORLDS.flatMap((w) => w.lessons.map((l) => `${w.id}/$
 if (lcProblems.length !== 150) errors.push(`LC150 has ${lcProblems.length} problems, expected 150`);
 if (new Set(lcProblems.map((p) => p.slug)).size !== lcProblems.length) errors.push("LC150 has duplicate slugs");
 for (const c of LC150) if (!lessonKeys.has(c.lesson)) errors.push(`LC150 category ${c.category} links to missing lesson ${c.lesson}`);
+for (const p of lcProblems) if (!LC_GUIDE[p.slug]) errors.push(`LC150 ${p.slug} has no study guide (run python3 scripts/lc150/build.py)`);
+for (const c of LC150) if (!LC_PATTERNS[c.category]) errors.push(`LC150 category ${c.category} has no pattern guide`);
 console.log(`🧩 LeetCode Top Interview 150: ${lcProblems.length} problems in ${LC150.length} categories`);
 
 if (warn.length) console.log(`\n${warn.length} warning(s):\n  ${warn.join("\n  ")}`);
