@@ -301,6 +301,7 @@ function TreeView({ p }: { p: TreePanel }) {
           const st = cellStyle(n.tone);
           return (
             <g key={n.id} className="transition-all duration-300">
+              <rect x={px(n) - nodeW / 2} y={py(n) - 15} width={nodeW} height={30} rx={15} fill="#ffffff" />
               <rect x={px(n) - nodeW / 2} y={py(n) - 15} width={nodeW} height={30} rx={15} fill={n.tone ? (n.tone === "dim" ? C.baseFill : `${TONE[n.tone]}26`) : "#ffffff"} stroke={st.borderColor} strokeWidth={2} />
               <text x={px(n)} y={py(n) + 4.5} textAnchor="middle" fontSize="12.5" fontWeight="700" fontFamily="var(--font-jbmono), monospace" fill={st.color}>
                 {n.label}
@@ -332,7 +333,7 @@ function ListView({ p, uid }: { p: ListPanel; uid: string }) {
   const stackAt: Record<string, number> = {};
   const W = Math.max(120, p.nodes.length * gapX + 30);
   const rows = Math.max(1, ...Object.values(live.reduce<Record<string, number>>((acc, [, v]) => ((acc[v!] = (acc[v!] ?? 0) + 1), acc), {})));
-  const H = cy + 22 + 34 + rows * 15;
+  const H = cy + 22 + 34 + rows * 15 + (p.nodes.some((n) => n.rand) ? 34 : 0);
   const marker = `arrow-${uid}`;
 
   return (
@@ -381,10 +382,10 @@ function ListView({ p, uid }: { p: ListPanel; uid: string }) {
               </g>
             );
           })}
-          {live.map(([name, v], k) => {
+          {live.map(([name, v]) => {
             const row = (stackAt[v!] = (stackAt[v!] ?? -1) + 1);
             return (
-              <text key={name} x={X(at.get(v!)!)} y={cy + 34 + (p.nodes.some((n) => n.rand) ? 22 : 0) + row * 15} textAnchor="middle" fontSize="11" fontWeight="700" fontFamily="var(--font-jbmono), monospace" fill={PTR_COLORS[ptrs.findIndex(([nm]) => nm === name) % PTR_COLORS.length]} className="transition-all duration-300">
+              <text key={name} x={X(at.get(v!)!)} y={cy + 34 + (p.nodes.some((n) => n.rand) ? 34 : 0) + row * 15} textAnchor="middle" fontSize="11" fontWeight="700" fontFamily="var(--font-jbmono), monospace" fill={PTR_COLORS[ptrs.findIndex(([nm]) => nm === name) % PTR_COLORS.length]} className="transition-all duration-300">
                 ▲{name}
               </text>
             );
@@ -483,51 +484,53 @@ function LineView({ p }: { p: LinePanel }) {
   const ticks: number[] = [];
   for (let v = Math.ceil(lo / tick) * tick; v <= hi; v += tick) ticks.push(v);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="block w-full max-w-[640px]">
-      {ticks.map((v) => (
-        <g key={v}>
-          <line x1={sx(v)} y1={4} x2={sx(v)} y2={H - 22} stroke="#e2e8f0" strokeWidth={1} />
-          <text x={sx(v)} y={H - 8} textAnchor="middle" fontSize="10" fill={C.faint} fontFamily="monospace">
-            {v}
-          </text>
-        </g>
-      ))}
-      {p.rows.map((row, ri) => (
-        <g key={ri}>
-          <text x={4} y={ri * rowH + 22} fontSize="10.5" fontWeight="600" fill={C.muted}>
-            {row.label}
-          </text>
-          {row.items.map((it, k) => {
-            const c = it.tone ? TONE[it.tone] : C.muted;
-            const x1 = sx(it.s);
-            const w = Math.max(6, sx(it.e) - x1);
-            return (
-              <g key={k}>
-                <rect x={x1} y={ri * rowH + 9} width={w} height={17} rx={5} fill={`${c}2e`} stroke={c} strokeWidth={1.6} className="transition-all duration-300" />
-                {it.text && w > 26 && (
-                  <text x={x1 + w / 2} y={ri * rowH + 21.5} textAnchor="middle" fontSize="9.5" fontWeight="600" fill={C.text} fontFamily="monospace">
-                    {it.text}
-                  </text>
-                )}
-              </g>
-            );
-          })}
-        </g>
-      ))}
-      {(p.marks ?? []).map((m, i) => {
-        const c = m.tone ? TONE[m.tone] : C.bad;
-        return (
-          <g key={i}>
-            <line x1={sx(m.x)} y1={2} x2={sx(m.x)} y2={H - 22} stroke={c} strokeWidth={2} strokeDasharray="4 3" />
-            {m.text && (
-              <text x={sx(m.x) + 3} y={10} fontSize="10" fontWeight="700" fill={c}>
-                {m.text}
-              </text>
-            )}
+    <div className="overflow-x-auto pb-1 scrollbar-thin">
+      <svg viewBox={`0 0 ${W} ${H}`} className="block w-full min-w-[480px] max-w-[640px]">
+        {ticks.map((v) => (
+          <g key={v}>
+            <line x1={sx(v)} y1={4} x2={sx(v)} y2={H - 22} stroke="#e2e8f0" strokeWidth={1} />
+            <text x={sx(v)} y={H - 8} textAnchor="middle" fontSize="10" fill={C.faint} fontFamily="monospace">
+              {v}
+            </text>
           </g>
-        );
-      })}
-    </svg>
+        ))}
+        {p.rows.map((row, ri) => (
+          <g key={ri}>
+            <text x={4} y={ri * rowH + 22} fontSize="10.5" fontWeight="600" fill={C.muted}>
+              {row.label}
+            </text>
+            {row.items.map((it, k) => {
+              const c = it.tone ? TONE[it.tone] : C.muted;
+              const x1 = sx(it.s);
+              const w = Math.max(6, sx(it.e) - x1);
+              return (
+                <g key={k}>
+                  <rect x={x1} y={ri * rowH + 9} width={w} height={17} rx={5} fill={`${c}2e`} stroke={c} strokeWidth={1.6} className="transition-all duration-300" />
+                  {it.text && w > 26 && (
+                    <text x={x1 + w / 2} y={ri * rowH + 21.5} textAnchor="middle" fontSize="9.5" fontWeight="600" fill={C.text} fontFamily="monospace">
+                      {it.text}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        ))}
+        {(p.marks ?? []).map((m, i) => {
+          const c = m.tone ? TONE[m.tone] : C.bad;
+          return (
+            <g key={i}>
+              <line x1={sx(m.x)} y1={2} x2={sx(m.x)} y2={H - 22} stroke={c} strokeWidth={2} strokeDasharray="4 3" />
+              {m.text && (
+                <text x={sx(m.x) + 3} y={10} fontSize="10" fontWeight="700" fill={c}>
+                  {m.text}
+                </text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+    </div>
   );
 }
 

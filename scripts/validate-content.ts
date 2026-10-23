@@ -5,6 +5,7 @@ import { WORLDS } from "../src/content";
 import { LC150 } from "../src/content/leetcode150";
 import { LC_GUIDE, LC_PATTERNS } from "../src/content/leetcode150-guide";
 import { BOSS_HEARTS, BOSS_HP } from "../src/lib/game/engine";
+import { validateSims } from "./validate-sims";
 
 const errors: string[] = [];
 const warn: string[] = [];
@@ -60,10 +61,13 @@ for (const c of LC150) if (!lessonKeys.has(c.lesson)) errors.push(`LC150 categor
 for (const p of lcProblems) if (!LC_GUIDE[p.slug]) errors.push(`LC150 ${p.slug} has no study guide (run python3 scripts/lc150/build.py)`);
 for (const c of LC150) if (!LC_PATTERNS[c.category]) errors.push(`LC150 category ${c.category} has no pattern guide`);
 console.log(`🧩 LeetCode Top Interview 150: ${lcProblems.length} problems in ${LC150.length} categories`);
+validateSims(errors).then((simStats) => {
+  console.log(`▶️  Simulations: ${simStats.sims} problems, ${simStats.cases} examples traced and checked, ${simStats.frames} frames`);
 
-if (warn.length) console.log(`\n${warn.length} warning(s):\n  ${warn.join("\n  ")}`);
-if (errors.length) {
-  console.error(`\n${errors.length} error(s):\n  ${errors.join("\n  ")}`);
-  process.exit(1);
-}
-console.log("\n✓ content valid");
+  if (warn.length) console.log(`\n${warn.length} warning(s):\n  ${warn.join("\n  ")}`);
+  if (errors.length) {
+    console.error(`\n${errors.length} error(s):\n  ${errors.join("\n  ")}`);
+    process.exit(1);
+  }
+  console.log("\n✓ content valid");
+});

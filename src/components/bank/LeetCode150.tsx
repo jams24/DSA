@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { clsx } from "clsx";
-import { AlertTriangle, ArrowRight, Check, ChevronDown, Compass, ExternalLink, GraduationCap, Lightbulb, Search, Sparkles } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, ChevronDown, Compass, ExternalLink, GraduationCap, Lightbulb, MonitorPlay, Search, Sparkles } from "lucide-react";
 import { lcUrl, type LcCategory, type LcDifficulty } from "@/content/leetcode150";
 import { REWARDS } from "@/lib/game/engine";
 import { useGame, usePlayer } from "@/lib/game/store";
@@ -381,9 +381,14 @@ export function LeetCode150({
                           <AlertTriangle size={15} className="mt-0.5 shrink-0 text-amber" />
                           <span>{guides[p.slug].pitfall}</span>
                         </p>
-                        <Link href={`/leetcode-150/${p.slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan hover:underline">
-                          Full breakdown, pattern template & tested solution <ArrowRight size={14} />
-                        </Link>
+                        <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                          <Link href={`/leetcode-150/${p.slug}#simulation`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan hover:underline">
+                            <MonitorPlay size={14} /> Watch it run step by step
+                          </Link>
+                          <Link href={`/leetcode-150/${p.slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan hover:underline">
+                            Full breakdown, pattern template & tested solution <ArrowRight size={14} />
+                          </Link>
+                        </div>
                       </div>
                     )}
                   </li>

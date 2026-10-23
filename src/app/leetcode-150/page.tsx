@@ -8,7 +8,7 @@ import { SectionTitle } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "LeetCode Top Interview 150",
-  description: "All 150 problems from LeetCode's Top Interview 150 study plan, each with its key trick, approach, complexity, pitfalls and a tested solution, plus a pattern guide per category.",
+  description: "All 150 problems from LeetCode's Top Interview 150 study plan, each with its key trick, approach, a step-by-step simulation, complexity, pitfalls and a tested solution, plus a pattern guide per category.",
 };
 
 export default async function LeetCode150Page() {
