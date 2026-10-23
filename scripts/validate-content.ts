@@ -1,10 +1,12 @@
 // Sanity checks for course content. Run with: npm run validate
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { WORLDS } from "../src/content";
 import { LC150 } from "../src/content/leetcode150";
 import { LC_GUIDE, LC_PATTERNS } from "../src/content/leetcode150-guide";
 import { BOSS_HEARTS, BOSS_HP } from "../src/lib/game/engine";
+import { CHALLENGES } from "../src/content/challenges";
+import { OUT as CHALLENGE_CODE_OUT, renderChallengeCode } from "./gen-challenge-code";
 import { validateSims } from "./validate-sims";
 
 const errors: string[] = [];
@@ -61,6 +63,27 @@ for (const c of LC150) if (!lessonKeys.has(c.lesson)) errors.push(`LC150 categor
 for (const p of lcProblems) if (!LC_GUIDE[p.slug]) errors.push(`LC150 ${p.slug} has no study guide (run python3 scripts/lc150/build.py)`);
 for (const c of LC150) if (!LC_PATTERNS[c.category]) errors.push(`LC150 category ${c.category} has no pattern guide`);
 console.log(`🧩 LeetCode Top Interview 150: ${lcProblems.length} problems in ${LC150.length} categories`);
+
+// Practical coding challenges
+const challengeSlugs = new Set<string>();
+for (const c of CHALLENGES) {
+  if (challengeSlugs.has(c.slug)) errors.push(`challenge ${c.slug}: duplicate slug`);
+  challengeSlugs.add(c.slug);
+  for (const [field, list] of Object.entries({ requirements: c.requirements, graded: c.graded, approach: c.approach, edgeCases: c.edgeCases, followUps: c.followUps }))
+    if (list.length === 0) errors.push(`challenge ${c.slug}: empty ${field}`);
+  if (c.solutions.length === 0) errors.push(`challenge ${c.slug}: no solutions`);
+  for (const s of c.solutions) {
+    for (const f of [s.file, s.test].filter((x): x is string => !!x))
+      if (!existsSync(join(__dirname, "../challenge-code", f))) errors.push(`challenge ${c.slug}: missing file challenge-code/${f}`);
+    if (s.run && s.run !== "tsc" && !s.test) errors.push(`challenge ${c.slug} · ${s.label}: run mode without a test`);
+    if (!s.run && !s.notes) errors.push(`challenge ${c.slug} · ${s.label}: untested solutions must say why in notes`);
+  }
+}
+if (!errors.some((e) => e.includes("missing file challenge-code/")) && readFileSync(CHALLENGE_CODE_OUT, "utf8") !== renderChallengeCode())
+  errors.push("src/content/challenges/code.generated.ts is stale: run npm run challenges:gen");
+const runnable = CHALLENGES.flatMap((c) => c.solutions).filter((s) => s.run).length;
+console.log(`🛠️  Coding challenges: ${CHALLENGES.length} challenges, ${runnable} runnable solutions (run them with npm run challenges:test)`);
+
 validateSims(errors).then((simStats) => {
   console.log(`▶️  Simulations: ${simStats.sims} problems, ${simStats.cases} examples traced and checked, ${simStats.frames} frames`);
 

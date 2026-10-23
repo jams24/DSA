@@ -18,6 +18,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Reference solutions in many languages, run by `npm run challenges:test` instead.
+    "challenge-code/**",
   ]),
 ]);
 

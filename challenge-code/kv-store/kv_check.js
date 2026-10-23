@@ -1,0 +1,35 @@
+const assert = require("node:assert/strict");
+const { TransactionalKV } = require("./solution.cjs");
+
+const db = new TransactionalKV();
+db.set("a", "10");
+db.set("b", "10");
+assert.equal(db.count("10"), 2);
+db.begin();
+db.set("a", "20");
+db.begin();
+db.delete("b");
+assert.equal(db.count("10"), 0);
+assert.ok(db.rollback());
+assert.equal(db.get("b"), "10");
+assert.equal(db.get("a"), "20");
+assert.ok(db.rollback());
+assert.equal(db.get("a"), "10");
+assert.equal(db.rollback(), false);
+
+const n = new TransactionalKV();
+n.set("a", "1");
+n.begin();
+n.begin();
+n.set("a", "2");
+n.rollback();
+n.rollback();
+assert.equal(n.get("a"), "1");
+n.begin();
+n.set("x", "9");
+n.begin();
+n.set("x", "8");
+assert.ok(n.commit());
+assert.equal(n.get("x"), "8");
+assert.equal(n.rollback(), false);
+console.log("ok");
