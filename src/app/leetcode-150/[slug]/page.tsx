@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, ExternalLink, Lightbulb, Sparkles } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, ExternalLink, Lightbulb, MonitorPlay, Sparkles } from "lucide-react";
 import { getLessonByKey } from "@/content";
 import { LC150, lcUrl } from "@/content/leetcode150";
 import { LC_GUIDE, LC_PATTERNS } from "@/content/leetcode150-guide";
 import { highlight } from "@/lib/markdown";
 import { RevealCode } from "@/components/bank/RevealCode";
 import { SolveToggle } from "@/components/bank/SolveToggle";
+import { SimPlayer } from "@/components/sim/SimPlayer";
 
 const ALL = LC150.flatMap((c) => c.problems.map((p) => ({ ...p, category: c.category, lesson: c.lesson })));
 
@@ -100,6 +101,16 @@ export default async function ProblemGuidePage(props: PageProps<"/leetcode-150/[
             <span className="rounded-lg border border-line-2 bg-panel-2 px-2.5 py-1 font-mono text-ink">time {g.time}</span>
             <span className="rounded-lg border border-line-2 bg-panel-2 px-2.5 py-1 font-mono text-ink">space {g.space}</span>
           </div>
+        </section>
+
+        <section id="simulation" className="panel scroll-mt-20 p-5">
+          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-ink">
+              <MonitorPlay size={18} className="text-cyan" /> Watch it run
+            </h2>
+            <span className="text-xs text-faint">Step through the algorithm on real input, or try your own.</span>
+          </div>
+          <SimPlayer slug={slug} category={p.category} />
         </section>
 
         <section className="flex gap-3 rounded-2xl border border-amber/40 bg-amber/[0.06] p-4 text-sm leading-relaxed">
