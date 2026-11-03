@@ -9,6 +9,7 @@ import { buildAchievements } from "@/lib/game/achievements";
 import { levelInfo } from "@/lib/game/levels";
 import { overallProgress, worldProgress } from "@/lib/game/progress";
 import { useGame, usePlayer } from "@/lib/game/store";
+import { worldHref } from "@/lib/paths";
 import { useCatalog } from "@/components/game/GameProvider";
 import { AVATAR_EMOJI, Avatar, Button, LinkButton, ProgressBar, SectionTitle } from "@/components/ui";
 
@@ -119,7 +120,7 @@ export function ProfileView() {
           {catalog.map((w) => {
             const p = worldProgress(w, player);
             return (
-              <Link key={w.id} href={`/worlds/${w.id}`} className="panel flex items-center gap-4 p-4 transition hover:border-line-2">
+              <Link key={w.id} href={worldHref(w)} className="panel flex items-center gap-4 p-4 transition hover:border-line-2">
                 <span className="text-3xl">{w.emoji}</span>
                 <div className="min-w-0 flex-1">
                   <div className="flex justify-between text-sm">

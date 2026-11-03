@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { WORLDS, getWorld } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { CORE_WORLDS, getWorld } from "@/content";
+import { isLanguage, worldHref } from "@/lib/paths";
 import { WorldMap } from "@/components/world/WorldMap";
 import { WorldHeaderStats } from "@/components/world/WorldHeaderStats";
 
 export function generateStaticParams() {
-  return WORLDS.map((w) => ({ worldId: w.id }));
+  return CORE_WORLDS.map((w) => ({ worldId: w.id }));
 }
 
 export async function generateMetadata(props: PageProps<"/worlds/[worldId]">): Promise<Metadata> {
@@ -19,12 +20,13 @@ export default async function WorldPage(props: PageProps<"/worlds/[worldId]">) {
   const { worldId } = await props.params;
   const world = getWorld(worldId);
   if (!world) notFound();
+  if (isLanguage(world)) permanentRedirect(worldHref(world));
 
   const quizCount = world.lessons.reduce((n, l) => n + l.quiz.length, 0);
   const vizCount = world.lessons.filter((l) => l.visualizers?.length || l.diagram).length;
-  const idx = WORLDS.findIndex((w) => w.id === world.id);
-  const prev = WORLDS[idx - 1];
-  const next = WORLDS[idx + 1];
+  const idx = CORE_WORLDS.findIndex((w) => w.id === world.id);
+  const prev = CORE_WORLDS[idx - 1];
+  const next = CORE_WORLDS[idx + 1];
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-8" style={{ "--accent": world.color } as React.CSSProperties}>

@@ -16,6 +16,12 @@ export type Lang =
   | "dockerfile"
   | "hcl"
   | "properties"
+  | "xml"
+  | "json"
+  | "cmake"
+  | "kotlin"
+  | "proto"
+  | "make"
   | "text";
 
 export interface CodeVariant {
@@ -27,6 +33,12 @@ export interface CodeSample {
   title: string;
   note?: string;
   variants: CodeVariant[];
+  /** markdown shown under the code: a walkthrough of how it works */
+  explain?: string;
+  /** exactly what the program prints; checked by `npm run languages:test` */
+  output?: string;
+  /** don't compile/run this sample in `npm run languages:test` (needs third-party deps, or shows a bug on purpose) */
+  noCheck?: string;
 }
 
 export interface QuizQuestion {
@@ -113,6 +125,59 @@ export interface ArchDiagram {
   flows: ArchFlow[];
 }
 
+/** One file in a project step. Steps always show whole files, so the latest version of each path is the finished project. */
+export interface ProjectFile {
+  path: string;
+  lang: Lang;
+  code: string;
+}
+
+export interface ProjectStep {
+  title: string;
+  /** markdown: what this step builds and why */
+  explain: string;
+  files: ProjectFile[];
+  /** commands to try after the step */
+  run?: string;
+  /** what you should see */
+  output?: string;
+}
+
+export interface ProjectGuide {
+  /** markdown: what you'll build */
+  summary: string;
+  skills: string[];
+  /** finished file tree */
+  tree: string;
+  steps: ProjectStep[];
+  /** stretch goals once it works */
+  extensions: string[];
+  /**
+   * bash run by `npm run languages:test` in a directory holding the finished files. $JAVA_CMD, $CXX_CMD and
+   * $GO_CMD point at the toolchains. Prefix with "net:" when it downloads dependencies.
+   */
+  verify?: string;
+}
+
+export interface Library {
+  name: string;
+  /** one line: what it is */
+  what: string;
+  /** when to reach for it, and what to compare it with */
+  when: string;
+  tag?: "standard" | "essential" | "popular" | "rising";
+  snippet?: CodeVariant;
+}
+
+export interface LibraryGroup {
+  category: string;
+  blurb?: string;
+  libs: Library[];
+}
+
+/** Section of a language track roadmap. */
+export type Stage = "Foundations" | "Core" | "Advanced" | "Ecosystem" | "Projects" | "Interview";
+
 export interface Lesson {
   id: string;
   title: string;
@@ -132,6 +197,12 @@ export interface Lesson {
   problems?: PracticeProblem[];
   /** system-design style case study (counts toward the case-study achievement) */
   caseStudy?: boolean;
+  /** language tracks: which roadmap section the lesson belongs to */
+  stage?: Stage;
+  /** a guided build, shown on the Build tab */
+  project?: ProjectGuide;
+  /** a library catalog, shown on the Toolbox tab */
+  toolbox?: LibraryGroup[];
 }
 
 export interface Boss {
@@ -144,6 +215,8 @@ export interface Boss {
 
 export interface World {
   id: string;
+  /** "language" tracks live under /languages instead of /worlds */
+  track?: "language";
   order: number;
   title: string;
   subtitle: string;
@@ -166,10 +239,13 @@ export interface CatalogLesson {
   minutes: number;
   caseStudy?: boolean;
   hasVisualizer: boolean;
+  stage?: Stage;
+  kind?: "project" | "toolbox";
 }
 
 export interface CatalogWorld {
   id: string;
+  track?: "language";
   order: number;
   title: string;
   subtitle: string;

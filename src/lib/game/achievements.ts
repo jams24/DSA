@@ -208,6 +208,17 @@ export function buildAchievements(catalog: Catalog): Achievement[] {
       check: (s) => (s.stats.solved?.length ?? 0) >= 150,
     },
     {
+      id: "polyglot",
+      name: "Polyglot",
+      description: "Defeat the boss of every language track: Java, C++ and Go.",
+      emoji: "🗣️",
+      xp: 300,
+      check: (s, c) => {
+        const tracks = c.catalog.filter((w) => w.track === "language");
+        return tracks.length > 0 && tracks.every((w) => (s.progress[`boss/${w.id}`]?.stars ?? 0) > 0);
+      },
+    },
+    {
       id: "completionist",
       name: "Completionist",
       description: "Complete every single lesson.",

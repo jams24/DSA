@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
-import { BookOpen, Check, ChevronLeft, ChevronRight, Code2, Eye, MessagesSquare, Swords, Trophy } from "lucide-react";
-import type { ArchDiagram, ComplexityRow, Difficulty, PracticeProblem, QuizQuestion } from "@/content/types";
+import { BookOpen, Check, ChevronLeft, ChevronRight, Code2, Eye, Hammer, MessagesSquare, Package, Swords, Trophy } from "lucide-react";
+import type { ArchDiagram, ComplexityRow, Difficulty, PracticeProblem, QuizQuestion, Stage } from "@/content/types";
+import { bossHref, isLanguage, lessonHref, worldHref } from "@/lib/paths";
 import { useGame, usePlayer } from "@/lib/game/store";
 import { DifficultyPill, Pill, Stars } from "@/components/ui";
 import { DiagramSlot, VisualizerSlot } from "@/components/viz/VisualizerSlot";
@@ -12,6 +13,7 @@ import { useCatalog } from "@/components/game/GameProvider";
 import { CodeSamples, type RenderedSample } from "./CodeSamples";
 import { InterviewPanel, type RenderedQA } from "./Interview";
 import { LessonQuiz } from "./LessonQuiz";
+import { ProjectBuild, Toolbox, type RenderedProject, type RenderedToolbox } from "./LanguageTabs";
 
 export interface LessonViewProps {
   worldId: string;
@@ -28,16 +30,19 @@ export interface LessonViewProps {
     complexity?: ComplexityRow[];
     quiz: QuizQuestion[];
     problems?: PracticeProblem[];
+    stage?: Stage;
   };
   conceptHtml: string;
   interview: RenderedQA[];
   code: RenderedSample[];
+  project?: RenderedProject;
+  toolbox?: RenderedToolbox;
   index: number;
   prev: { href: string; title: string } | null;
   next: { href: string; title: string };
 }
 
-type Tab = "learn" | "visualize" | "code" | "interview" | "quiz";
+type Tab = "learn" | "build" | "toolbox" | "visualize" | "code" | "interview" | "quiz";
 
 export function LessonView(props: LessonViewProps) {
   const { lesson, worldId, index } = props;
@@ -48,10 +53,14 @@ export function LessonView(props: LessonViewProps) {
   const play = useGame((s) => s.play);
   const entry = player.progress[lesson.key];
   const accent = world?.color ?? "#0891b2";
+  const lang = isLanguage(world);
+  const ref = world ?? { id: worldId };
 
   const hasViz = lesson.visualizers.length > 0 || !!lesson.diagram;
   const tabs: { id: Tab; label: string; icon: typeof BookOpen; done: boolean }[] = [
     { id: "learn" as Tab, label: "Learn", icon: BookOpen, done: !!entry?.read },
+    ...(props.project ? [{ id: "build" as Tab, label: "Build", icon: Hammer, done: false }] : []),
+    ...(props.toolbox ? [{ id: "toolbox" as Tab, label: "Toolbox", icon: Package, done: false }] : []),
     ...(hasViz ? [{ id: "visualize" as Tab, label: "Visualize", icon: Eye, done: !!entry?.visualized }] : []),
     ...(props.code.length ? [{ id: "code" as Tab, label: "Code", icon: Code2, done: false }] : []),
     { id: "interview" as Tab, label: "Interview", icon: MessagesSquare, done: false },
@@ -59,7 +68,7 @@ export function LessonView(props: LessonViewProps) {
   ];
 
   const [tab, setTab] = useState<Tab>("learn");
-  const [lang, setLang] = useState("python");
+  const [codeLang, setCodeLang] = useState(lang ? worldId : "python");
 
   useEffect(() => {
     const fromHash = window.location.hash.slice(1) as Tab;
@@ -67,7 +76,7 @@ export function LessonView(props: LessonViewProps) {
       if (tabs.some((x) => x.id === fromHash)) setTab(fromHash);
       try {
         const l = localStorage.getItem("dq-lang");
-        if (l) setLang(l);
+        if (l && !lang) setCodeLang(l);
       } catch {}
     }, 0);
     return () => clearTimeout(t);
@@ -102,16 +111,16 @@ export function LessonView(props: LessonViewProps) {
   return (
     <div className="mx-auto max-w-7xl px-4 pt-6" style={{ "--accent": accent } as React.CSSProperties}>
       <nav className="mb-5 flex flex-wrap items-center gap-1.5 text-sm text-faint">
-        <Link href="/worlds" className="hover:text-ink">
-          Worlds
+        <Link href={lang ? "/languages" : "/worlds"} className="hover:text-ink">
+          {lang ? "Languages" : "Worlds"}
         </Link>
         <span>/</span>
-        <Link href={`/worlds/${worldId}`} className="hover:text-ink">
+        <Link href={worldHref(ref)} className="hover:text-ink">
           {world?.emoji} {world?.title}
         </Link>
         <span>/</span>
         <span className="text-dim">
-          Level {index + 1} of {world?.lessons.length}
+          {lang ? `${lesson.stage ?? "Chapter"} · ${index + 1} of ${world?.lessons.length}` : `Level ${index + 1} of ${world?.lessons.length}`}
         </span>
       </nav>
 
@@ -120,7 +129,7 @@ export function LessonView(props: LessonViewProps) {
           <header className="mb-6">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-md px-2 py-1 font-pixel text-[9px]" style={{ background: `${accent}22`, color: accent }}>
-                LV {index + 1}
+                {lang ? "CH" : "LV"} {index + 1}
               </span>
               <DifficultyPill level={lesson.difficulty} />
               <Pill>⏱ {lesson.minutes} min</Pill>
@@ -203,6 +212,10 @@ export function LessonView(props: LessonViewProps) {
             </div>
           )}
 
+          {tab === "build" && props.project && <ProjectBuild project={props.project} storageKey={lesson.key} accent={accent} />}
+
+          {tab === "toolbox" && props.toolbox && <Toolbox groups={props.toolbox} accent={accent} />}
+
           {tab === "visualize" && (
             <div className="space-y-6">
               {lesson.diagram && <DiagramSlot diagram={lesson.diagram} onInteract={() => mark("visualize")} />}
@@ -212,7 +225,7 @@ export function LessonView(props: LessonViewProps) {
             </div>
           )}
 
-          {tab === "code" && <CodeSamples samples={props.code} preferred={lang} onPreferred={(l) => { setLang(l); try { localStorage.setItem("dq-lang", l); } catch {} }} />}
+          {tab === "code" && <CodeSamples samples={props.code} preferred={codeLang} onPreferred={(l) => { setCodeLang(l); if (!lang) { try { localStorage.setItem("dq-lang", l); } catch {} } }} />}
 
           {tab === "interview" && <InterviewPanel qas={props.interview} problems={lesson.problems} />}
 
@@ -276,7 +289,7 @@ export function LessonView(props: LessonViewProps) {
                   return (
                     <li key={l.id}>
                       <Link
-                        href={`/worlds/${worldId}/${l.id}`}
+                        href={lessonHref(ref, l.id)}
                         className={clsx(
                           "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition",
                           current ? "bg-slate-900/[0.06] text-ink" : "text-dim hover:bg-slate-900/[0.04] hover:text-ink",
@@ -296,7 +309,7 @@ export function LessonView(props: LessonViewProps) {
                 })}
                 <li>
                   <Link
-                    href={`/worlds/${worldId}/boss`}
+                    href={bossHref(ref)}
                     className="mt-2 flex items-center gap-2 rounded-lg border border-rose/30 bg-rose/[0.06] px-2 py-2 text-sm text-rose hover:bg-rose/10"
                   >
                     <span>{world?.boss.emoji}</span>

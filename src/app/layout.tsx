@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s · DSA Quest",
   },
   description:
-    "Learn data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka and AI agents through interactive visualizations, quizzes and boss battles.",
+    "Learn data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka and AI agents, and master Java, C++ and Go, through interactive visualizations, guided projects, quizzes and boss battles.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -36,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </p>
               <div className="flex gap-4">
                 <Link href="/worlds" className="hover:text-ink">Worlds</Link>
+                <Link href="/languages" className="hover:text-ink">Languages</Link>
                 <Link href="/cheatsheets" className="hover:text-ink">Cheat sheets</Link>
                 <Link href="/questions" className="hover:text-ink">Question bank</Link>
                 <a href="https://github.com/jams24/DSA" className="hover:text-ink">GitHub</a>

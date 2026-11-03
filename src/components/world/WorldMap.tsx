@@ -7,6 +7,7 @@ import { useGame, useIsAdmin, usePlayer } from "@/lib/game/store";
 import { nextInWorld, worldProgress } from "@/lib/game/progress";
 import { useCatalog } from "@/components/game/GameProvider";
 import { Stars } from "@/components/ui";
+import { bossHref, lessonHref } from "@/lib/paths";
 
 const ROW = 128;
 const TOP = 70;
@@ -67,7 +68,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
         return (
           <div key={l.id} className="absolute" style={{ left: `${left}%`, top: yOf(i), transform: "translate(-50%, -50%)" }}>
             <Link
-              href={`/worlds/${world.id}/${l.id}`}
+              href={lessonHref(world, l.id)}
               className={clsx(
                 "relative grid h-[72px] w-[72px] place-items-center rounded-full border-4 transition duration-200 hover:scale-110",
                 isNext && "animate-pulse-ring",
@@ -104,7 +105,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
                 labelRight ? "left-[calc(100%+16px)] text-left" : "right-[calc(100%+16px)] text-right",
               )}
             >
-              <Link href={`/worlds/${world.id}/${l.id}`} className="group block">
+              <Link href={lessonHref(world, l.id)} className="group block">
                 <div className="font-display text-sm font-semibold text-ink group-hover:underline sm:text-base">{l.title}</div>
                 <div className="hidden text-xs text-dim sm:block">{l.tagline}</div>
                 <div className={clsx("mt-1 flex items-center gap-2", labelRight ? "" : "justify-end")}>
@@ -126,7 +127,7 @@ export function WorldMap({ worldId }: { worldId: string }) {
         return (
           <div className="absolute" style={{ left: `${left}%`, top: yOf(i), transform: "translate(-50%, -50%)" }}>
             <Link
-              href={`/worlds/${world.id}/boss`}
+              href={bossHref(world)}
               className={clsx(
                 "relative grid h-24 w-24 place-items-center rounded-3xl border-4 text-5xl transition hover:scale-110",
                 allDone && !beaten && "animate-pulse-ring",

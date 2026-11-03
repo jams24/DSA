@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { BookOpen, Brain, Code2, Eye, Layers, ListChecks, Network, Swords, Timer, Trophy, Zap } from "lucide-react";
-import { contentStats } from "@/content";
+import { ArrowRight, BookOpen, Brain, Code2, Eye, GraduationCap, Layers, ListChecks, Network, Swords, Timer, Trophy, Zap } from "lucide-react";
+import { LANGUAGE_TRACKS, contentStats } from "@/content";
+import { worldHref } from "@/lib/paths";
 import { ContinueButton, PlayerCard } from "@/components/home/PlayerCard";
 import { DailyBanner } from "@/components/home/DailyBanner";
 import { WorldCards } from "@/components/world/WorldCards";
@@ -9,7 +10,7 @@ import { LinkButton, SectionTitle } from "@/components/ui";
 const LOOP = [
   { icon: BookOpen, title: "Learn", text: "Short, interview-focused explanations with the trade-offs spelled out.", color: "#65a30d" },
   { icon: Eye, title: "Visualize", text: "Step through animated algorithms and live system simulations.", color: "#0891b2" },
-  { icon: Code2, title: "Code", text: "Clean reference implementations in Python, JavaScript and Java.", color: "#7c3aed" },
+  { icon: Code2, title: "Code", text: "Clean, tested implementations in Python, JavaScript, Java, C++ and Go.", color: "#7c3aed" },
   { icon: Brain, title: "Interview", text: "The questions interviewers actually ask, with model answers.", color: "#db2777" },
   { icon: Swords, title: "Quiz & Boss", text: "Earn stars, then defeat each world's boss to prove mastery.", color: "#e11d48" },
 ];
@@ -32,8 +33,8 @@ export default function Home() {
             <span className="bg-gradient-to-r from-violet to-pink bg-clip-text text-transparent">Raft consensus</span>.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-dim">
-            DSA Quest is an interview-prep RPG. Clear levels in data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka and AI agents — with
-            interactive visualizations, real interview questions and boss battles.
+            DSA Quest is an interview-prep RPG. Clear levels in data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka and AI agents, and master Java, C++ and Go from
+            your first program to production APIs, with interactive visualizations, real interview questions and boss battles.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ContinueButton />
@@ -68,6 +69,37 @@ export default function Home() {
         <WorldCards />
       </section>
 
+      {/* language academy */}
+      <section className="pt-20">
+        <SectionTitle eyebrow="Language Academy" title="Master Java, C++ and Go">
+          Beginner to job-ready: explained code, library toolboxes, REST APIs in each language&apos;s frameworks, guided projects and interview prep. Every sample was compiled and run.
+        </SectionTitle>
+        <div className="grid gap-4 md:grid-cols-3">
+          {LANGUAGE_TRACKS.map((w) => {
+            const s = contentStats([w]);
+            return (
+              <Link key={w.id} href={worldHref(w)} className="group panel p-5 transition hover:-translate-y-1">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl" aria-hidden>
+                    {w.emoji}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-display text-lg font-semibold text-ink">{w.title}</h3>
+                    <p className="text-xs text-faint">
+                      {s.lessons} chapters · {s.samples} samples · {s.projects} projects
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-3 text-sm text-dim">{w.subtitle}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium" style={{ color: w.color }}>
+                  Start the track <ArrowRight size={14} className="transition group-hover:translate-x-1" />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
       {/* loop */}
       <section className="pt-20">
         <SectionTitle eyebrow="How a level works" title="Learn it. See it. Code it. Defend it." />
@@ -90,6 +122,7 @@ export default function Home() {
         <SectionTitle eyebrow="Game modes" title="Beyond the campaign" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[
+            { href: "/languages", icon: GraduationCap, title: "Language Academy", text: "Java, C++ and Go from zero to interview-ready, with guided projects and REST APIs.", color: "#4f46e5" },
             { href: "/leetcode-150", icon: ListChecks, title: "LeetCode Top 150", text: "All 150 with the key trick, a step-by-step simulation, pitfalls and tested solutions.", color: "#ea580c" },
             { href: "/challenges", icon: Code2, title: "Coding Challenges", text: "Build what interviewers ask for: APIs, UI components and language drills in Python, JS, Java, Go, React.", color: "#7c3aed" },
             { href: "/interview", icon: Timer, title: "Interview Practice", text: "STAR story bank for behavioral rounds, Amazon's Leadership Principles, and a timed mock-interview simulator.", color: "#0d9488" },

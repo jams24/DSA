@@ -111,6 +111,18 @@ export const VISUALIZERS: Record<string, Entry> = {
   compaction: { title: "Retention & log compaction", blurb: "Segments, the log cleaner, tombstones and delete vs compact policies.", C: lazy(() => import("./kafka/Compaction")) },
   windows: { title: "Stream windows & late events", blurb: "Tumbling, hopping and session windows with out-of-order events and grace.", C: lazy(() => import("./kafka/Windows")) },
   kafkasizing: { title: "Kafka cluster sizing", blurb: "Partitions, storage, network and broker count from throughput and retention.", C: lazy(() => import("./kafka/Sizing")) },
+  // Language Academy
+  jmemory: { title: "Java: stack, heap & references", blurb: "Step through aliasing, pass-by-value and the string pool, line by line.", C: lazy(() => import("./lang/JavaMemory")) },
+  jstream: { title: "Lazy stream pipelines", blurb: "Watch elements flow one at a time, short-circuit at limit(), and pile up behind sorted().", C: lazy(() => import("./lang/JavaStreams")) },
+  jthreads: { title: "Platform threads vs virtual threads", blurb: "Run 100+ I/O-bound requests on a thread pool, then on virtual threads, and compare.", C: lazy(() => import("./lang/JavaThreads")) },
+  jgc: { title: "Generational garbage collection", blurb: "Allocate, age, copy and promote objects through Eden, survivors and Old. Then cause an OutOfMemoryError.", C: lazy(() => import("./lang/JavaGC")) },
+  cppmemory: { title: "C++: pointers, stack & heap", blurb: "new/delete, leaks, dangling pointers and references vs pointers, line by line.", C: lazy(() => import("./lang/CppMemory")) },
+  cppsmart: { title: "Smart pointer ownership", blurb: "unique_ptr moves, shared_ptr reference counts, a cycle that leaks, and weak_ptr fixing it.", C: lazy(() => import("./lang/SmartPointers")) },
+  cppmove: { title: "Copy vs move", blurb: "See a move steal a buffer, and why vector copies instead of moving without noexcept.", C: lazy(() => import("./lang/CppMove")) },
+  cppvtable: { title: "Virtual dispatch & vtables", blurb: "Follow vptr → vtable → function, then watch slicing and a missing virtual destructor bite.", C: lazy(() => import("./lang/VTable")) },
+  goslice: { title: "Go slices: header, backing array & append", blurb: "len vs cap, growth on append, and the shared-array bug that bites every Go developer once.", C: lazy(() => import("./lang/GoSlices")) },
+  gochan: { title: "Channels & select", blurb: "Unbuffered handoffs, buffered queues, close/range, a select timeout leak and a deadlock.", C: lazy(() => import("./lang/GoChannels")) },
+  gosched: { title: "The Go scheduler (G-M-P)", blurb: "Run queues, work stealing, syscall hand-off, the netpoller and preemption.", C: lazy(() => import("./lang/GoScheduler")) },
   // Agents, LLM frontier & AI engineering
   agentloop: { title: "Inside an agent harness", blurb: "Step through a coding agent's loop: tool calls, permissions, hooks, subagents and compaction.", C: lazy(() => import("./agents/AgentLoop")) },
   context: { title: "Context budget & prompt caching", blurb: "Why agent sessions get expensive, and how caching and compaction fix it.", C: lazy(() => import("./agents/ContextBudget")) },

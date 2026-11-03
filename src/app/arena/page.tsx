@@ -63,7 +63,7 @@ export default function ArenaPage() {
 
       <section className="pt-16">
         <SectionTitle eyebrow="Boss rush" title="Rematch any boss" />
-        <BossList bosses={WORLDS.map((w) => ({ worldId: w.id, worldTitle: w.title, color: w.color, ...w.boss }))} />
+        <BossList bosses={WORLDS.map((w) => ({ worldId: w.id, track: w.track, worldTitle: w.title, color: w.color, ...w.boss }))} />
       </section>
     </div>
   );

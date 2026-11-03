@@ -4,6 +4,7 @@ import { useGame, useIsAdmin, usePlayer } from "@/lib/game/store";
 import { nextInWorld, worldProgress } from "@/lib/game/progress";
 import { useCatalog } from "@/components/game/GameProvider";
 import { LinkButton, ProgressBar } from "@/components/ui";
+import { bossHref, lessonHref } from "@/lib/paths";
 
 export function WorldHeaderStats({ worldId }: { worldId: string }) {
   const world = useCatalog().find((w) => w.id === worldId);
@@ -28,11 +29,11 @@ export function WorldHeaderStats({ worldId }: { worldId: string }) {
       )}
       <div className="mt-5">
         {next ? (
-          <LinkButton href={`/worlds/${world.id}/${next.id}`} size="lg">
+          <LinkButton href={lessonHref(world, next.id)} size="lg">
             {p.done === 0 ? "Start level 1" : `Continue: ${next.title}`}
           </LinkButton>
         ) : (
-          <LinkButton href={`/worlds/${world.id}/boss`} size="lg" variant="danger">
+          <LinkButton href={bossHref(world)} size="lg" variant="danger">
             All levels cleared — fight the boss!
           </LinkButton>
         )}

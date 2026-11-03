@@ -15,10 +15,18 @@ import { infra } from "./worlds/infra";
 import { agents } from "./worlds/agents";
 import { kubernetes } from "./worlds/kubernetes";
 import { kafka } from "./worlds/kafka";
+import { java } from "./languages/java";
+import { cpp } from "./languages/cpp";
+import { go } from "./languages/go";
 
-export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka].sort(
+export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka, java, cpp, go].sort(
   (a, b) => a.order - b.order,
 );
+
+/** The campaign worlds (DSA, system design, infra, AI). */
+export const CORE_WORLDS = WORLDS.filter((w) => w.track !== "language");
+/** Java, C++ and Go tracks. */
+export const LANGUAGE_TRACKS = WORLDS.filter((w) => w.track === "language");
 
 export function getWorld(worldId: string): World | undefined {
   return WORLDS.find((w) => w.id === worldId);
@@ -40,6 +48,7 @@ export function getLessonByKey(key: string) {
 export function buildCatalog(): Catalog {
   return WORLDS.map((w) => ({
     id: w.id,
+    track: w.track,
     order: w.order,
     title: w.title,
     subtitle: w.subtitle,
@@ -56,6 +65,8 @@ export function buildCatalog(): Catalog {
       minutes: l.minutes,
       caseStudy: l.caseStudy,
       hasVisualizer: !!(l.visualizers?.length || l.diagram),
+      stage: l.stage,
+      kind: l.project ? ("project" as const) : l.toolbox ? ("toolbox" as const) : undefined,
     })),
   }));
 }
@@ -104,15 +115,18 @@ export function allFlashcards(): FlashCard[] {
   );
 }
 
-export function contentStats() {
-  const lessons = WORLDS.flatMap((w) => w.lessons);
+export function contentStats(worlds: World[] = WORLDS) {
+  const lessons = worlds.flatMap((w) => w.lessons);
   const visualizers = new Set(lessons.flatMap((l) => l.visualizers ?? []));
   return {
-    worlds: WORLDS.length,
+    worlds: worlds.length,
     lessons: lessons.length,
     visualizers: visualizers.size + lessons.filter((l) => l.diagram).length,
     questions: lessons.reduce((n, l) => n + l.quiz.length, 0),
     interview: lessons.reduce((n, l) => n + l.interview.length, 0),
     problems: lessons.reduce((n, l) => n + (l.problems?.length ?? 0), 0),
+    projects: lessons.filter((l) => l.project).length,
+    libraries: lessons.reduce((n, l) => n + (l.toolbox ?? []).reduce((m, g) => m + g.libs.length, 0), 0),
+    samples: lessons.reduce((n, l) => n + (l.code?.length ?? 0), 0),
   };
 }

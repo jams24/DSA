@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { WORLDS } from "@/content";
 import { renderMarkdown } from "@/lib/markdown";
+import { lessonHref } from "@/lib/paths";
 import { QuestionBank, type BankProblem, type BankQA } from "@/components/bank/QuestionBank";
 import { SectionTitle } from "@/components/ui";
 
@@ -15,7 +16,7 @@ export default async function QuestionsPage() {
 
   for (const w of WORLDS) {
     for (const l of w.lessons) {
-      const href = `/worlds/${w.id}/${l.id}`;
+      const href = lessonHref(w, l.id);
       for (const qa of l.interview) {
         qas.push({ worldId: w.id, lesson: l.title, href, q: qa.q, freq: qa.freq, html: await renderMarkdown(qa.a) });
       }

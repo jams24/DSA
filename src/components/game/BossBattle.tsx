@@ -12,6 +12,8 @@ import { useGame } from "@/lib/game/store";
 import { shuffle } from "@/lib/random";
 import { sfx } from "@/lib/sound";
 import { Button, LinkButton, Stars } from "@/components/ui";
+import { useCatalog } from "./GameProvider";
+import { isLanguage, worldHref } from "@/lib/paths";
 import { QuestionCard } from "./QuestionCard";
 
 const SECONDS = 25;
@@ -19,6 +21,9 @@ const SECONDS = 25;
 type Phase = "intro" | "ask" | "revealed" | "won" | "lost";
 
 export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId: string; worldTitle: string; color: string; boss: Boss; pool: PooledQuestion[] }) {
+  const worldRef = useCatalog().find((w) => w.id === worldId) ?? { id: worldId };
+  const language = isLanguage(worldRef);
+  const home = worldHref(worldRef);
   const play = useGame((s) => s.play);
   const [deck, setDeck] = useState<PooledQuestion[]>([]);
   const [i, setI] = useState(0);
@@ -167,10 +172,10 @@ export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId
           <Button variant={won ? "secondary" : "danger"} onClick={start}>
             {won ? "Fight again" : "Rematch"}
           </Button>
-          <LinkButton href={`/worlds/${worldId}`} variant="secondary">
+          <LinkButton href={home} variant="secondary">
             Back to {worldTitle}
           </LinkButton>
-          {won && <LinkButton href="/worlds">Next world</LinkButton>}
+          {won && <LinkButton href={language ? "/languages" : "/worlds"}>{language ? "All languages" : "Next world"}</LinkButton>}
         </div>
       </div>
     );
@@ -255,7 +260,7 @@ export function BossBattle({ worldId, worldTitle, color, boss, pool }: { worldId
         </div>
       )}
       <div className="text-center text-xs text-faint">
-        <Link href={`/worlds/${worldId}`} className="hover:text-ink">
+        <Link href={home} className="hover:text-ink">
           Flee the battle
         </Link>
       </div>

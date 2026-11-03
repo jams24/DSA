@@ -17,7 +17,7 @@ const ARENA_SPAN_XL = [
 ];
 
 export function WorldCards({ large = false }: { large?: boolean }) {
-  const catalog = useCatalog();
+  const catalog = useCatalog().filter((w) => w.track !== "language");
   const player = usePlayer();
   const ready = useGame((s) => s.ready);
 

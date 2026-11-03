@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { WORLDS, getWorld, worldQuestions } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { CORE_WORLDS, getWorld, worldQuestions } from "@/content";
+import { bossHref, isLanguage } from "@/lib/paths";
 import { BossBattle } from "@/components/game/BossBattle";
 
 export function generateStaticParams() {
-  return WORLDS.map((w) => ({ worldId: w.id }));
+  return CORE_WORLDS.map((w) => ({ worldId: w.id }));
 }
 
 export async function generateMetadata(props: PageProps<"/worlds/[worldId]/boss">): Promise<Metadata> {
@@ -17,6 +18,7 @@ export default async function BossPage(props: PageProps<"/worlds/[worldId]/boss"
   const { worldId } = await props.params;
   const world = getWorld(worldId);
   if (!world) notFound();
+  if (isLanguage(world)) permanentRedirect(bossHref(world));
   return (
     <div className="mx-auto max-w-3xl px-4 pt-8">
       <BossBattle worldId={world.id} worldTitle={world.title} color={world.color} boss={world.boss} pool={worldQuestions(world.id)} />

@@ -13,7 +13,8 @@
     "create-admin": "tsx scripts/create-admin.mts",
     "lc150:build": "python3 scripts/lc150/build.py",
     "challenges:gen": "tsx --tsconfig tsconfig.json scripts/gen-challenge-code.ts",
-    "challenges:test": "tsx --tsconfig tsconfig.json scripts/test-challenges.ts"
+    "challenges:test": "tsx --tsconfig tsconfig.json scripts/test-challenges.ts",
+    "languages:test": "tsx --tsconfig tsconfig.json scripts/test-language-code.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { contentStats } from "@/content";
+import { CORE_WORLDS, contentStats } from "@/content";
 import { WorldCards } from "@/components/world/WorldCards";
 import { SectionTitle } from "@/components/ui";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function WorldsPage() {
-  const stats = contentStats();
+  const stats = contentStats(CORE_WORLDS);
   return (
     <div className="mx-auto max-w-7xl px-4 pt-10">
       <SectionTitle eyebrow="World select" title="Choose your realm">

@@ -9,15 +9,18 @@ import { useGame, usePlayer } from "@/lib/game/store";
 import { levelInfo } from "@/lib/game/levels";
 import { Avatar, buttonClass } from "@/components/ui";
 
-const NAV = [
+// The header is capped at max-w-7xl, so the desktop bar has the same room at every width from xl up.
+// `more` items don't fit in it and always live in the menu.
+const NAV: { href: string; label: string; more?: boolean }[] = [
   { href: "/worlds", label: "Worlds" },
+  { href: "/languages", label: "Languages" },
   { href: "/arena", label: "Arena" },
   { href: "/leetcode-150", label: "LeetCode 150" },
   { href: "/challenges", label: "Challenges" },
   { href: "/interview", label: "Interview" },
   { href: "/questions", label: "Questions" },
-  { href: "/cheatsheets", label: "Cheat Sheets" },
-  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/cheatsheets", label: "Cheat Sheets", more: true },
+  { href: "/leaderboard", label: "Leaderboard", more: true },
 ];
 
 export function Logo() {
@@ -94,15 +97,15 @@ export function TopBar() {
     <header className="sticky top-0 z-50 border-b border-line/80 bg-bg/75 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:gap-4">
         <Logo />
-        <nav className="ml-1 hidden items-center xl:flex 2xl:ml-4 2xl:gap-1">
-          {NAV.map((n) => {
+        <nav className="ml-1 hidden items-center xl:flex">
+          {NAV.filter((n) => !n.more).map((n) => {
             const active = pathname === n.href || pathname.startsWith(`${n.href}/`);
             return (
               <Link
                 key={n.href}
                 href={n.href}
                 className={clsx(
-                  "rounded-lg px-2 py-2 text-sm whitespace-nowrap transition 2xl:px-3",
+                  "rounded-lg px-2 py-2 text-sm whitespace-nowrap transition",
                   active ? "bg-slate-900/[0.06] text-ink" : "text-dim hover:bg-slate-900/[0.04] hover:text-ink",
                 )}
               >
@@ -121,7 +124,7 @@ export function TopBar() {
           </button>
           <PlayerChip />
           <button
-            className="grid h-10 w-10 place-items-center rounded-xl text-dim hover:bg-slate-900/5 xl:hidden"
+            className="grid h-10 w-10 place-items-center rounded-xl text-dim hover:bg-slate-900/5"
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
           >
@@ -130,13 +133,13 @@ export function TopBar() {
         </div>
       </div>
       {open && (
-        <nav className="border-t border-line bg-bg/95 px-4 py-3 xl:hidden">
+        <nav className="border-t border-line bg-bg/95 px-4 py-3">
           {NAV.map((n) => (
             <Link
               key={n.href}
               href={n.href}
               onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2.5 text-dim hover:bg-slate-900/5 hover:text-ink"
+              className={clsx("block rounded-lg px-3 py-2.5 text-dim hover:bg-slate-900/5 hover:text-ink", !n.more && "xl:hidden")}
             >
               {n.label}
             </Link>

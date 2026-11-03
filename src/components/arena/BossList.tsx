@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useGame, usePlayer } from "@/lib/game/store";
 import { Stars } from "@/components/ui";
+import { bossHref } from "@/lib/paths";
 
-export function BossList({ bosses }: { bosses: { worldId: string; worldTitle: string; color: string; name: string; emoji: string; title: string }[] }) {
+export function BossList({ bosses }: { bosses: { worldId: string; track?: "language"; worldTitle: string; color: string; name: string; emoji: string; title: string }[] }) {
   const player = usePlayer();
   const ready = useGame((s) => s.ready);
   return (
@@ -14,7 +15,7 @@ export function BossList({ bosses }: { bosses: { worldId: string; worldTitle: st
         return (
           <Link
             key={b.worldId}
-            href={`/worlds/${b.worldId}/boss`}
+            href={bossHref({ id: b.worldId, track: b.track })}
             className="panel flex items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:border-rose/50"
           >
             <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-rose/30 bg-rose/[0.08] text-3xl">{b.emoji}</span>

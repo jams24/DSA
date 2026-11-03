@@ -3,11 +3,14 @@
 import { useState } from "react";
 import { clsx } from "clsx";
 import { Check, Copy } from "lucide-react";
+import { OutputBox } from "./LanguageTabs";
 
 export interface RenderedSample {
   title: string;
   note?: string;
   variants: { lang: string; code: string; html: string }[];
+  explainHtml?: string;
+  output?: string;
 }
 
 const LANG_LABEL: Record<string, string> = {
@@ -23,6 +26,12 @@ const LANG_LABEL: Record<string, string> = {
   dockerfile: "Dockerfile",
   hcl: "Terraform",
   properties: "Config",
+  xml: "XML",
+  json: "JSON",
+  cmake: "CMake",
+  kotlin: "Kotlin",
+  proto: "Protobuf",
+  make: "Makefile",
   text: "Text",
 };
 
@@ -78,6 +87,12 @@ function Sample({ sample, preferred, onPreferred }: { sample: RenderedSample; pr
         </div>
       </header>
       <div className="code-block p-3" dangerouslySetInnerHTML={{ __html: active.html }} />
+      {(sample.output || sample.explainHtml) && (
+        <div className="space-y-3 border-t border-line bg-panel-2/40 px-4 py-4">
+          {sample.output && <OutputBox output={sample.output} />}
+          {sample.explainHtml && <div className="prose-quest prose-tight" dangerouslySetInnerHTML={{ __html: sample.explainHtml }} />}
+        </div>
+      )}
     </section>
   );
 }

@@ -21,10 +21,12 @@ export function overallProgress(catalog: Catalog, p: PlayerState) {
   return { total: lessons.length, done, stars, bosses, pct: lessons.length ? (done / lessons.length) * 100 : 0 };
 }
 
-/** First unfinished lesson in course order (or null when everything is done). */
+/** First unfinished campaign lesson in course order (or null when everything is done). Language tracks are opt-in, so they're skipped. */
 export function nextLesson(catalog: Catalog, p: PlayerState): { world: CatalogWorld; lesson: CatalogLesson } | null {
-  for (const world of catalog)
+  for (const world of catalog) {
+    if (world.track === "language") continue;
     for (const lesson of world.lessons) if (lessonStars(p, lesson.key) === 0) return { world, lesson };
+  }
   return null;
 }
 
