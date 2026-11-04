@@ -33,7 +33,7 @@ export default function Home() {
             <span className="bg-gradient-to-r from-violet to-pink bg-clip-text text-transparent">Raft consensus</span>.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-dim">
-            DSA Quest is an interview-prep RPG. Clear levels in data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka and AI agents, and master Java, C++ and Go from
+            DSA Quest is an interview-prep RPG. Clear levels in data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka and AI agents, and master Java, C++, Go and Python from
             your first program to production APIs, with interactive visualizations, real interview questions and boss battles.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -71,10 +71,10 @@ export default function Home() {
 
       {/* language academy */}
       <section className="pt-20">
-        <SectionTitle eyebrow="Language Academy" title="Master Java, C++ and Go">
+        <SectionTitle eyebrow="Language Academy" title="Master Java, C++, Go and Python">
           Beginner to job-ready: explained code, library toolboxes, REST APIs in each language&apos;s frameworks, guided projects and interview prep. Every sample was compiled and run.
         </SectionTitle>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {LANGUAGE_TRACKS.map((w) => {
             const s = contentStats([w]);
             return (
@@ -122,7 +122,7 @@ export default function Home() {
         <SectionTitle eyebrow="Game modes" title="Beyond the campaign" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[
-            { href: "/languages", icon: GraduationCap, title: "Language Academy", text: "Java, C++ and Go from zero to interview-ready, with guided projects and REST APIs.", color: "#4f46e5" },
+            { href: "/languages", icon: GraduationCap, title: "Language Academy", text: "Java, C++, Go and Python from zero to interview-ready, with guided projects and REST APIs.", color: "#4f46e5" },
             { href: "/leetcode-150", icon: ListChecks, title: "LeetCode Top 150", text: "All 150 with the key trick, a step-by-step simulation, pitfalls and tested solutions.", color: "#ea580c" },
             { href: "/challenges", icon: Code2, title: "Coding Challenges", text: "Build what interviewers ask for: APIs, UI components and language drills in Python, JS, Java, Go, React.", color: "#7c3aed" },
             { href: "/interview", icon: Timer, title: "Interview Practice", text: "STAR story bank for behavioral rounds, Amazon's Leadership Principles, and a timed mock-interview simulator.", color: "#0d9488" },

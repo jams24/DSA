@@ -165,7 +165,7 @@ export function LanguageCards({ extras }: { extras: Record<string, { versions: s
   const player = usePlayer();
   const ready = useGame((s) => s.ready);
   return (
-    <div className="grid gap-5 lg:grid-cols-3">
+    <div className="grid gap-5 md:grid-cols-2">
       {catalog.map((w) => {
         const p = worldProgress(w, player);
         const next = nextInWorld(w, player);

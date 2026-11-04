@@ -32,6 +32,7 @@ const LANG_LABEL: Record<string, string> = {
   kotlin: "Kotlin",
   proto: "Protobuf",
   make: "Makefile",
+  toml: "TOML",
   text: "Text",
 };
 

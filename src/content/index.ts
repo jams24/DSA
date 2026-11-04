@@ -18,14 +18,15 @@ import { kafka } from "./worlds/kafka";
 import { java } from "./languages/java";
 import { cpp } from "./languages/cpp";
 import { go } from "./languages/go";
+import { python } from "./languages/python";
 
-export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka, java, cpp, go].sort(
+export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka, java, cpp, go, python].sort(
   (a, b) => a.order - b.order,
 );
 
 /** The campaign worlds (DSA, system design, infra, AI). */
 export const CORE_WORLDS = WORLDS.filter((w) => w.track !== "language");
-/** Java, C++ and Go tracks. */
+/** Java, C++, Go and Python tracks. */
 export const LANGUAGE_TRACKS = WORLDS.filter((w) => w.track === "language");
 
 export function getWorld(worldId: string): World | undefined {

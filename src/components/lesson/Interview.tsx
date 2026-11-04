@@ -60,7 +60,7 @@ export function InterviewPanel({ qas, problems }: { qas: RenderedQA[]; problems?
                 href={p.url}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center gap-3 rounded-xl border border-line bg-panel/60 px-4 py-3 transition hover:border-cyan/40"
+                className="group flex min-w-0 items-center gap-3 rounded-xl border border-line bg-panel/60 px-4 py-3 transition hover:border-cyan/40"
               >
                 <span
                   className={clsx(

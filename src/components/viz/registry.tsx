@@ -123,6 +123,10 @@ export const VISUALIZERS: Record<string, Entry> = {
   goslice: { title: "Go slices: header, backing array & append", blurb: "len vs cap, growth on append, and the shared-array bug that bites every Go developer once.", C: lazy(() => import("./lang/GoSlices")) },
   gochan: { title: "Channels & select", blurb: "Unbuffered handoffs, buffered queues, close/range, a select timeout leak and a deadlock.", C: lazy(() => import("./lang/GoChannels")) },
   gosched: { title: "The Go scheduler (G-M-P)", blurb: "Run queues, work stealing, syscall hand-off, the netpoller and preemption.", C: lazy(() => import("./lang/GoScheduler")) },
+  pyrefs: { title: "Python: names, objects & references", blurb: "Aliasing, the mutable default argument, shallow vs deep copy, and a reference cycle the GC has to clean up.", C: lazy(() => import("./lang/PyRefs")) },
+  pygil: { title: "The GIL: threads vs processes vs asyncio", blurb: "Run 4 CPU-bound or I/O-bound tasks five ways and see who holds the GIL on every tick.", C: lazy(() => import("./lang/PyGIL")) },
+  pyasync: { title: "Inside the asyncio event loop", blurb: "Watch tasks move between running, ready and suspended, and see one blocking call freeze everything.", C: lazy(() => import("./lang/PyAsync")) },
+  pygen: { title: "Generator pipelines: lazy vs eager", blurb: "Pull log lines one at a time through parse and filter generators, stop after 2 errors, and compare the cost with list comprehensions.", C: lazy(() => import("./lang/PyGenerators")) },
   // Agents, LLM frontier & AI engineering
   agentloop: { title: "Inside an agent harness", blurb: "Step through a coding agent's loop: tool calls, permissions, hooks, subagents and compaction.", C: lazy(() => import("./agents/AgentLoop")) },
   context: { title: "Context budget & prompt caching", blurb: "Why agent sessions get expensive, and how caching and compaction fix it.", C: lazy(() => import("./agents/ContextBudget")) },

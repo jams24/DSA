@@ -22,6 +22,7 @@ export type Lang =
   | "kotlin"
   | "proto"
   | "make"
+  | "toml"
   | "text";
 
 export interface CodeVariant {
@@ -39,6 +40,8 @@ export interface CodeSample {
   output?: string;
   /** don't compile/run this sample in `npm run languages:test` (needs third-party deps, or shows a bug on purpose) */
   noCheck?: string;
+  /** oldest Python that runs this sample, e.g. "3.14"; older interpreters skip it in the test runner */
+  minPython?: string;
 }
 
 export interface QuizQuestion {
@@ -153,10 +156,12 @@ export interface ProjectGuide {
   /** stretch goals once it works */
   extensions: string[];
   /**
-   * bash run by `npm run languages:test` in a directory holding the finished files. $JAVA_CMD, $CXX_CMD and
-   * $GO_CMD point at the toolchains. Prefix with "net:" when it downloads dependencies.
+   * bash run by `npm run languages:test` in a directory holding the finished files. $JAVA_CMD, $CXX_CMD,
+   * $GO_CMD and $PY_CMD point at the toolchains. Prefix with "net:" when it downloads dependencies.
    */
   verify?: string;
+  /** Python packages (import names) the verify command needs; the project is skipped when they aren't installed */
+  requires?: string[];
 }
 
 export interface Library {

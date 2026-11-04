@@ -210,7 +210,7 @@ export function buildAchievements(catalog: Catalog): Achievement[] {
     {
       id: "polyglot",
       name: "Polyglot",
-      description: "Defeat the boss of every language track: Java, C++ and Go.",
+      description: "Defeat the boss of every language track: Java, C++, Go and Python.",
       emoji: "🗣️",
       xp: 300,
       check: (s, c) => {
