@@ -60,8 +60,28 @@ for (const w of WORLDS) {
         for (const n of named) if (!n.startsWith("quest-") && !n.startsWith("$")) errors.push(`${at}: Docker object '${n}' must be named quest-* so the test runner can clean it up`);
         if (!s.images?.length) warn.push(`${at}: docker sample without an images list`);
       }
+      if (s.k8s) {
+        // the test runner resets the shared cluster between samples by deleting quest-* namespaces and
+        // cluster-wide objects and quest* node labels/taints, so samples must only create those
+        const code = [...s.variants.map((v) => v.code), ...(s.files ?? []).map((f) => f.code)].join("\n");
+        const namespaces = [
+          ...code.matchAll(/kubectl[^\n|;&]*?\s(?:-n|--namespace[ =])\s*"?([\w$.-]+)/g),
+          ...code.matchAll(/^\s*namespace: ([\w.-]+)/gm),
+          ...code.matchAll(/create namespace ([\w.-]+)/g),
+        ].map((m) => m[1]);
+        for (const n of namespaces) if (!/^(quest-|\$)/.test(n) && !["kube-system", "kube-node-lease"].includes(n)) errors.push(`${at}: namespace '${n}' must be quest-* so the test runner can clean it up`);
+        for (const m of code.matchAll(/kubectl (?:label|taint) nodes? \S+ ([\w./-]+)=/g)) if (!m[1].startsWith("quest")) errors.push(`${at}: node label/taint '${m[1]}' must start with quest`);
+        for (const m of code.matchAll(/kind: (?:ClusterRole|ClusterRoleBinding|StorageClass|PriorityClass|IngressClass|CustomResourceDefinition)\n(?:.*\n)*?\s*name: ([\w.-]+)/g))
+          if (!/^quest|\.quest\./.test(m[1])) errors.push(`${at}: cluster-wide object '${m[1]}' must be named quest* (or be in a quest.* API group)`);
+        if (!s.images?.length) errors.push(`${at}: k8s sample without an images list (the test cluster is offline)`);
+        const used = [...code.matchAll(/(?:image: |--image=)"?([\w./:-]+)/g)].map((m) => m[1]);
+        for (const img of used) if (!s.images?.includes(img) && !/does-not-exist|slimm$/.test(img) && img !== "node") warn.push(`${at}: image ${img} isn't in images, so the offline test cluster won't have it`);
+      }
     }
-    if (l.project?.buildsOn) {
+    if (l.project?.buildsOn?.includes("/")) {
+      const [wid, lid] = l.project.buildsOn.split("/");
+      if (!WORLDS.find((x) => x.id === wid)?.lessons.find((x) => x.id === lid)?.project) errors.push(`${where}: project buildsOn '${l.project.buildsOn}' must be a lesson with a project`);
+    } else if (l.project?.buildsOn) {
       const base = w.lessons.findIndex((x) => x.id === l.project!.buildsOn);
       if (base < 0 || base >= w.lessons.indexOf(l) || !w.lessons[base].project) errors.push(`${where}: project buildsOn '${l.project.buildsOn}' must be an earlier lesson with a project`);
     }

@@ -243,7 +243,7 @@ A100 40/80 GB · ~1.6–2 TB/s — H100 SXM 80 GB · 3.35 TB/s — H200 141 GB �
   },
   {
     id: "infra",
-    title: "Infra, Kubernetes & SRE cheat sheet",
+    title: "Infra & SRE cheat sheet",
     emoji: "⚓",
     md: `
 ### Networking
@@ -256,18 +256,6 @@ A100 40/80 GB · ~1.6–2 TB/s — H100 SXM 80 GB · 3.35 TB/s — H200 141 GB �
 ### Linux triage (first 60 seconds)
 \`uptime\` → \`dmesg -T | tail\` → \`vmstat 1\` → \`mpstat -P ALL 1\` → \`pidstat 1\` → \`iostat -xz 1\` → \`free -m\` → \`df -h\` / \`df -i\` → \`ss -s\` → \`sar -n TCP,ETCP 1\` → \`top\`.
 - Exit **137** = SIGKILL (often OOM) · **143** = SIGTERM · load average counts **D-state** (I/O) tasks too.
-
-### Kubernetes
-| Symptom | Look at |
-|---|---|
-| Pending | \`kubectl describe pod\` events: Insufficient cpu/memory, taints, affinity, PVC zone |
-| CrashLoopBackOff | \`kubectl logs --previous\`, exit code, liveness probe too strict |
-| OOMKilled | memory limit vs real usage, leaks, JVM heap vs container limit |
-| ImagePullBackOff | image name/tag/digest, registry auth (imagePullSecrets) |
-| Service unreachable | selector ↔ pod labels, readiness, \`kubectl get endpointslices\`, NetworkPolicy |
-- **Requests** schedule, **limits** enforce (CPU → throttle, memory → OOM kill). QoS: Guaranteed > Burstable > BestEffort.
-- **HPA**: desired = ceil(current × metric / target), every 15 s, scale-down stabilization 5 min.
-- **Zero-downtime**: maxUnavailable 0 + readiness probe + preStop sleep + SIGTERM handling + PDB.
 
 ### Deployments
 Recreate (downtime) · Rolling (mixed versions) · Blue/green (2× capacity, instant rollback) · Canary (smallest blast radius) · Feature flags (deploy ≠ release) · Schema: **expand → migrate → contract**.
@@ -318,6 +306,53 @@ Container = process + **namespaces** (pid, mnt, net, uts, ipc, user, cgroup) + *
 
 ### Never in production
 \`:latest\` · \`--privileged\` · mounting \`docker.sock\` · secrets in \`ENV\` or layers · running as root · no memory limit · logs without rotation (json-file needs \`max-size\`).
+`,
+  },
+  {
+    id: "kubernetes",
+    title: "Kubernetes cheat sheet",
+    emoji: "☸️",
+    md: `
+### Everyday kubectl
+| Task | Command |
+|---|---|
+| What's running, where | \`kubectl get pods -o wide\` · \`get all -n shop\` · \`-A\` all namespaces · \`-w\` watch · \`-l app=web\` |
+| Why is it like that | \`kubectl describe pod web-7d4\` (Events at the bottom) · \`kubectl get events --sort-by=.lastTimestamp\` |
+| Logs | \`kubectl logs deploy/web -f\` · \`--previous\` · \`-c sidecar\` · \`-l app=web --prefix\` |
+| Get inside | \`kubectl exec -it web-7d4 -- sh\` · \`kubectl debug -it web-7d4 --image=busybox --target=web\` · \`kubectl port-forward svc/web 8080:80\` |
+| Deploy | \`kubectl apply -f\` / \`-k\` · \`kubectl diff -k .\` · \`kubectl rollout status\` / \`history\` / \`undo\` / \`restart deploy/web\` |
+| Exact fields | \`-o yaml\` · \`-o jsonpath='{.status.podIP}'\` · \`kubectl explain pod.spec.containers.resources\` |
+| YAML fast | \`kubectl create deploy web --image=nginx:1.27 --dry-run=client -o yaml\` |
+| Who may | \`kubectl auth can-i create pods -n shop --as=system:serviceaccount:shop:ci\` · \`--list\` |
+| Nodes | \`kubectl top nodes\` · \`kubectl cordon\` · \`kubectl drain --ignore-daemonsets --delete-emptydir-data\` · \`kubectl uncordon\` |
+
+### Pick the right object
+Deployment (stateless copies) · StatefulSet (stable names + a disk each) · DaemonSet (one per node) · Job / CronJob (run to completion / on a schedule) · Service (stable name + load balancing) · Ingress / Gateway (HTTP front door) · ConfigMap / Secret (config, credentials) · PVC (storage) · HPA (scale on metrics) · PDB (limit voluntary evictions) · NetworkPolicy (who may connect) · Role + RoleBinding (who may do what).
+
+### Troubleshooting
+| Symptom | Look at |
+|---|---|
+| Pending | \`describe pod\` → FailedScheduling: Insufficient cpu/memory (requests), untolerated taint, affinity/selector, unbound PVC |
+| ImagePullBackOff | image name/tag, registry auth (\`imagePullSecrets\`), rate limits, network |
+| CrashLoopBackOff | \`logs --previous\` + exit code: 1 app error · 137 SIGKILL (OOMKilled or liveness) · 143 SIGTERM |
+| CreateContainerConfigError | a missing Secret/ConfigMap or key |
+| Running, 0/1 Ready | readiness probe: port, path, dependencies |
+| Service unreachable | selector ↔ labels, \`kubectl get endpointslices\`, readiness, targetPort, NetworkPolicy, DNS (\`svc.ns.svc.cluster.local\`) |
+| Stuck Terminating | finalizers (\`metadata.finalizers\`) waiting for a controller |
+
+### Resources and scaling
+- **Requests** schedule, **limits** enforce: CPU over limit → throttled, memory over limit → OOMKilled. QoS: Guaranteed (requests = limits) > Burstable > BestEffort (evicted first).
+- **HPA**: desired = ceil(current × metric ÷ target), checked every 15 s, 5 min scale-down stabilization; CPU % is relative to **requests**.
+- **Zero-downtime deploy**: readiness probe + maxUnavailable 0 + preStop sleep + SIGTERM handling + PDB + replicas spread across nodes/zones.
+
+### Probes
+**startup** (slow boot; others wait) · **liveness** (restart: check the process only, never dependencies) · **readiness** (in/out of the Service: dependencies belong here).
+
+### Security baseline
+Own ServiceAccount per app (\`automountServiceAccountToken: false\` if it never calls the API) · least-privilege Roles, no \`*\` · Pod Security \`restricted\`: runAsNonRoot, drop ALL, no privilege escalation, seccomp RuntimeDefault · readOnlyRootFilesystem · secrets as files from a secret manager · default-deny NetworkPolicies · pinned images (digests), scanned and signed.
+
+### Never in production
+\`:latest\` · \`privileged: true\` · secrets in manifests or Git · liveness probes that check the database · no requests · one replica of anything important · \`kubectl edit\` instead of Git.
 `,
   },
   {

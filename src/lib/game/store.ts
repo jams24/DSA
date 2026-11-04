@@ -133,9 +133,10 @@ export const useGame = create<GameStore>()(
     }),
     {
       name: "dsa-quest",
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
       // v2: the Docker lessons moved from the kubernetes world to the docker world
+      // v3: the Kubernetes lessons moved from the infra world to the kubernetes world
       migrate: (persisted) => {
         const p = persisted as { guest?: PlayerState };
         if (p?.guest?.progress) migrateMovedLessons(p.guest.progress);

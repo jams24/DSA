@@ -1,5 +1,5 @@
 // Compiles and runs the Java, C++, Go and Python programs in the Language Academy, the C, Python
-// and shell samples in the Operating Systems and Compilers worlds, and the Docker world's scripts.
+// and shell samples in the Operating Systems and Compilers worlds, and the Docker and Kubernetes worlds' scripts.
 // Run with: npm run languages:test [filter]     (filter matches "<world>/<lesson>", e.g. "os/" or "python/py-web")
 //
 // Code samples: every java / cpp / go variant that has an entry point, and every python variant, is
@@ -12,6 +12,12 @@
 // their `files` (Dockerfile, app code ...) next to them. Images are never pulled: a sample whose `images`
 // aren't all present locally is skipped. Every container, network, volume and image named quest-* is
 // removed before and after each one, and the `vary` regexes mask IDs, PIDs and timings before comparing.
+//
+// Kubernetes samples (`k8s: true`) are bash scripts run with kubectl against a throwaway 3-node k3s cluster
+// that scripts/k8s-cluster.sh starts in Docker (once, on the first such sample) with every k8s sample's
+// `images` preloaded; it runs offline and is deleted at exit. Samples create only quest-* namespaces and
+// cluster-wide objects, which `k8s-cluster.sh clean` removes (with quest* node labels and taints) before
+// and after each one. LANG_KUBECONFIG=<path> uses an already running test cluster instead, and keeps it.
 //
 // Projects: the latest version of every file across the steps is written to a temp directory and
 // the project's `verify` command runs there (bash). It's skipped when a tool it needs is missing. A project
@@ -37,7 +43,7 @@ import { WORLDS } from "../src/content";
 import type { CodeSample, Lesson, World } from "../src/content/types";
 
 /** Core worlds whose code samples are runnable programs (the language tracks are always included). */
-const CODE_WORLDS = new Set(["os", "compilers", "docker"]);
+const CODE_WORLDS = new Set(["os", "compilers", "docker", "kubernetes"]);
 
 const JAVA = process.env.LANG_JAVA ?? "java";
 const CXX = (process.env.LANG_CXX ?? "clang++ -std=c++23").split(" ");
@@ -106,6 +112,39 @@ function dockerUp() {
   return dockerState;
 }
 const missingImages = (images: string[] = []) => images.filter((i) => !has("docker", ["image", "inspect", i]));
+
+const K8S_SCRIPT = join(process.cwd(), "scripts/k8s-cluster.sh");
+let k8sState: { kubeconfig?: string; error?: string } | undefined;
+/** The test cluster, started on first use with every k8s sample's and project's images preloaded. */
+function k8sCluster() {
+  if (k8sState) return k8sState;
+  if (process.env.LANG_KUBECONFIG) return (k8sState = { kubeconfig: process.env.LANG_KUBECONFIG });
+  if (!dockerUp()) return (k8sState = { error: "Docker isn't running" });
+  if (!has("kubectl", ["version", "--client"])) return (k8sState = { error: "kubectl isn't installed" });
+  const wanted = WORLDS.flatMap((w) => w.lessons).flatMap((l) => [...(l.code ?? []).filter((s) => s.k8s), ...(l.project?.k8s ? [l.project] : [])]);
+  const images = [...new Set(wanted.flatMap((s) => s.images ?? []))].filter((i) => !missingImages([i]).length);
+  const dir = mkdtempSync(join(tmpdir(), "k8s-"));
+  const kubeconfig = join(dir, "kubeconfig");
+  console.log("  … starting a 3-node k3s test cluster in Docker");
+  try {
+    execFileSync("bash", [K8S_SCRIPT, "up", kubeconfig, ...images], { stdio: ["ignore", "pipe", "pipe"], timeout: 600_000 });
+  } catch (e) {
+    const err = e as { status?: number; stderr?: Buffer; message: string };
+    const why = err.stderr?.toString().trim() || err.message;
+    return (k8sState = { error: err.status === 3 ? `${why} (docker pull them once; see scripts/k8s-cluster.sh)` : `the test cluster didn't start: ${why.slice(-400)}` });
+  }
+  process.on("exit", () => {
+    try {
+      execFileSync("bash", [K8S_SCRIPT, "down"], { stdio: "ignore" });
+    } catch {}
+    rmSync(dir, { recursive: true, force: true });
+  });
+  return (k8sState = { kubeconfig });
+}
+/** Delete everything samples create (quest-* namespaces and cluster-wide objects, node labels and taints). */
+function k8sClean(kubeconfig: string) {
+  execFileSync("bash", [K8S_SCRIPT, "clean"], { env: { ...process.env, KUBECONFIG: kubeconfig }, stdio: "ignore", timeout: 600_000 });
+}
 
 /** Remove every container, network, volume and image whose name starts with quest- (what the samples create). */
 function dockerCleanup() {
@@ -235,7 +274,7 @@ function checkSample(where: string, s: CodeSample, world: string) {
   for (const v of s.variants) {
     const runnable = ["java", "cpp", "go", "python"].includes(v.lang) || (CODE_WORLDS.has(world) && ["c", "bash", "llvm"].includes(v.lang));
     if (!runnable || !hasMain(v.lang, v.code)) continue;
-    if (v.lang === "bash" && !s.linux && !s.docker) continue; // shell snippets in other samples are commands to read, not programs
+    if (v.lang === "bash" && !s.linux && !s.docker && !s.k8s) continue; // shell snippets in other samples are commands to read, not programs
     const label = `${where} · "${s.title}"${s.variants.length > 1 ? ` [${v.lang}]` : ""}`;
     if (s.noCheck && !(NET && s.noCheck.startsWith("net:"))) {
       skipped++;
@@ -247,9 +286,14 @@ function checkSample(where: string, s: CodeSample, world: string) {
       console.log(`  ⏭  ${label}: Docker isn't running`);
       continue;
     }
-    if (s.docker && missingImages(s.images).length) {
+    if ((s.docker || s.k8s) && missingImages(s.images).length) {
       skipped++;
       console.log(`  ⏭  ${label}: needs ${missingImages(s.images).map((i) => `docker pull ${i}`).join(", ")}`);
+      continue;
+    }
+    if (s.k8s && k8sCluster().error) {
+      skipped++;
+      console.log(`  ⏭  ${label}: ${k8sCluster().error}`);
       continue;
     }
     if (s.linux && !LINUX && !docker) {
@@ -262,7 +306,7 @@ function checkSample(where: string, s: CodeSample, world: string) {
       console.log(`  ⏭  ${label}: needs root (run as root, or use LANG_LINUX_IMAGE with Docker)`);
       continue;
     }
-    if (!s.linux && !s.docker && !tools[v.lang as keyof typeof tools]) {
+    if (!s.linux && !s.docker && !s.k8s && !tools[v.lang as keyof typeof tools]) {
       skipped++;
       console.log(`  ⏭  ${label}: no ${v.lang} toolchain`);
       continue;
@@ -289,6 +333,12 @@ function checkSample(where: string, s: CodeSample, world: string) {
         dockerCleanup();
         writeFileSync(join(dir, "run.sh"), v.code);
         out = execFileSync("bash", ["run.sh"], { cwd: dir, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 300_000 });
+      } else if (s.k8s) {
+        const { kubeconfig } = k8sCluster();
+        k8sClean(kubeconfig!);
+        writeFileSync(join(dir, "run.sh"), v.code);
+        const env = { ...process.env, KUBECONFIG: kubeconfig };
+        out = execFileSync("bash", ["run.sh"], { cwd: dir, env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 600_000 });
       } else out = s.linux ? runLinuxSample(v.lang, v.code, dir, s.privileged) : runSample(v.lang, v.code, dir);
       if (pytest) {
         passed++;
@@ -306,9 +356,16 @@ function checkSample(where: string, s: CodeSample, world: string) {
       console.log(`  ✗ ${label}`);
     } finally {
       if (s.docker) dockerCleanup();
+      if (s.k8s && k8sCluster().kubeconfig) k8sClean(k8sCluster().kubeconfig!);
       rmSync(dir, { recursive: true, force: true });
     }
   }
+}
+
+/** buildsOn target: a lesson id in the same world, or "world/lesson" for another world */
+function findLesson(w: World, ref: string) {
+  const [world, lesson] = ref.includes("/") ? ref.split("/") : [w.id, ref];
+  return WORLDS.find((x) => x.id === world)?.lessons.find((x) => x.id === lesson);
 }
 
 function checkProject(where: string, l: Lesson, w: World) {
@@ -348,9 +405,14 @@ function checkProject(where: string, l: Lesson, w: World) {
     console.log(`  ⏭  ${label}: Docker isn't running`);
     return;
   }
-  if (p.docker && missingImages(p.images).length) {
+  if ((p.docker || p.k8s) && missingImages(p.images).length) {
     skipped++;
     console.log(`  ⏭  ${label}: needs ${missingImages(p.images).map((i) => `docker pull ${i}`).join(", ")}`);
+    return;
+  }
+  if (p.k8s && k8sCluster().error) {
+    skipped++;
+    console.log(`  ⏭  ${label}: ${k8sCluster().error}`);
     return;
   }
   const cmd = p.verify.replace(/^net:\s*/, "");
@@ -367,7 +429,7 @@ function checkProject(where: string, l: Lesson, w: World) {
   }
   const files = new Map<string, string>();
   const chain: NonNullable<Lesson["project"]>[] = [];
-  for (let q: Lesson["project"] = p; q; q = q.buildsOn ? w.lessons.find((x) => x.id === q!.buildsOn)?.project : undefined) chain.unshift(q);
+  for (let q: Lesson["project"] = p; q; q = q.buildsOn ? findLesson(w, q.buildsOn)?.project : undefined) chain.unshift(q);
   for (const q of chain) for (const st of q.steps) for (const f of st.files) files.set(f.path, f.code);
   const dir = mkdtempSync(join(tmpdir(), "proj-"));
   try {
@@ -375,7 +437,8 @@ function checkProject(where: string, l: Lesson, w: World) {
       dir,
       [...files].map(([path, code]) => ({ path, code })),
     );
-    if (p.docker) dockerCleanup();
+    if (p.docker || p.k8s) dockerCleanup();
+    if (p.k8s) k8sClean(k8sCluster().kubeconfig!);
     if (p.linux) {
       runInLinux(dir, cmd.replaceAll("$CC_CMD", "gcc").replaceAll("$PY_CMD", "python3"), p.privileged);
       passed++;
@@ -387,7 +450,7 @@ function checkProject(where: string, l: Lesson, w: World) {
       shell: "/bin/bash",
       stdio: "pipe",
       timeout: 600_000,
-      env: { ...process.env, JAVA_CMD: JAVA, CXX_CMD: CXX.join(" "), GO_CMD: GO, PY_CMD: PY, CC_CMD: CC.join(" "), CLANG_CMD: CLANG.join(" "), PYTHONDONTWRITEBYTECODE: "1" },
+      env: { ...process.env, ...(p.k8s ? { KUBECONFIG: k8sCluster().kubeconfig } : {}), JAVA_CMD: JAVA, CXX_CMD: CXX.join(" "), GO_CMD: GO, PY_CMD: PY, CC_CMD: CC.join(" "), CLANG_CMD: CLANG.join(" "), PYTHONDONTWRITEBYTECODE: "1" },
     });
     passed++;
     console.log(`  ✓ ${label} (${files.size} files)`);
@@ -396,7 +459,8 @@ function checkProject(where: string, l: Lesson, w: World) {
     failures.push(`${label}: ${(err.stderr?.toString() || "") + (err.stdout?.toString() || "") || err.message}`.slice(0, 4000));
     console.log(`  ✗ ${label}`);
   } finally {
-    if (p.docker) dockerCleanup();
+    if (p.docker || p.k8s) dockerCleanup();
+    if (p.k8s) k8sClean(k8sCluster().kubeconfig!);
     rmSync(dir, { recursive: true, force: true });
   }
 }

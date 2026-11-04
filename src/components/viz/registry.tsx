@@ -102,6 +102,8 @@ export const VISUALIZERS: Record<string, Entry> = {
   k8snet: { title: "Services, Ingress & NetworkPolicy", blurb: "Follow a packet through DNS, kube-proxy DNAT, the CNI and policies.", C: lazy(() => import("./cloud/K8sNet")) },
   statefulset: { title: "StatefulSet vs Deployment", blurb: "Stable names, ordered rollout and a PVC per pod. Delete pods and keep the data.", C: lazy(() => import("./cloud/StatefulSet")) },
   gitops: { title: "GitOps reconciliation (Argo CD)", blurb: "Commit to Git, drift the cluster by hand, and watch sync, selfHeal and prune.", C: lazy(() => import("./cloud/GitOps")) },
+  labels: { title: "Labels & selectors playground", blurb: "Write kubectl -l selectors, relabel pods, and see what a Service or ReplicaSet would pick.", C: lazy(() => import("./cloud/Labels")) },
+  rbac: { title: "RBAC: can I?", blurb: "Pick a user or ServiceAccount, a verb and a resource, and trace which binding allows it.", C: lazy(() => import("./cloud/Rbac")) },
   podstatus: { title: "Broken pod triage", blurb: "Read kubectl output and find the root cause of eight real failure modes.", C: lazy(() => import("./cloud/PodStatus")) },
   // Kafka engineering
   producer: { title: "Kafka producer internals", blurb: "linger.ms, batch.size, compression and acks, then retries with and without idempotence.", C: lazy(() => import("./kafka/Producer")) },

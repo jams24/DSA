@@ -327,6 +327,8 @@ export const MOVED_LESSONS: Record<string, string> = {
   "kubernetes/docker-internals": "docker/docker-internals",
   "kubernetes/docker-networking": "docker/docker-networking",
   "kubernetes/docker-compose": "docker/docker-compose",
+  "infra/k8s-architecture": "kubernetes/k8s-architecture",
+  "infra/k8s-workloads": "kubernetes/k8s-workloads",
 };
 
 /** Re-keys progress saved under a moved lesson's old key (keeping the best of both if both exist). Mutates and returns `progress`. */

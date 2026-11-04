@@ -55,6 +55,11 @@ export interface CodeSample {
   docker?: boolean;
   /** local Docker images the sample uses: the test runner never pulls, and skips the sample when one is missing */
   images?: string[];
+  /**
+   * a bash script driving kubectl against a Kubernetes cluster; the test runner starts a throwaway k3s cluster
+   * (scripts/k8s-cluster.sh) with the sample's `images` preloaded, and points KUBECONFIG at it
+   */
+  k8s?: boolean;
   /** regexes (sources) for output that changes between runs (IDs, PIDs, IPs, timings), masked before comparing */
   vary?: string[];
 }
@@ -180,8 +185,8 @@ export interface ProjectGuide {
   /** Python packages (import names) the verify command needs; the project is skipped when they aren't installed */
   requires?: string[];
   /**
-   * id of an earlier lesson in the same world whose finished project this one continues: its files are
-   * the starting point, and verify runs with them in place
+   * id of an earlier lesson in the same world (or "world/lesson" for another world) whose finished project
+   * this one continues: its files are the starting point, and verify runs with them in place
    */
   buildsOn?: string;
   /** verify drives the Docker engine on the host (skipped when Docker isn't running) */
@@ -190,6 +195,8 @@ export interface ProjectGuide {
   images?: string[];
   /** with `linux`: verify needs root and extra capabilities, so it runs in a privileged container */
   privileged?: boolean;
+  /** verify drives kubectl (and Docker) against the test runner's throwaway Kubernetes cluster */
+  k8s?: boolean;
 }
 
 export interface Library {

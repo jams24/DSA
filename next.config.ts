@@ -4,13 +4,13 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
-  // The Docker lessons moved from the Kubernetes world to the Docker world
+  // Lessons that moved: Docker from the Kubernetes world to the Docker world, Kubernetes from infra to Kubernetes
   async redirects() {
-    return ["docker-internals", "docker-networking", "docker-compose"].map((id) => ({
-      source: `/worlds/kubernetes/${id}`,
-      destination: `/worlds/docker/${id}`,
-      permanent: true,
-    }));
+    const moved = [
+      ...["docker-internals", "docker-networking", "docker-compose"].map((id) => [`kubernetes/${id}`, `docker/${id}`]),
+      ...["k8s-architecture", "k8s-workloads"].map((id) => [`infra/${id}`, `kubernetes/${id}`]),
+    ];
+    return moved.map(([from, to]) => ({ source: `/worlds/${from}`, destination: `/worlds/${to}`, permanent: true }));
   },
   turbopack: {
     rules: {
