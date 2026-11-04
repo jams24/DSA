@@ -138,4 +138,18 @@ export const VISUALIZERS: Record<string, Entry> = {
   injection: { title: "Prompt injection & the lethal trifecta", blurb: "Poison an email agent, then find the defenses that actually stop exfiltration.", C: lazy(() => import("./agents/Injection")) },
   cascade: { title: "Model routing & cascades", blurb: "Router vs cascade vs one big model: cost against quality.", C: lazy(() => import("./agents/Cascade")) },
   lora: { title: "Fine-tuning memory: full vs LoRA vs QLoRA", blurb: "Trainable parameters, adapter size and what fits on one GPU.", C: lazy(() => import("./agents/LoRA")) },
+  // operating systems
+  cpu: { title: "Inside the CPU: fetch, decode, execute", blurb: "Step a tiny CPU through a real program and watch the program counter, registers and ALU at every phase.", C: lazy(() => import("./os/TinyCpu")) },
+  procstate: { title: "Process states", blurb: "Create, dispatch, preempt, block and reap processes, and watch them move between ready, running and waiting.", C: lazy(() => import("./os/ProcState")) },
+  cpusched: { title: "CPU scheduling", blurb: "FCFS, SJF, SRTF, priority and round robin on the same jobs: a live Gantt chart, the ready queue and waiting times.", C: lazy(() => import("./os/CpuSched")) },
+  ctxswitch: { title: "A context switch, step by step", blurb: "Timer interrupt, save registers into the PCB, switch page tables, restore the next task, and a voluntary switch on read().", C: lazy(() => import("./os/CtxSwitch")) },
+  race: { title: "Race condition playground", blurb: "Step two threads through counter++ in any order you like, find the order that loses an update, then add a lock.", C: lazy(() => import("./os/Race")) },
+  philosophers: { title: "Dining philosophers", blurb: "Five philosophers, five forks: watch the naive rule deadlock in a circle, then fix it with fork ordering or a waiter.", C: lazy(() => import("./os/Philosophers")) },
+  banker: { title: "The Banker's algorithm", blurb: "Ask for resources and watch the safety check pretend to run every process to decide: grant, wait or deny.", C: lazy(() => import("./os/Banker")) },
+  paging: { title: "Address translation lab", blurb: "Split a virtual address, check the TLB, walk the page table, take minor and major page faults, and get the physical address.", C: lazy(() => import("./os/Paging")) },
+  pagerepl: { title: "Page replacement", blurb: "FIFO, LRU, OPT and Clock on any reference string, frame by frame, plus Belady's anomaly and the thrashing cliff.", C: lazy(() => import("./os/PageRepl")) },
+  allocator: { title: "Heap allocator playground", blurb: "malloc and free on a 1 KiB heap with first, best and worst fit: splitting, coalescing and external fragmentation.", C: lazy(() => import("./os/Allocator")) },
+  inode: { title: "Inodes, links and blocks", blurb: "Create, grow, hard-link, symlink and delete files in a tiny file system, and watch the directory, inode table and disk blocks.", C: lazy(() => import("./os/Inode")) },
+  diskarm: { title: "Disk-arm scheduling", blurb: "FCFS, SSTF, SCAN, C-SCAN, LOOK and C-LOOK: watch the head's path across the cylinders and compare total movement.", C: lazy(() => import("./os/DiskArm")) },
+  perms: { title: "Who may open this file?", blurb: "Flip rwx bits, pick owner, group member, other or root, and see the one class the kernel checks, plus umask.", C: lazy(() => import("./os/Perms")) },
 };

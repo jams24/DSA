@@ -23,6 +23,9 @@ export type Lang =
   | "proto"
   | "make"
   | "toml"
+  | "c"
+  | "asm"
+  | "llvm"
   | "text";
 
 export interface CodeVariant {
@@ -42,6 +45,10 @@ export interface CodeSample {
   noCheck?: string;
   /** oldest Python that runs this sample, e.g. "3.14"; older interpreters skip it in the test runner */
   minPython?: string;
+  /** Linux-only (uses /proc, epoll, namespaces ...): on other hosts the test runner uses Docker (LANG_LINUX_IMAGE) or skips it */
+  linux?: boolean;
+  /** needs root and extra capabilities (namespaces, cgroups); run in a privileged container */
+  privileged?: boolean;
 }
 
 export interface QuizQuestion {
@@ -157,9 +164,11 @@ export interface ProjectGuide {
   extensions: string[];
   /**
    * bash run by `npm run languages:test` in a directory holding the finished files. $JAVA_CMD, $CXX_CMD,
-   * $GO_CMD and $PY_CMD point at the toolchains. Prefix with "net:" when it downloads dependencies.
+   * $GO_CMD, $PY_CMD and $CC_CMD point at the toolchains. Prefix with "net:" when it downloads dependencies.
    */
   verify?: string;
+  /** verify only on Linux (natively, or in the LANG_LINUX_IMAGE Docker image) */
+  linux?: boolean;
   /** Python packages (import names) the verify command needs; the project is skipped when they aren't installed */
   requires?: string[];
 }
@@ -204,6 +213,8 @@ export interface Lesson {
   caseStudy?: boolean;
   /** language tracks: which roadmap section the lesson belongs to */
   stage?: Stage;
+  /** core worlds: a signpost on the world map ("Part 2 · Processes"), set on the first lesson of each part */
+  part?: string;
   /** a guided build, shown on the Build tab */
   project?: ProjectGuide;
   /** a library catalog, shown on the Toolbox tab */
@@ -245,6 +256,7 @@ export interface CatalogLesson {
   caseStudy?: boolean;
   hasVisualizer: boolean;
   stage?: Stage;
+  part?: string;
   kind?: "project" | "toolbox";
 }
 

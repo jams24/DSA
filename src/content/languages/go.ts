@@ -8,7 +8,7 @@ import { goProjects } from "./go-5";
 export const go: World = {
   id: "go",
   track: "language",
-  order: 14,
+  order: 16,
   title: "Go",
   subtitle: "From your first goroutine to production HTTP services, the scheduler and idiomatic interviews",
   description:

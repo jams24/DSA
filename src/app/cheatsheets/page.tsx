@@ -5,7 +5,7 @@ import { SectionTitle } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Cheat Sheets",
-  description: "Big-O tables, pattern recognition, latency numbers, estimation, system design template, distributed systems, AI inference formulas and an infra/SRE sheet.",
+  description: "Big-O tables, pattern recognition, latency numbers, estimation, system design template, distributed systems, AI inference formulas, an infra/SRE sheet and operating systems.",
 };
 
 export default async function CheatSheetsPage() {

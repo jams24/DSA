@@ -33,6 +33,9 @@ const LANG_LABEL: Record<string, string> = {
   proto: "Protobuf",
   make: "Makefile",
   toml: "TOML",
+  c: "C",
+  asm: "Assembly",
+  llvm: "LLVM IR",
   text: "Text",
 };
 

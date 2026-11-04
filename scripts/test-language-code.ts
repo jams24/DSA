@@ -1,5 +1,6 @@
-// Compiles and runs the Java, C++, Go and Python programs in the Language Academy.
-// Run with: npm run languages:test [filter]
+// Compiles and runs the Java, C++, Go and Python programs in the Language Academy, and the C, Python
+// and shell samples in the Operating Systems and Compilers worlds.
+// Run with: npm run languages:test [filter]     (filter matches "<world>/<lesson>", e.g. "os/" or "python/py-web")
 //
 // Code samples: every java / cpp / go variant that has an entry point, and every python variant, is
 // compiled and run. When the sample declares `output`, stdout must match it exactly (trailing
@@ -16,18 +17,29 @@
 //   LANG_GO       go (default: go)
 //   LANG_PYTHON   Python 3.12+ interpreter (default: python3); point it at a virtualenv to run the samples
 //                 that use third-party packages (pydantic, pytest, httpx, SQLAlchemy, numpy, pandas ...)
+//   LANG_CC       C compiler (default: cc)
+//   LANG_LINUX_IMAGE  samples and projects marked `linux` (they use /proc, epoll, namespaces ...) run natively on
+//                 Linux; elsewhere they run in this Docker image if it's set (any local image with gcc, bash
+//                 and python3, e.g. node:20 or gcc:14; never pulled), and are skipped otherwise
 //   LANG_NET=1    also run samples/projects marked as needing the network (third-party deps)
 import { execFileSync, execSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { LANGUAGE_TRACKS } from "../src/content";
+import { WORLDS } from "../src/content";
 import type { CodeSample, Lesson } from "../src/content/types";
+
+/** Core worlds whose code samples are runnable programs (the language tracks are always included). */
+const CODE_WORLDS = new Set(["os", "compilers"]);
 
 const JAVA = process.env.LANG_JAVA ?? "java";
 const CXX = (process.env.LANG_CXX ?? "clang++ -std=c++23").split(" ");
 const GO = process.env.LANG_GO ?? "go";
 const PY = process.env.LANG_PYTHON ?? "python3";
+const CC = (process.env.LANG_CC ?? "cc").split(" ");
+const LINUX = process.platform === "linux";
+const LINUX_IMAGE = process.env.LANG_LINUX_IMAGE;
+const C_FLAGS = ["-std=gnu17", "-O1", "-g", "-Wall", "-Wextra", "-Werror", "-pthread"];
 const NET = process.env.LANG_NET === "1";
 const only = process.argv[2];
 
@@ -50,7 +62,22 @@ const olderPython = (min: string) => {
   const [a, b] = min.split(".").map(Number);
   return pyVersion[0] < a || (pyVersion[0] === a && pyVersion[1] < b);
 };
-const tools = { java: has(JAVA, ["-version"]), cpp: has(CXX[0], ["--version"]), go: has(GO, ["version"]), python: has(PY, ["--version"]) };
+const tools = {
+  java: has(JAVA, ["-version"]),
+  cpp: has(CXX[0], ["--version"]),
+  go: has(GO, ["version"]),
+  python: has(PY, ["--version"]),
+  c: has(CC[0], ["--version"]),
+  bash: true,
+};
+const docker = (() => {
+  if (LINUX || !LINUX_IMAGE) return false;
+  try {
+    return execFileSync("docker", ["images", "-q", LINUX_IMAGE], { encoding: "utf8" }).trim() !== "";
+  } catch {
+    return false;
+  }
+})();
 
 const norm = (s: string) =>
   s
@@ -89,11 +116,35 @@ function hasMain(lang: string, code: string) {
   if (lang === "java") return /static\s+void\s+main\s*\(|^\s*void\s+main\s*\(/m.test(code);
   if (lang === "cpp") return /\bint\s+main\s*\(/.test(code);
   if (lang === "go") return /^package main\b/m.test(code) && /^func main\(\)/m.test(code);
-  if (lang === "python") return true;
+  if (lang === "c") return /\bint\s+main\s*\(/.test(code);
+  if (lang === "python" || lang === "bash") return true;
   return false;
 }
 
+/** Run a shell command in the Linux image with `dir` mounted at /w (no network, image never pulled). */
+function runInLinux(dir: string, cmd: string, privileged = false): string {
+  if (!docker) return run("bash", ["-c", cmd], dir);
+  const args = ["run", "--rm", "--pull", "never", "--network", "none", ...(privileged ? ["--privileged"] : []), "-v", `${dir}:/w`, "-w", "/w"];
+  return run("docker", [...args, LINUX_IMAGE!, "bash", "-c", cmd], dir);
+}
+
+function runLinuxSample(lang: string, code: string, dir: string, privileged = false): string {
+  const file = lang === "c" ? "main.c" : lang === "python" ? "main.py" : "main.sh";
+  writeFileSync(join(dir, file), code);
+  const cmd = lang === "c" ? `gcc ${C_FLAGS.join(" ")} main.c -o main && ./main` : lang === "python" ? "python3 main.py" : "bash main.sh";
+  return runInLinux(dir, cmd, privileged);
+}
+
 function runSample(lang: string, code: string, dir: string): string {
+  if (lang === "c") {
+    writeFileSync(join(dir, "main.c"), code);
+    run(CC[0], [...CC.slice(1), ...C_FLAGS, "main.c", "-o", "main"], dir);
+    return run(join(dir, "main"), [], dir);
+  }
+  if (lang === "bash") {
+    writeFileSync(join(dir, "main.sh"), code);
+    return run("bash", ["main.sh"], dir);
+  }
   if (lang === "java") {
     // source-file mode runs the first top-level class; name the file after it so javac's public-class rule holds
     const file = `${/^public\s+(?:final\s+|abstract\s+|sealed\s+)*(?:class|record|interface|enum)\s+(\w+)/m.exec(code)?.[1] ?? "Main"}.java`;
@@ -124,26 +175,38 @@ let passed = 0;
 let skipped = 0;
 const failures: string[] = [];
 
-function checkSample(where: string, s: CodeSample) {
+function checkSample(where: string, s: CodeSample, world: string) {
   for (const v of s.variants) {
-    if (!["java", "cpp", "go", "python"].includes(v.lang) || !hasMain(v.lang, v.code)) continue;
-    const label = `${where} · "${s.title}"`;
+    const runnable = ["java", "cpp", "go", "python"].includes(v.lang) || (CODE_WORLDS.has(world) && ["c", "bash"].includes(v.lang));
+    if (!runnable || !hasMain(v.lang, v.code)) continue;
+    if (v.lang === "bash" && !s.linux) continue; // shell snippets in other samples are commands to read, not programs
+    const label = `${where} · "${s.title}"${s.variants.length > 1 ? ` [${v.lang}]` : ""}`;
     if (s.noCheck && !(NET && s.noCheck.startsWith("net:"))) {
       skipped++;
       console.log(`  ⏭  ${label}: ${s.noCheck}`);
       continue;
     }
-    if (!tools[v.lang as keyof typeof tools]) {
+    if (s.linux && !LINUX && !docker) {
+      skipped++;
+      console.log(`  ⏭  ${label}: Linux only (set LANG_LINUX_IMAGE to a local Docker image with gcc and python3)`);
+      continue;
+    }
+    if (s.privileged && !docker && process.getuid?.() !== 0) {
+      skipped++;
+      console.log(`  ⏭  ${label}: needs root (run as root, or use LANG_LINUX_IMAGE with Docker)`);
+      continue;
+    }
+    if (!s.linux && !tools[v.lang as keyof typeof tools]) {
       skipped++;
       console.log(`  ⏭  ${label}: no ${v.lang} toolchain`);
       continue;
     }
-    if (v.lang === "python" && s.minPython && olderPython(s.minPython)) {
+    if (v.lang === "python" && !s.linux && s.minPython && olderPython(s.minPython)) {
       skipped++;
       console.log(`  ⏭  ${label}: needs Python ${s.minPython}+ (${PY} is ${pyVersion.join(".")})`);
       continue;
     }
-    if (v.lang === "python") {
+    if (v.lang === "python" && !s.linux) {
       const missing = missingPythonModules(v.code);
       if (missing.length) {
         skipped++;
@@ -154,7 +217,7 @@ function checkSample(where: string, s: CodeSample) {
     const pytest = v.lang === "python" && isPytest(v.code);
     const dir = mkdtempSync(join(tmpdir(), "lang-"));
     try {
-      const out = runSample(v.lang, v.code, dir);
+      const out = s.linux ? runLinuxSample(v.lang, v.code, dir, s.privileged) : runSample(v.lang, v.code, dir);
       if (pytest) {
         passed++;
         console.log(`  ✓ ${label} (pytest: ${out.trim().split("\n").pop()})`);
@@ -197,6 +260,11 @@ function checkProject(where: string, l: Lesson) {
       return;
     }
   }
+  if (p.linux && !LINUX && !docker) {
+    skipped++;
+    console.log(`  ⏭  ${label}: Linux only (set LANG_LINUX_IMAGE)`);
+    return;
+  }
   const cmd = p.verify.replace(/^net:\s*/, "");
   const tool = cmd.trim().split(/\s+/)[0];
   if (["mvn", "cmake"].includes(tool) && !has(tool, ["--version"])) {
@@ -212,12 +280,18 @@ function checkProject(where: string, l: Lesson) {
       mkdirSync(dirname(join(dir, path)), { recursive: true });
       writeFileSync(join(dir, path), code.endsWith("\n") ? code : `${code}\n`);
     }
+    if (p.linux) {
+      runInLinux(dir, cmd.replaceAll("$CC_CMD", "gcc").replaceAll("$PY_CMD", "python3"));
+      passed++;
+      console.log(`  ✓ ${label} (${files.size} files, Linux)`);
+      return;
+    }
     execSync(cmd, {
       cwd: dir,
       shell: "/bin/bash",
       stdio: "pipe",
       timeout: 600_000,
-      env: { ...process.env, JAVA_CMD: JAVA, CXX_CMD: CXX.join(" "), GO_CMD: GO, PY_CMD: PY, PYTHONDONTWRITEBYTECODE: "1" },
+      env: { ...process.env, JAVA_CMD: JAVA, CXX_CMD: CXX.join(" "), GO_CMD: GO, PY_CMD: PY, CC_CMD: CC.join(" "), PYTHONDONTWRITEBYTECODE: "1" },
     });
     passed++;
     console.log(`  ✓ ${label} (${files.size} files)`);
@@ -230,12 +304,13 @@ function checkProject(where: string, l: Lesson) {
   }
 }
 
-for (const w of LANGUAGE_TRACKS) {
+for (const w of WORLDS.filter((w) => w.track === "language" || CODE_WORLDS.has(w.id))) {
+  if (only && !w.lessons.some((l) => `${w.id}/${l.id}`.includes(only))) continue;
   console.log(`${w.emoji} ${w.title}`);
   for (const l of w.lessons) {
     const where = `${w.id}/${l.id}`;
     if (only && !where.includes(only)) continue;
-    for (const s of l.code ?? []) checkSample(where, s);
+    for (const s of l.code ?? []) checkSample(where, s, w.id);
     if (l.project) checkProject(where, l);
   }
 }

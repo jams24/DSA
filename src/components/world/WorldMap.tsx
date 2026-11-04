@@ -11,6 +11,7 @@ import { bossHref, lessonHref } from "@/lib/paths";
 
 const ROW = 128;
 const TOP = 70;
+const GAP = 56; // extra space above a lesson that starts a new part
 
 export function WorldMap({ worldId }: { worldId: string }) {
   const catalog = useCatalog();
@@ -24,9 +25,13 @@ export function WorldMap({ worldId }: { worldId: string }) {
   const next = ready ? nextInWorld(world, player) : null;
   const prog = worldProgress(world, player);
   const count = world.lessons.length + 1; // + boss
-  const height = TOP * 2 + (count - 1) * ROW;
+  // partsUpTo[i]: how many part signposts sit above node i (the boss counts every part)
+  const partsUpTo: number[] = [];
+  world.lessons.reduce((n, l, i) => (partsUpTo[i] = n + (l.part ? 1 : 0)), 0);
+  partsUpTo.push(partsUpTo.at(-1) ?? 0);
+  const height = TOP * 2 + (count - 1) * ROW + partsUpTo[count - 1] * GAP;
   const xOf = (i: number) => 50 + 24 * Math.sin(i * 1.15);
-  const yOf = (i: number) => TOP + i * ROW;
+  const yOf = (i: number) => TOP + i * ROW + partsUpTo[i] * GAP;
 
   let d = `M ${xOf(0)} ${yOf(0)}`;
   for (let i = 1; i < count; i++) {
@@ -58,6 +63,20 @@ export function WorldMap({ worldId }: { worldId: string }) {
           />
         )}
       </svg>
+
+      {world.lessons.map(
+        (l, i) =>
+          l.part && (
+            <div key={`part-${l.id}`} className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2" style={{ top: yOf(i) - 92 }}>
+              <span
+                className="block rounded-full border-2 bg-panel px-3 py-1.5 text-center font-pixel text-[8px] leading-relaxed tracking-wider whitespace-nowrap uppercase shadow-sm sm:text-[9px]"
+                style={{ borderColor: accent, color: accent }}
+              >
+                {l.part}
+              </span>
+            </div>
+          ),
+      )}
 
       {world.lessons.map((l, i) => {
         const stars = player.progress[l.key]?.stars ?? 0;

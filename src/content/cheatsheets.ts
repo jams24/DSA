@@ -328,6 +328,48 @@ Cost = in·p_in + out·p_out · cache prefixes · batch API ≈ half price · ro
 `,
   },
   {
+    id: "os",
+    title: "Operating systems cheat sheet",
+    emoji: "🖥️",
+    md: `
+### Processes & threads
+- **Process** = address space + resources (fds, PID, credentials). **Thread** = registers + stack + TLS inside a process. Threads share heap, globals and fds.
+- **fork** copies (copy-on-write) → **exec** replaces the program → parent **wait**s. Exited but not reaped = **zombie**; parent died = **orphan** (adopted by init).
+- States: R running/runnable · S sleeping · D uninterruptible (disk) · T stopped · Z zombie.
+- Context switch ≈ 1–5 µs + cold caches/TLB. Thread switch is cheaper (no page-table switch).
+
+### Scheduling
+FCFS (convoy effect) · SJF/SRTF (optimal average wait, needs prediction, starves long jobs) · Round Robin (quantum ≫ switch cost) · Priority (+ **aging** against starvation) · MLFQ · Linux **CFS/EEVDF** (lowest virtual runtime first, nice = weight). Turnaround = finish − arrival; waiting = turnaround − burst.
+
+### Concurrency
+- Race = unsynchronised access, at least one write. counter++ is load/add/store.
+- **Mutex** (owned, sleeps) · **spinlock** (busy-waits, short sections) · **semaphore** (counter, no owner) · **condition variable** (always wait in a *while* loop) · **RW lock** · atomics/CAS.
+- **Deadlock needs all 4**: mutual exclusion, hold and wait, no preemption, circular wait. Prevent with a global lock order; avoid with **Banker's**; detect with a wait-for graph cycle.
+
+### Memory
+- Virtual address = page number + offset (4 KiB pages: low 12 bits). Page table entry: frame, present, R/W/X, user, dirty, accessed.
+- **TLB** caches translations. Multi-level tables (x86-64: 4 levels). Huge pages cut TLB misses.
+- Page fault: **minor** (in RAM, just map) · **major** (read from disk) · **invalid** → SIGSEGV.
+- Replacement: OPT (ideal) · LRU (approximated by **Clock**) · FIFO (**Belady's anomaly**). **Thrashing** = working sets > RAM.
+- Stack (per thread, auto, ~8 MiB) vs heap (malloc: brk / mmap). Internal vs external fragmentation; buddy and slab allocators.
+
+### Files, storage & I/O
+- **inode** = metadata + block pointers (no name). Directory = name → inode. **Hard link** = another name, same inode; **symlink** = a file holding a path. rm = unlink a name.
+- fd table → open file description (offset, flags) → inode. Page cache; **fsync** for durability; journaling for crash consistency.
+- Disk arm: FCFS · SSTF · SCAN · C-SCAN · LOOK · C-LOOK. RAID 0 stripe · 1 mirror · 5 parity · 10 mirror+stripe.
+- I/O models: blocking · non-blocking · multiplexing (**select / poll / epoll**, kqueue) · async (io_uring). DMA moves data without the CPU.
+- IPC: pipe · FIFO · Unix socket (can pass fds) · shared memory (fastest, needs sync) · message queue · signals (SIGTERM can be caught, SIGKILL/SIGSTOP can't).
+
+### Security & containers
+- chmod: r=4 w=2 x=1 for owner/group/others; only the **first matching class** is checked; root skips. umask 022 → files 644, dirs 755. setuid 4000, setgid 2000, sticky 1000.
+- Least privilege: drop privileges (setgroups → setgid → setuid), **capabilities**, seccomp, SELinux/AppArmor (MAC). NX + ASLR + canaries against memory bugs.
+- VM = own kernel on a hypervisor (KVM, Xen, ESXi; VT-x + EPT). **Container** = host process + **namespaces** (pid, mnt, net, uts, ipc, user, cgroup, time) + **cgroups** (memory.max → OOM kill, exit 137; cpu.max → throttling) + overlayfs layers.
+
+### Debugging Linux in 60 seconds
+uptime · dmesg -T | tail · vmstat 1 · mpstat -P ALL 1 · pidstat 1 · iostat -xz 1 · free -m · sar -n DEV 1 · sar -n TCP,ETCP 1 · top. Then strace, lsof, ss, perf, eBPF tools. **USE**: utilisation, saturation, errors for every resource.
+`,
+  },
+  {
     id: "communication",
     title: "Talking like a senior engineer",
     emoji: "🗣️",

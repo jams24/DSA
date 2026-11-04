@@ -5,7 +5,7 @@ import { SectionTitle } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Worlds",
-  description: "Eleven worlds from Big-O to Kubernetes, Kafka and AI agents. Pick a realm and start climbing.",
+  description: "Twelve worlds from Big-O to Kubernetes, Kafka, AI agents and operating systems. Pick a realm and start climbing.",
 };
 
 export default function WorldsPage() {
