@@ -152,4 +152,13 @@ export const VISUALIZERS: Record<string, Entry> = {
   inode: { title: "Inodes, links and blocks", blurb: "Create, grow, hard-link, symlink and delete files in a tiny file system, and watch the directory, inode table and disk blocks.", C: lazy(() => import("./os/Inode")) },
   diskarm: { title: "Disk-arm scheduling", blurb: "FCFS, SSTF, SCAN, C-SCAN, LOOK and C-LOOK: watch the head's path across the cylinders and compare total movement.", C: lazy(() => import("./os/DiskArm")) },
   perms: { title: "Who may open this file?", blurb: "Flip rwx bits, pick owner, group member, other or root, and see the one class the kernel checks, plus umask.", C: lazy(() => import("./os/Perms")) },
+  // compilers
+  lexer: { title: "Watch a lexer work", blurb: "Type any code and step through it token by token: maximal munch, the keyword table, skipped comments and lexical errors.", C: lazy(() => import("./compilers/Lexer")) },
+  automata: { title: "Run a DFA", blurb: "Feed strings to automata for names, numbers, (a|b)*abb and binary multiples of 3: one edge per character, then accept or reject.", C: lazy(() => import("./compilers/Automata")) },
+  llparse: { title: "LL(1) table-driven parsing", blurb: "A predictive parser expands the nonterminal on top of its stack using the parse table: see every lookup, match and syntax error.", C: lazy(() => import("./compilers/LLParse")) },
+  pratt: { title: "Pratt parsing, step by step", blurb: "Watch binding powers decide which call each operator joins, for precedence, associativity, prefix minus and parentheses, then see the tree.", C: lazy(() => import("./compilers/Pratt")) },
+  lrparse: { title: "Shift, reduce: an SLR parser", blurb: "Drive the classic SLR table for arithmetic: shifts, reductions, GOTO and the moment precedence is decided.", C: lazy(() => import("./compilers/LRParse")) },
+  stackvm: { title: "A bytecode stack machine", blurb: "Compile an expression to bytecode, or run a while loop, one instruction at a time: pc, operand stack, variables and output.", C: lazy(() => import("./compilers/StackVM")) },
+  optimizer: { title: "Optimization passes", blurb: "Constant folding, copy propagation, CSE, strength reduction and dead code elimination, round after round until a fixpoint.", C: lazy(() => import("./compilers/Optimizer")) },
+  regalloc: { title: "Linear-scan register allocation", blurb: "Live intervals, a handful of registers and one decision per interval: reuse, take a free register, or spill.", C: lazy(() => import("./compilers/RegAlloc")) },
 };

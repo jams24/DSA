@@ -171,6 +171,11 @@ export interface ProjectGuide {
   linux?: boolean;
   /** Python packages (import names) the verify command needs; the project is skipped when they aren't installed */
   requires?: string[];
+  /**
+   * id of an earlier lesson in the same world whose finished project this one continues: its files are
+   * the starting point, and verify runs with them in place
+   */
+  buildsOn?: string;
 }
 
 export interface Library {

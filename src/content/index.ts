@@ -16,12 +16,13 @@ import { agents } from "./worlds/agents";
 import { kubernetes } from "./worlds/kubernetes";
 import { kafka } from "./worlds/kafka";
 import { os } from "./worlds/os";
+import { compilers } from "./worlds/compilers";
 import { java } from "./languages/java";
 import { cpp } from "./languages/cpp";
 import { go } from "./languages/go";
 import { python } from "./languages/python";
 
-export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka, os, java, cpp, go, python].sort(
+export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka, os, compilers, java, cpp, go, python].sort(
   (a, b) => a.order - b.order,
 );
 

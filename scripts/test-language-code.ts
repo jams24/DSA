@@ -9,7 +9,8 @@
 // isn't installed are skipped with the package name.
 //
 // Projects: the latest version of every file across the steps is written to a temp directory and
-// the project's `verify` command runs there (bash). It's skipped when a tool it needs is missing.
+// the project's `verify` command runs there (bash). It's skipped when a tool it needs is missing. A project
+// that `buildsOn` an earlier lesson's project starts from that project's finished files.
 //
 // Toolchains (override with env vars):
 //   LANG_JAVA     java launcher, JDK 21+ (default: java)
@@ -18,6 +19,7 @@
 //   LANG_PYTHON   Python 3.12+ interpreter (default: python3); point it at a virtualenv to run the samples
 //                 that use third-party packages (pydantic, pytest, httpx, SQLAlchemy, numpy, pandas ...)
 //   LANG_CC       C compiler (default: cc)
+//   LANG_CLANG    clang, used to compile and run LLVM IR (.ll) samples and the compiler project (default: clang)
 //   LANG_LINUX_IMAGE  samples and projects marked `linux` (they use /proc, epoll, namespaces ...) run natively on
 //                 Linux; elsewhere they run in this Docker image if it's set (any local image with gcc, bash
 //                 and python3, e.g. node:20 or gcc:14; never pulled), and are skipped otherwise
@@ -27,7 +29,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { WORLDS } from "../src/content";
-import type { CodeSample, Lesson } from "../src/content/types";
+import type { CodeSample, Lesson, World } from "../src/content/types";
 
 /** Core worlds whose code samples are runnable programs (the language tracks are always included). */
 const CODE_WORLDS = new Set(["os", "compilers"]);
@@ -37,6 +39,7 @@ const CXX = (process.env.LANG_CXX ?? "clang++ -std=c++23").split(" ");
 const GO = process.env.LANG_GO ?? "go";
 const PY = process.env.LANG_PYTHON ?? "python3";
 const CC = (process.env.LANG_CC ?? "cc").split(" ");
+const CLANG = (process.env.LANG_CLANG ?? "clang").split(" ");
 const LINUX = process.platform === "linux";
 const LINUX_IMAGE = process.env.LANG_LINUX_IMAGE;
 const C_FLAGS = ["-std=gnu17", "-O1", "-g", "-Wall", "-Wextra", "-Werror", "-pthread"];
@@ -68,6 +71,7 @@ const tools = {
   go: has(GO, ["version"]),
   python: has(PY, ["--version"]),
   c: has(CC[0], ["--version"]),
+  llvm: has(CLANG[0], ["--version"]),
   bash: true,
 };
 const docker = (() => {
@@ -117,6 +121,7 @@ function hasMain(lang: string, code: string) {
   if (lang === "cpp") return /\bint\s+main\s*\(/.test(code);
   if (lang === "go") return /^package main\b/m.test(code) && /^func main\(\)/m.test(code);
   if (lang === "c") return /\bint\s+main\s*\(/.test(code);
+  if (lang === "llvm") return /^define\s[^@\n]*@main\(/m.test(code);
   if (lang === "python" || lang === "bash") return true;
   return false;
 }
@@ -136,6 +141,11 @@ function runLinuxSample(lang: string, code: string, dir: string, privileged = fa
 }
 
 function runSample(lang: string, code: string, dir: string): string {
+  if (lang === "llvm") {
+    writeFileSync(join(dir, "main.ll"), code);
+    run(CLANG[0], [...CLANG.slice(1), "-Wno-override-module", "main.ll", "-o", "main"], dir);
+    return run(join(dir, "main"), [], dir);
+  }
   if (lang === "c") {
     writeFileSync(join(dir, "main.c"), code);
     run(CC[0], [...CC.slice(1), ...C_FLAGS, "main.c", "-o", "main"], dir);
@@ -177,7 +187,7 @@ const failures: string[] = [];
 
 function checkSample(where: string, s: CodeSample, world: string) {
   for (const v of s.variants) {
-    const runnable = ["java", "cpp", "go", "python"].includes(v.lang) || (CODE_WORLDS.has(world) && ["c", "bash"].includes(v.lang));
+    const runnable = ["java", "cpp", "go", "python"].includes(v.lang) || (CODE_WORLDS.has(world) && ["c", "bash", "llvm"].includes(v.lang));
     if (!runnable || !hasMain(v.lang, v.code)) continue;
     if (v.lang === "bash" && !s.linux) continue; // shell snippets in other samples are commands to read, not programs
     const label = `${where} · "${s.title}"${s.variants.length > 1 ? ` [${v.lang}]` : ""}`;
@@ -238,7 +248,7 @@ function checkSample(where: string, s: CodeSample, world: string) {
   }
 }
 
-function checkProject(where: string, l: Lesson) {
+function checkProject(where: string, l: Lesson, w: World) {
   const p = l.project!;
   const label = `${where} · project`;
   if (!p.verify) {
@@ -272,8 +282,15 @@ function checkProject(where: string, l: Lesson) {
     console.log(`  ⏭  ${label}: ${tool} not installed`);
     return;
   }
+  if (cmd.includes("$CLANG_CMD") && !tools.llvm) {
+    skipped++;
+    console.log(`  ⏭  ${label}: clang not installed (set LANG_CLANG)`);
+    return;
+  }
   const files = new Map<string, string>();
-  for (const st of p.steps) for (const f of st.files) files.set(f.path, f.code);
+  const chain: NonNullable<Lesson["project"]>[] = [];
+  for (let q: Lesson["project"] = p; q; q = q.buildsOn ? w.lessons.find((x) => x.id === q!.buildsOn)?.project : undefined) chain.unshift(q);
+  for (const q of chain) for (const st of q.steps) for (const f of st.files) files.set(f.path, f.code);
   const dir = mkdtempSync(join(tmpdir(), "proj-"));
   try {
     for (const [path, code] of files) {
@@ -291,7 +308,7 @@ function checkProject(where: string, l: Lesson) {
       shell: "/bin/bash",
       stdio: "pipe",
       timeout: 600_000,
-      env: { ...process.env, JAVA_CMD: JAVA, CXX_CMD: CXX.join(" "), GO_CMD: GO, PY_CMD: PY, CC_CMD: CC.join(" "), PYTHONDONTWRITEBYTECODE: "1" },
+      env: { ...process.env, JAVA_CMD: JAVA, CXX_CMD: CXX.join(" "), GO_CMD: GO, PY_CMD: PY, CC_CMD: CC.join(" "), CLANG_CMD: CLANG.join(" "), PYTHONDONTWRITEBYTECODE: "1" },
     });
     passed++;
     console.log(`  ✓ ${label} (${files.size} files)`);
@@ -311,7 +328,7 @@ for (const w of WORLDS.filter((w) => w.track === "language" || CODE_WORLDS.has(w
     const where = `${w.id}/${l.id}`;
     if (only && !where.includes(only)) continue;
     for (const s of l.code ?? []) checkSample(where, s, w.id);
-    if (l.project) checkProject(where, l);
+    if (l.project) checkProject(where, l, w);
   }
 }
 

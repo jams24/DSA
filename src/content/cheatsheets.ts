@@ -370,6 +370,57 @@ uptime · dmesg -T | tail · vmstat 1 · mpstat -P ALL 1 · pidstat 1 · iostat 
 `,
   },
   {
+    id: "compilers",
+    title: "Compilers cheat sheet",
+    emoji: "⚒️",
+    md: `
+### The pipeline
+source → **lexer** (tokens) → **parser** (AST) → **semantic analysis** (scopes, types) → **IR** (three-address code, CFG, SSA) → **optimizer** → **back end** (instruction selection, scheduling, register allocation) → assembly → **assembler** (object file) → **linker** (executable) → **loader** (process).
+- Front end = language-specific; back end = CPU-specific; the IR in the middle gives M languages × N CPUs with M + N parts (LLVM).
+- gcc -E (preprocess) · -S (assembly) · -c (object file) · -save-temps -v (keep everything). clang -emit-llvm -S for LLVM IR.
+
+### Lexing & automata
+- Token = kind + lexeme + position. **Maximal munch**: longest match wins (\`<=\` over \`<\`, \`iffy\` is a name); ties go to the earlier rule (keywords before names).
+- Regex → NFA (Thompson) → DFA (subset construction, up to 2ⁿ states) → minimal DFA (unique). DFA matching is O(n), no backtracking. Backtracking engines risk **ReDoS**.
+- Regular languages can't count: balanced brackets need a grammar (a stack).
+
+### Grammars & parsing
+- Ambiguity (\`1 + 2 * 3\` with two trees) is fixed by precedence and associativity levels. Left recursion breaks recursive descent: rewrite as a loop.
+- **Recursive descent**: one function per rule. **Pratt**: binding powers (left, right); right below left = right-associative (\`^\`, \`=\`).
+- **LL(1)**: top-down, FIRST/FOLLOW, one lookahead token; a cell with two rules = conflict. **LR/LALR**: bottom-up shift/reduce, handles left recursion; yacc and bison. Shift/reduce and reduce/reduce conflicts.
+- Parse tree keeps every token; AST keeps meaning.
+
+### Semantic analysis & types
+- Symbol table = stack of scopes (name → declaration). Lexical scoping: meaning is fixed where the code is written; a resolver records each use's scope depth.
+- Static vs dynamic (when types are checked) · strong vs weak (implicit conversions). Error type to stop cascades.
+- **Hindley–Milner**: fresh type variables, generate equations, **unify**; occurs check rejects infinite types; let-polymorphism generalises.
+
+### Interpreters & VMs
+- Tree-walker: evaluate(node) with environments (dict + parent link). Closure = function + its defining environment (heap, not stack). return via exception.
+- Bytecode: compact, linear, cache-friendly. Stack VM (JVM, CPython, Wasm) vs register VM (Lua, Dalvik): fewer instructions vs simpler compiler. Backpatch forward jumps. Faster dispatch: computed goto, superinstructions, quickening.
+
+### IR & optimization
+- Basic block = straight-line code, one entry and one exit; CFG edges = jumps. **SSA**: every variable assigned once; **φ** merges values at joins; place φ at dominance frontiers.
+- Constant folding/propagation · copy propagation · CSE/GVN · dead code elimination · **inlining** (enables everything else) · LICM · strength reduction · loop unrolling · vectorization · tail calls.
+- Data-flow analysis: liveness (backward), reaching definitions (forward), iterate to a **fixpoint**.
+- Undefined behaviour (signed overflow, null deref, out of bounds) lets the optimizer assume it never happens: \`x + 1 > x\` → true.
+- LLVM: typed SSA IR, \`alloca\` + mem2reg instead of building SSA in the front end; opt runs passes; \`-O0/-O1/-O2/-O3/-Os\`, \`-flto\`, PGO.
+
+### Back end
+- x86-64 System V: args in rdi, rsi, rdx, rcx, r8, r9; result in rax; callee-saved rbx, rbp, r12–r15; rsp 16-byte aligned at every call. cqo + idiv: quotient rax, remainder rdx.
+- Instruction selection = tile the IR tree (maximal munch, or optimal by dynamic programming). lea does address arithmetic in one instruction.
+- **Register allocation**: interference graph colouring (Chaitin–Briggs: simplify, spill, select; coalescing) vs **linear scan** (fast, for JITs; spill the interval ending furthest away). Spill = store after def, load before use.
+- Peephole: push/pop → mov, mov reg, 0 → xor, multiply by 2ᵏ → shift.
+
+### Linking, runtimes & JITs
+- Object file: .text .data .bss .rodata, symbols (T, D, B defined; U undefined), relocations. Linker: resolve each symbol to exactly one definition, then patch. "undefined reference" = missing definition; "multiple definition" = two strong definitions.
+- Static (.a, copied in) vs dynamic (.so, loaded by ld.so; PLT stubs + GOT, lazy binding; -fPIC, PIE + ASLR). C++ **name mangling**; extern "C" turns it off.
+- GC: reference counting (immediate, leaks cycles) · mark-sweep · mark-compact · copying (cost ∝ live objects) · **generational** (most objects die young; write barrier records old → young) · concurrent (tri-colour marking).
+- vtable = per-class array of function pointers; zero-cost exceptions use unwind tables, paid only when throwing.
+- JIT tiers: interpreter → baseline → optimizing (V8: Ignition, Sparkplug, Maglev, TurboFan; HotSpot: C1, C2). Type feedback → speculation behind **guards** → **deoptimization**. Inline caches (mono-, poly-, megamorphic), OSR, W^X.
+`,
+  },
+  {
     id: "communication",
     title: "Talking like a senior engineer",
     emoji: "🗣️",

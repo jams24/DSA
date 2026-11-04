@@ -35,6 +35,10 @@ for (const w of WORLDS) {
       if (!q.explain) errors.push(`${where} quiz #${i}: missing explanation`);
     });
     for (const v of l.visualizers ?? []) if (!vizIds.has(v)) errors.push(`${where}: unknown visualizer '${v}'`);
+    if (l.project?.buildsOn) {
+      const base = w.lessons.findIndex((x) => x.id === l.project!.buildsOn);
+      if (base < 0 || base >= w.lessons.indexOf(l) || !w.lessons[base].project) errors.push(`${where}: project buildsOn '${l.project.buildsOn}' must be an earlier lesson with a project`);
+    }
     if (!l.visualizers?.length && !l.diagram) warn.push(`${where}: no visualizer or diagram`);
     if (l.diagram) {
       const nodes = new Set(l.diagram.nodes.map((n) => n.id));

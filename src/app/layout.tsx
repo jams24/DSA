@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s · DSA Quest",
   },
   description:
-    "Learn data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka, AI agents and operating systems, and master Java, C++, Go and Python, through interactive visualizations, guided projects, quizzes and boss battles.",
+    "Learn data structures, algorithms, system design, distributed systems, AI inference, DevOps/SRE, Docker & Kubernetes, Kafka, AI agents, operating systems and compilers, and master Java, C++, Go and Python, through interactive visualizations, guided projects, quizzes and boss battles.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
