@@ -6,7 +6,7 @@ import type { Catalog } from "@/content/types";
 import type { ActionRequest } from "@/lib/api-schemas";
 import { setSoundEnabled, sfx } from "@/lib/sound";
 import { buildAchievements } from "./achievements";
-import { applyAction, emptyState, type GameAction, type Outcome, type PlayerState } from "./engine";
+import { applyAction, emptyState, migrateMovedLessons, type GameAction, type Outcome, type PlayerState } from "./engine";
 
 export interface PublicUser {
   id: string;
@@ -133,8 +133,14 @@ export const useGame = create<GameStore>()(
     }),
     {
       name: "dsa-quest",
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
+      // v2: the Docker lessons moved from the kubernetes world to the docker world
+      migrate: (persisted) => {
+        const p = persisted as { guest?: PlayerState };
+        if (p?.guest?.progress) migrateMovedLessons(p.guest.progress);
+        return p as Partial<GameStore>;
+      },
       partialize: (s) => ({ guest: s.guest, sound: s.sound }),
       skipHydration: true,
       onRehydrateStorage: () => (s) => {

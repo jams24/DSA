@@ -21,6 +21,7 @@ export async function LessonPageBody({ worldId, lessonId }: { worldId: string; l
         title: s.title,
         note: s.note,
         variants: await Promise.all(s.variants.map(async (v) => ({ lang: v.lang, code: v.code, html: await highlight(v.code, v.lang) }))),
+        files: s.files ? await Promise.all(s.files.map(async (f) => ({ path: f.path, lang: f.lang, code: f.code, html: await highlight(f.code, f.lang) }))) : undefined,
         explainHtml: s.explain ? await renderMarkdown(s.explain) : undefined,
         output: s.output,
       })),

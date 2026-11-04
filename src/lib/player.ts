@@ -2,6 +2,7 @@
 
 import type { Prisma } from "@prisma/client";
 import type { Outcome, PlayerState, PlayerStats } from "./game/engine";
+import { migrateMovedLessons } from "./game/engine";
 
 type Tx = Prisma.TransactionClient;
 
@@ -41,6 +42,7 @@ export async function loadPlayer(tx: Tx, userId: string): Promise<{ user: Public
       u.cards.map((c) => [c.cardId, { box: c.box, dueAt: c.dueAt.toISOString(), reviews: c.reviews }]),
     ),
   };
+  migrateMovedLessons(state.progress);
   return { user: { id: u.id, username: u.username, avatar: u.avatar, role: u.role }, state };
 }
 

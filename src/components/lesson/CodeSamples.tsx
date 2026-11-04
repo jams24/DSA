@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { clsx } from "clsx";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, FileCode2 } from "lucide-react";
 import { OutputBox } from "./LanguageTabs";
 
 export interface RenderedSample {
   title: string;
   note?: string;
   variants: { lang: string; code: string; html: string }[];
+  /** files the commands use (Dockerfile, app code ...), shown as tabs above them */
+  files?: { path: string; lang: string; code: string; html: string }[];
   explainHtml?: string;
   output?: string;
 }
@@ -90,6 +92,10 @@ function Sample({ sample, preferred, onPreferred }: { sample: RenderedSample; pr
           </button>
         </div>
       </header>
+      {sample.files && sample.files.length > 0 && <SampleFiles files={sample.files} />}
+      {sample.files && sample.files.length > 0 && (
+        <div className="px-4 pt-2.5 text-[10px] font-semibold tracking-wider text-faint uppercase">Then run</div>
+      )}
       <div className="code-block p-3" dangerouslySetInnerHTML={{ __html: active.html }} />
       {(sample.output || sample.explainHtml) && (
         <div className="space-y-3 border-t border-line bg-panel-2/40 px-4 py-4">
@@ -98,5 +104,46 @@ function Sample({ sample, preferred, onPreferred }: { sample: RenderedSample; pr
         </div>
       )}
     </section>
+  );
+}
+
+function SampleFiles({ files }: { files: NonNullable<RenderedSample["files"]> }) {
+  const [i, setI] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const f = files[Math.min(i, files.length - 1)];
+  return (
+    <div className="border-b border-line">
+      <div className="flex items-center gap-2 bg-panel-2/40 px-2 py-1.5">
+        <span className="shrink-0 pl-1 text-[10px] font-semibold tracking-wider text-faint uppercase">Files</span>
+        <div className="flex min-w-0 flex-1 gap-1 overflow-x-auto scrollbar-thin">
+          {files.map((x, k) => (
+            <button
+              key={x.path}
+              type="button"
+              onClick={() => setI(k)}
+              className={clsx(
+                "flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1 font-mono text-[11px] transition",
+                k === i ? "bg-panel-3 text-ink shadow-[inset_0_0_0_1px_#cbd5e1]" : "text-faint hover:text-ink",
+              )}
+            >
+              <FileCode2 size={12} /> {x.path}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            void navigator.clipboard?.writeText(f.code.trim());
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          }}
+          className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-line-2 text-dim hover:text-ink"
+          aria-label={`Copy ${f.path}`}
+        >
+          {copied ? <Check size={13} className="text-emerald" /> : <Copy size={13} />}
+        </button>
+      </div>
+      <div className="code-block p-3" dangerouslySetInnerHTML={{ __html: f.html }} />
+    </div>
   );
 }

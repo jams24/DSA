@@ -13,6 +13,7 @@ import { distributed } from "./worlds/distributed";
 import { aiInference } from "./worlds/ai-inference";
 import { infra } from "./worlds/infra";
 import { agents } from "./worlds/agents";
+import { docker } from "./worlds/docker";
 import { kubernetes } from "./worlds/kubernetes";
 import { kafka } from "./worlds/kafka";
 import { os } from "./worlds/os";
@@ -22,7 +23,7 @@ import { cpp } from "./languages/cpp";
 import { go } from "./languages/go";
 import { python } from "./languages/python";
 
-export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, kubernetes, kafka, os, compilers, java, cpp, go, python].sort(
+export const WORLDS: World[] = [foundations, treesGraphs, algorithms, patterns, systemDesign, distributed, aiInference, infra, agents, docker, kubernetes, kafka, os, compilers, java, cpp, go, python].sort(
   (a, b) => a.order - b.order,
 );
 

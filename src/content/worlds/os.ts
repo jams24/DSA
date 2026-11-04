@@ -8,7 +8,7 @@ import { osPart6 } from "./os-6";
 
 export const os: World = {
   id: "os",
-  order: 12,
+  order: 13,
   title: "Kernel Kingdom",
   subtitle: "Operating systems from the power button up: processes, scheduling, concurrency, memory, file systems, I/O, security, containers and the OS interview",
   description:

@@ -63,7 +63,7 @@ export default function Home() {
 
       {/* worlds */}
       <section className="pt-20">
-        <SectionTitle eyebrow="World select" title="Thirteen worlds. One offer letter.">
+        <SectionTitle eyebrow="World select" title="Fourteen worlds. One offer letter.">
           Start in Foundation Fields or warp straight to the realm your next interview needs. Every world ends with a boss.
         </SectionTitle>
         <WorldCards />

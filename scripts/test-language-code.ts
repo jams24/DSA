@@ -1,5 +1,5 @@
-// Compiles and runs the Java, C++, Go and Python programs in the Language Academy, and the C, Python
-// and shell samples in the Operating Systems and Compilers worlds.
+// Compiles and runs the Java, C++, Go and Python programs in the Language Academy, the C, Python
+// and shell samples in the Operating Systems and Compilers worlds, and the Docker world's scripts.
 // Run with: npm run languages:test [filter]     (filter matches "<world>/<lesson>", e.g. "os/" or "python/py-web")
 //
 // Code samples: every java / cpp / go variant that has an entry point, and every python variant, is
@@ -7,6 +7,11 @@
 // whitespace ignored). Samples with `noCheck` are skipped and the reason is printed. Python samples
 // that define test_ functions run under pytest instead, and ones importing a third-party package that
 // isn't installed are skipped with the package name.
+//
+// Docker samples (`docker: true`) are bash scripts run on the host against the local Docker engine, with
+// their `files` (Dockerfile, app code ...) next to them. Images are never pulled: a sample whose `images`
+// aren't all present locally is skipped. Every container, network, volume and image named quest-* is
+// removed before and after each one, and the `vary` regexes mask IDs, PIDs and timings before comparing.
 //
 // Projects: the latest version of every file across the steps is written to a temp directory and
 // the project's `verify` command runs there (bash). It's skipped when a tool it needs is missing. A project
@@ -32,7 +37,7 @@ import { WORLDS } from "../src/content";
 import type { CodeSample, Lesson, World } from "../src/content/types";
 
 /** Core worlds whose code samples are runnable programs (the language tracks are always included). */
-const CODE_WORLDS = new Set(["os", "compilers"]);
+const CODE_WORLDS = new Set(["os", "compilers", "docker"]);
 
 const JAVA = process.env.LANG_JAVA ?? "java";
 const CXX = (process.env.LANG_CXX ?? "clang++ -std=c++23").split(" ");
@@ -86,10 +91,51 @@ const docker = (() => {
 const norm = (s: string) =>
   s
     .replace(/\r/g, "")
+    .replace(/^WARNING: The requested image's platform .*\n/gm, "") // host-specific (emulated images)
     .split("\n")
     .map((l) => l.replace(/\s+$/, ""))
     .join("\n")
     .replace(/\n+$/, "");
+
+/** Replace each `vary` match with a placeholder, so run-to-run noise (IDs, PIDs, timings) doesn't fail the check. */
+const mask = (s: string, vary: string[] = []) => vary.reduce((t, src) => t.replace(new RegExp(src, "gm"), "‹varies›"), s);
+
+let dockerState: boolean | undefined;
+function dockerUp() {
+  dockerState ??= has("docker", ["info", "--format", "{{.ServerVersion}}"]);
+  return dockerState;
+}
+const missingImages = (images: string[] = []) => images.filter((i) => !has("docker", ["image", "inspect", i]));
+
+/** Remove every container, network, volume and image whose name starts with quest- (what the samples create). */
+function dockerCleanup() {
+  const names = (args: string[]) => {
+    try {
+      return execFileSync("docker", args, { encoding: "utf8" })
+        .split("\n")
+        .filter((n) => n.startsWith("quest-") && !n.endsWith(":<none>"));
+    } catch {
+      return [];
+    }
+  };
+  const rm = (args: string[], list: string[]) => {
+    if (!list.length) return;
+    try {
+      execFileSync("docker", [...args, ...list], { stdio: "ignore" });
+    } catch {}
+  };
+  rm(["rm", "-f"], names(["ps", "-a", "--format", "{{.Names}}"]));
+  rm(["network", "rm"], names(["network", "ls", "--format", "{{.Name}}"]));
+  rm(["volume", "rm", "-f"], names(["volume", "ls", "--format", "{{.Name}}"]));
+  rm(["rmi", "-f"], names(["images", "--format", "{{.Repository}}:{{.Tag}}"]));
+}
+
+function writeFiles(dir: string, files: { path: string; code: string }[] = []) {
+  for (const f of files) {
+    mkdirSync(dirname(join(dir, f.path)), { recursive: true });
+    writeFileSync(join(dir, f.path), f.code.endsWith("\n") ? f.code : `${f.code}\n`);
+  }
+}
 
 function run(cmd: string, args: string[], cwd: string, input?: string) {
   return execFileSync(cmd, args, {
@@ -189,11 +235,21 @@ function checkSample(where: string, s: CodeSample, world: string) {
   for (const v of s.variants) {
     const runnable = ["java", "cpp", "go", "python"].includes(v.lang) || (CODE_WORLDS.has(world) && ["c", "bash", "llvm"].includes(v.lang));
     if (!runnable || !hasMain(v.lang, v.code)) continue;
-    if (v.lang === "bash" && !s.linux) continue; // shell snippets in other samples are commands to read, not programs
+    if (v.lang === "bash" && !s.linux && !s.docker) continue; // shell snippets in other samples are commands to read, not programs
     const label = `${where} · "${s.title}"${s.variants.length > 1 ? ` [${v.lang}]` : ""}`;
     if (s.noCheck && !(NET && s.noCheck.startsWith("net:"))) {
       skipped++;
       console.log(`  ⏭  ${label}: ${s.noCheck}`);
+      continue;
+    }
+    if (s.docker && !dockerUp()) {
+      skipped++;
+      console.log(`  ⏭  ${label}: Docker isn't running`);
+      continue;
+    }
+    if (s.docker && missingImages(s.images).length) {
+      skipped++;
+      console.log(`  ⏭  ${label}: needs ${missingImages(s.images).map((i) => `docker pull ${i}`).join(", ")}`);
       continue;
     }
     if (s.linux && !LINUX && !docker) {
@@ -206,7 +262,7 @@ function checkSample(where: string, s: CodeSample, world: string) {
       console.log(`  ⏭  ${label}: needs root (run as root, or use LANG_LINUX_IMAGE with Docker)`);
       continue;
     }
-    if (!s.linux && !tools[v.lang as keyof typeof tools]) {
+    if (!s.linux && !s.docker && !tools[v.lang as keyof typeof tools]) {
       skipped++;
       console.log(`  ⏭  ${label}: no ${v.lang} toolchain`);
       continue;
@@ -227,11 +283,17 @@ function checkSample(where: string, s: CodeSample, world: string) {
     const pytest = v.lang === "python" && isPytest(v.code);
     const dir = mkdtempSync(join(tmpdir(), "lang-"));
     try {
-      const out = s.linux ? runLinuxSample(v.lang, v.code, dir, s.privileged) : runSample(v.lang, v.code, dir);
+      writeFiles(dir, s.files);
+      let out: string;
+      if (s.docker) {
+        dockerCleanup();
+        writeFileSync(join(dir, "run.sh"), v.code);
+        out = execFileSync("bash", ["run.sh"], { cwd: dir, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 300_000 });
+      } else out = s.linux ? runLinuxSample(v.lang, v.code, dir, s.privileged) : runSample(v.lang, v.code, dir);
       if (pytest) {
         passed++;
         console.log(`  ✓ ${label} (pytest: ${out.trim().split("\n").pop()})`);
-      } else if (s.output !== undefined && norm(out) !== norm(s.output)) {
+      } else if (s.output !== undefined && mask(norm(out), s.vary) !== mask(norm(s.output), s.vary)) {
         failures.push(`${label}: output differs\n--- expected\n${norm(s.output)}\n--- actual\n${norm(out)}`);
         console.log(`  ✗ ${label}`);
       } else {
@@ -243,6 +305,7 @@ function checkSample(where: string, s: CodeSample, world: string) {
       failures.push(`${label}: ${(err.stderr || err.stdout || err.message).slice(0, 2500)}`);
       console.log(`  ✗ ${label}`);
     } finally {
+      if (s.docker) dockerCleanup();
       rmSync(dir, { recursive: true, force: true });
     }
   }
@@ -275,6 +338,21 @@ function checkProject(where: string, l: Lesson, w: World) {
     console.log(`  ⏭  ${label}: Linux only (set LANG_LINUX_IMAGE)`);
     return;
   }
+  if (p.privileged && !(p.linux && docker) && process.getuid?.() !== 0) {
+    skipped++;
+    console.log(`  ⏭  ${label}: needs root (run as root, or use LANG_LINUX_IMAGE with Docker)`);
+    return;
+  }
+  if (p.docker && !dockerUp()) {
+    skipped++;
+    console.log(`  ⏭  ${label}: Docker isn't running`);
+    return;
+  }
+  if (p.docker && missingImages(p.images).length) {
+    skipped++;
+    console.log(`  ⏭  ${label}: needs ${missingImages(p.images).map((i) => `docker pull ${i}`).join(", ")}`);
+    return;
+  }
   const cmd = p.verify.replace(/^net:\s*/, "");
   const tool = cmd.trim().split(/\s+/)[0];
   if (["mvn", "cmake"].includes(tool) && !has(tool, ["--version"])) {
@@ -293,12 +371,13 @@ function checkProject(where: string, l: Lesson, w: World) {
   for (const q of chain) for (const st of q.steps) for (const f of st.files) files.set(f.path, f.code);
   const dir = mkdtempSync(join(tmpdir(), "proj-"));
   try {
-    for (const [path, code] of files) {
-      mkdirSync(dirname(join(dir, path)), { recursive: true });
-      writeFileSync(join(dir, path), code.endsWith("\n") ? code : `${code}\n`);
-    }
+    writeFiles(
+      dir,
+      [...files].map(([path, code]) => ({ path, code })),
+    );
+    if (p.docker) dockerCleanup();
     if (p.linux) {
-      runInLinux(dir, cmd.replaceAll("$CC_CMD", "gcc").replaceAll("$PY_CMD", "python3"));
+      runInLinux(dir, cmd.replaceAll("$CC_CMD", "gcc").replaceAll("$PY_CMD", "python3"), p.privileged);
       passed++;
       console.log(`  ✓ ${label} (${files.size} files, Linux)`);
       return;
@@ -317,6 +396,7 @@ function checkProject(where: string, l: Lesson, w: World) {
     failures.push(`${label}: ${(err.stderr?.toString() || "") + (err.stdout?.toString() || "") || err.message}`.slice(0, 4000));
     console.log(`  ✗ ${label}`);
   } finally {
+    if (p.docker) dockerCleanup();
     rmSync(dir, { recursive: true, force: true });
   }
 }

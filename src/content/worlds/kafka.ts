@@ -3,7 +3,7 @@ import { kafkaPart2 } from "./kafka-2";
 
 export const kafka: World = {
   id: "kafka",
-  order: 11,
+  order: 12,
   title: "The Kafka Delta",
   subtitle: "Kafka engineering end to end: the log, producers, replication, consumer groups, exactly-once, storage, streams, Connect & CDC, operations and event-driven design",
   description:

@@ -35,6 +35,32 @@ for (const w of WORLDS) {
       if (!q.explain) errors.push(`${where} quiz #${i}: missing explanation`);
     });
     for (const v of l.visualizers ?? []) if (!vizIds.has(v)) errors.push(`${where}: unknown visualizer '${v}'`);
+    for (const s of l.code ?? []) {
+      const at = `${where} "${s.title}"`;
+      for (const src of s.vary ?? []) {
+        try {
+          new RegExp(src, "gm");
+        } catch {
+          errors.push(`${at}: vary /${src}/ isn't a valid regex`);
+        }
+      }
+      const paths = (s.files ?? []).map((f) => f.path);
+      if (new Set(paths).size !== paths.length) errors.push(`${at}: duplicate file paths`);
+      for (const p of paths) if (p.startsWith("/") || p.split("/").includes("..")) errors.push(`${at}: file path ${p} must stay inside the sample folder`);
+      if (s.docker) {
+        // the test runner cleans up after samples by the quest- prefix, so everything they name must use it
+        const code = s.variants.map((v) => v.code).join("\n");
+        const named = [
+          ...code.matchAll(/--name[ =]([\w.-]+)/g),
+          ...code.matchAll(/docker (?:network|volume) create ([\w.-]+)/g),
+          ...code.matchAll(/docker compose -p ([\w.-]+)/g),
+          ...code.matchAll(/docker build[^\n]*?(?:-t|--tag) ([\w.-]+)/g),
+          ...code.matchAll(/docker tag \S+ ([\w.-]+)/g),
+        ].map((m) => m[1]);
+        for (const n of named) if (!n.startsWith("quest-") && !n.startsWith("$")) errors.push(`${at}: Docker object '${n}' must be named quest-* so the test runner can clean it up`);
+        if (!s.images?.length) warn.push(`${at}: docker sample without an images list`);
+      }
+    }
     if (l.project?.buildsOn) {
       const base = w.lessons.findIndex((x) => x.id === l.project!.buildsOn);
       if (base < 0 || base >= w.lessons.indexOf(l) || !w.lessons[base].project) errors.push(`${where}: project buildsOn '${l.project.buildsOn}' must be an earlier lesson with a project`);

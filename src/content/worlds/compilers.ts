@@ -8,7 +8,7 @@ import { compilersPart6 } from "./compilers-6";
 
 export const compilers: World = {
   id: "compilers",
-  order: 13,
+  order: 14,
   title: "Compiler Forge",
   subtitle: "Compilers from first principles: lexing, automata, parsing, types, interpreters, bytecode VMs, SSA, optimization, LLVM, code generation, register allocation, linking, garbage collection, JITs, and building your own compiler",
   description:

@@ -322,6 +322,33 @@ export function applyAction(state: PlayerState, action: GameAction, catalog: Cat
   }
 }
 
+/** Lessons that moved to another world, old key → new key, so the progress saved under the old key follows them. */
+export const MOVED_LESSONS: Record<string, string> = {
+  "kubernetes/docker-internals": "docker/docker-internals",
+  "kubernetes/docker-networking": "docker/docker-networking",
+  "kubernetes/docker-compose": "docker/docker-compose",
+};
+
+/** Re-keys progress saved under a moved lesson's old key (keeping the best of both if both exist). Mutates and returns `progress`. */
+export function migrateMovedLessons(progress: Record<string, ProgressEntry>): Record<string, ProgressEntry> {
+  for (const [from, to] of Object.entries(MOVED_LESSONS)) {
+    const old = progress[from];
+    if (!old) continue;
+    const cur = progress[to];
+    progress[to] = cur
+      ? {
+          read: cur.read || old.read,
+          visualized: cur.visualized || old.visualized,
+          bestScore: Math.max(cur.bestScore, old.bestScore),
+          stars: Math.max(cur.stars, old.stars),
+          completedAt: cur.completedAt ?? old.completedAt ?? null,
+        }
+      : old;
+    delete progress[from];
+  }
+  return progress;
+}
+
 /** Valid progress keys: every lesson key plus one boss key per world. */
 export function validProgressKeys(catalog: Catalog): Set<string> {
   const keys = new Set<string>();
@@ -350,7 +377,7 @@ export function mergeGuest(
 
   let guestEntryXp = 0;
   let delta = 0;
-  for (const [key, raw] of Object.entries(guest.progress ?? {})) {
+  for (const [key, raw] of Object.entries(migrateMovedLessons({ ...(guest.progress ?? {}) }))) {
     if (!valid.has(key) || !raw) continue;
     const g: ProgressEntry = {
       read: !!raw.read,

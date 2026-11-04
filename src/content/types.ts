@@ -49,6 +49,14 @@ export interface CodeSample {
   linux?: boolean;
   /** needs root and extra capabilities (namespaces, cgroups); run in a privileged container */
   privileged?: boolean;
+  /** files the commands use (Dockerfile, app code, config): shown as tabs above them, and written next to the script before it runs */
+  files?: ProjectFile[];
+  /** a bash script driving the Docker engine on the host; the test runner skips it when Docker isn't running */
+  docker?: boolean;
+  /** local Docker images the sample uses: the test runner never pulls, and skips the sample when one is missing */
+  images?: string[];
+  /** regexes (sources) for output that changes between runs (IDs, PIDs, IPs, timings), masked before comparing */
+  vary?: string[];
 }
 
 export interface QuizQuestion {
@@ -176,6 +184,12 @@ export interface ProjectGuide {
    * the starting point, and verify runs with them in place
    */
   buildsOn?: string;
+  /** verify drives the Docker engine on the host (skipped when Docker isn't running) */
+  docker?: boolean;
+  /** local Docker images verify needs (never pulled; the project is skipped when one is missing) */
+  images?: string[];
+  /** with `linux`: verify needs root and extra capabilities, so it runs in a privileged container */
+  privileged?: boolean;
 }
 
 export interface Library {

@@ -8,7 +8,7 @@ import { pyProjects } from "./python-5";
 export const python: World = {
   id: "python",
   track: "language",
-  order: 17,
+  order: 18,
   title: "Python",
   subtitle: "From your first script to asyncio, the GIL, FastAPI services and Pythonic interviews",
   description:

@@ -8,7 +8,7 @@ import { javaProjects } from "./java-5";
 export const java: World = {
   id: "java",
   track: "language",
-  order: 14,
+  order: 15,
   title: "Java",
   subtitle: "From your first class to Spring Boot APIs, virtual threads and the JVM",
   description:

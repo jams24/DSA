@@ -289,6 +289,38 @@ Golden signals (latency, traffic, errors, saturation) · RED for services · USE
 `,
   },
   {
+    id: "docker",
+    title: "Docker cheat sheet",
+    emoji: "🐳",
+    md: `
+### Everyday commands
+| Task | Command |
+|---|---|
+| Run in the background | \`docker run -d --name web -p 8080:3000 -v data:/data -e MODE=prod app:1.4.2\` |
+| See everything | \`docker ps -a\` · \`docker images\` · \`docker volume ls\` · \`docker network ls\` · \`docker system df\` |
+| Look inside | \`docker logs -f --tail 100 web\` · \`docker exec -it web sh\` · \`docker inspect web\` · \`docker stats\` |
+| Stop / remove | \`docker stop web\` (SIGTERM, 10 s, SIGKILL) · \`docker rm -f web\` · \`docker system prune\` |
+| Build and ship | \`docker build -t app:1.4.2 .\` · \`docker tag\` · \`docker push\` · \`docker buildx build --platform linux/amd64,linux/arm64 --push\` |
+| Compose | \`docker compose up -d --build --wait\` · \`ps\` · \`logs -f\` · \`exec\` · \`down\` (\`-v\` deletes volumes) |
+
+### Exit codes
+**0** finished · **1** app error · **125** docker couldn't run it · **126** not executable · **127** command not found · **137** SIGKILL (OOM? check \`OOMKilled\`; or a stop timeout) · **143** SIGTERM handled.
+
+### Dockerfile checklist
+Pinned slim base · dependency manifests **before** source · \`npm ci\`/lockfile installs · cleanup in the **same** \`RUN\` · \`.dockerignore\` · multi-stage (build tools stay behind) · no secrets in layers (\`RUN --mount=type=secret\`) · \`USER\` non-root · exec-form \`CMD ["node", "server.js"]\` + a SIGTERM handler · \`HEALTHCHECK\` · OCI labels.
+
+### Where things go
+- **Code and dependencies**: the image. **Config**: environment variables. **Secrets**: mounted files. **Data**: named volumes (databases), bind mounts (dev code), tmpfs (scratch).
+- **Networking**: user-defined networks give DNS by container/service name; \`localhost\` is the container itself; apps must listen on \`0.0.0.0\`; \`EXPOSE\` documents, \`-p\` publishes.
+
+### Under the hood
+Container = process + **namespaces** (pid, mnt, net, uts, ipc, user, cgroup) + **cgroup** limits (\`memory.max\` → OOM kill, \`cpu.max\` → throttling, \`pids.max\`) + **overlayfs** root (read-only image layers + a writable layer: copy-up, whiteouts) + dropped capabilities and seccomp. CLI → dockerd → containerd → shim → runc → kernel. Images are OCI: index → manifest → config + layers, all sha256-addressed.
+
+### Never in production
+\`:latest\` · \`--privileged\` · mounting \`docker.sock\` · secrets in \`ENV\` or layers · running as root · no memory limit · logs without rotation (json-file needs \`max-size\`).
+`,
+  },
+  {
     id: "agents",
     title: "AI engineering & agents cheat sheet",
     emoji: "🤖",

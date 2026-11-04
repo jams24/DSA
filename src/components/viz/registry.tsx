@@ -161,4 +161,7 @@ export const VISUALIZERS: Record<string, Entry> = {
   stackvm: { title: "A bytecode stack machine", blurb: "Compile an expression to bytecode, or run a while loop, one instruction at a time: pc, operand stack, variables and output.", C: lazy(() => import("./compilers/StackVM")) },
   optimizer: { title: "Optimization passes", blurb: "Constant folding, copy propagation, CSE, strength reduction and dead code elimination, round after round until a fixpoint.", C: lazy(() => import("./compilers/Optimizer")) },
   regalloc: { title: "Linear-scan register allocation", blurb: "Live intervals, a handful of registers and one decision per interval: reuse, take a free register, or spill.", C: lazy(() => import("./compilers/RegAlloc")) },
+  // docker
+  containerlife: { title: "The container lifecycle", blurb: "Drive a container with real commands (create, start, pause, stop, kill, rm), crash it, OOM it and pick a restart policy.", C: lazy(() => import("./docker/ContainerLife")) },
+  overlayfs: { title: "Copy-on-write layers (overlayfs)", blurb: "Read, edit and delete files in two containers sharing one image: lookups, copy-up, whiteouts, docker rm and docker commit.", C: lazy(() => import("./docker/OverlayFS")) },
 };

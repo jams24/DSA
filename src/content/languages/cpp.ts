@@ -8,7 +8,7 @@ import { cppProjects } from "./cpp-5";
 export const cpp: World = {
   id: "cpp",
   track: "language",
-  order: 15,
+  order: 16,
   title: "C++",
   subtitle: "From your first compile to move semantics, templates, concurrency and a Boost.Beast REST API",
   description:
